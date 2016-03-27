@@ -4,18 +4,21 @@ var webpack = require('webpack')
 module.exports = {
   // fast sourcemap, refs compiled code
   devtool: 'eval',
-  entry: ['./src/webgl'],
+  entry: ['./src/main.js'],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundled_es6.js',
     sourceMapFilename: 'bundle-map.js'
   },
   // no plugins right now
-  plugins: [
-
-  ],
+  plugins: [],
   // use babel-loader es6 => es5, with caching for speed
   module: {
+    preloaders: [{
+      test: /\.js$/,
+      exclude: /node-modules/,
+      loader: 'eslint-loader'
+    }],
     loaders: [{
       test: /\.js$/,
       exclude: /node_modules/,
@@ -24,6 +27,10 @@ module.exports = {
         presets: ['es2015'],
         cacheDirectory: true
       }
-    }]
+    }],
+    eslint: {
+      failOnWarning: false,
+      failOnError: true
+    }
   }
 }

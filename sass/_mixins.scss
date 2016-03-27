@@ -1,0 +1,81 @@
+@function rem($px) {
+  @return ($px * 0.1)+rem;
+}
+
+@mixin appearance($appear) {
+  -webkit-appearance: $appear;
+     -moz-appearance: $appear;
+          appearance: $appear;
+}
+
+@mixin transform($command) {
+  -webkit-transform: #{$command};
+      -ms-transform: #{$command};
+          transform: #{$command};
+}
+
+@mixin animation($name, $duration, $timing:"", $delay:"", $iteration:"", $direction:"") {
+  -webkit-animation: $name $duration unquote(#{$timing}) unquote(#{$delay}) unquote(#{$iteration}) unquote(#{$direction});
+  animation: $name $duration unquote(#{$timing}) unquote(#{$delay}) unquote(#{$iteration}) unquote(#{$direction});
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name}: {
+    @content;
+  }
+}
+
+@mixin user-select($select) {
+  -webkit-user-select: $select;
+     -moz-user-select: $select;
+      -ms-user-select: $select;
+          user-select: $select;
+}
+
+@mixin hardwareAcceleration() {
+  -webkit-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+
+@mixin perspective($distance) {
+  -webkit-perspective: $distance;
+          perspective: $distance;
+}
+
+//--responsive-------------------------------------------
+
+  //breakpoint mixin
+$media-direction: min;
+@mixin breakpoint($values, $direction: $media-direction) {
+ 
+  @if length($values) > 1 {
+    $min: nth($values, 1);
+    $max: nth($values, 2);
+ 
+    @if unitless($max) {
+      $max: $max + 0px;
+    }
+ 
+    @if unitless($min) {
+      $min: $min + 0px;
+    }
+ 
+    @media screen and (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+ 
+  } @else {
+ 
+    @if unitless($values) {
+      $values: $values + 0px;
+    }
+ 
+    @media only screen and (#{$direction}-width: $values) {
+      @content;
+    }
+  }
+}
