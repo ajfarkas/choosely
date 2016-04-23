@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Choosely | Create List</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Choosely</h1>
+  <fieldset>
+    <legend>Let's start with a list of names.</legend>
+    <form id="names">
+      <label name="label-name">
+        Add a name
+        <input name="name" type="text" placeholder="Chris"/>
+      </label>
+      <button type="button" class="input-btn">+</button>
+    </form>
+  </fieldset>
+  <ul class="names">
+  </ul>
+  <script src="/dist/bundled_es6.js"></script>
+</body>
+</html>

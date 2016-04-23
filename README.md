@@ -9,14 +9,14 @@ A simple web application to help groups identify preferences through round-robin
   - [Dev Watch](#dev-watch)
 
 ## Tech Stack
-Choosely requires Node.js ≥ v5.9.0
+Choosely requires Node.js ≥ v4.2.6
 
 NPM v3.7.3
 
 SASS v3.4.15
 
 ## Installation
-  – Clone this repo: `git clone git@github.com:ajfarkas/choosely.git`
+  - Clone this repo: `git clone git@github.com:ajfarkas/choosely.git`
   - Make sure SASS is installed: `sass -v`
     - installation: `sudo gem install sass`
   - Make sure Node is up-to-date: `node -v`
