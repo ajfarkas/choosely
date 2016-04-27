@@ -3,6 +3,7 @@
 <head>
   <title>Choosely</title>
   <script src="/socket.io/socket.io.js"></script>
+  <script>window.socket = io()</script>
 </head>
 <body>
   <h1>Choosely</h1>
@@ -13,10 +14,11 @@
         Your name
         <input name="user" type="text" placeholder="I.P. Freeley"/>
       </label>
-      <label name="label=partner">
+      <label name="label-partner">
         Your patner's name
         <input name="partner" type="text" placeholder="Ben Dover"/>
       </label>
+      <button type="button" id="login-btn">Sign In</button> 
     </form>
   </fieldset>
   <script src="/dist/bundled_es6.js"></script>
