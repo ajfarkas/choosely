@@ -4,11 +4,13 @@ var webpack = require('webpack')
 module.exports = {
   // fast sourcemap, refs compiled code
   devtool: 'eval',
-  entry: ['./src/main.js'],
+  entry: {
+    app: './src/main.js',
+    test: './tests/testAll.js'},
   output: {
     path: path.join(__dirname, './public/dist'),
-    filename: 'bundled_es6.js',
-    sourceMapFilename: 'bundle-map.js'
+    filename: '[name].js',
+    sourceMapFilename: '[name]-map.js'
   },
   // no plugins right now
   plugins: [],

@@ -1,7 +1,10 @@
+// All DB READ functions
+
 const db = require('./data')
 
 const get = {
-    /* Read Names
+  /* Read Names
+   * Return all names associated with user account.
    * Args: Data (`Obj`)
    *   - verb: 'read'
    *   - subject: 'names'
@@ -17,6 +20,7 @@ const get = {
           d.score = d.score === undefined ? 0 : d.score
           d.matches = d.matches === undefined ? {} : d.matches
           names[d.name] = d
+          console.log(names)
         }
       })
       .on('end', () => {

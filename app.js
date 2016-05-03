@@ -6,6 +6,10 @@ const app = require('express')()
 const config = require('./node/config')
 const socket = require('./node/socket')
 
+const server = app.listen(config.port, config.ip)
+console.log(`attempting to run server on port ${config.port}.`)
+socket.createNew(server)
+
 app.get(/.*/, (req, res) => {
   var file = undefined
   if (req.url === '/') {
@@ -26,7 +30,3 @@ app.get(/.*/, (req, res) => {
   })
 })
 
-const server = app.listen(config.port, config.ip)
-console.log(`server running on port ${config.port}.`)
-
-socket.createNew(server)

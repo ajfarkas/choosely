@@ -6,7 +6,7 @@ if (window.location.pathname === '/') {
   F.$('#login-btn').addEventListener('click', F.login)
 
 } else if (window.location.pathname.match('create.html')) {
-
+  // use input value to create new name
   F.$('#names .input-btn').addEventListener('click', F.createName)
   F.$('[name=\"name\"]').addEventListener('keypress', e => {
     if (e.keyCode === 13) {
@@ -18,5 +18,4 @@ if (window.location.pathname === '/') {
   })
 
   socket.on('connected', F.readNames)
-
 }

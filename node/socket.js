@@ -4,7 +4,7 @@ const get = require('./clientGet')
 
 function createNew(server) {
   const io = socket(server)
-  console.log('new socket connection')
+  console.log('socket connection initialized')
 
   io.on('connection', (client) => {
     console.log('user connected.', client.id)

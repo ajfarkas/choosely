@@ -2,11 +2,13 @@ const F = require('./functions')
 
 const handlers = {
   namesRead: data => {
-    Object.keys(data).forEach(F.addNameToDOM)
+    Object.keys(data).forEach(record => {
+      F.addNameToDOM(data[record])
+    })
   },
   nameAdded: data => {
     if (window.Data.names[data.name] === undefined) {
-      F.addNameToDOM(data.name)
+      F.addNameToDOM(data) 
     }
   }
 }

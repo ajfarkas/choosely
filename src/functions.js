@@ -6,7 +6,7 @@ F.$ = (selector, container) => {
   return container.querySelector(selector)
 },
 
-F.login = (e) => {
+F.login = e => {
   e.preventDefault()
   
   let userId = undefined
@@ -23,28 +23,62 @@ F.login = (e) => {
   window.location.pathname = '/create.html'
 },
 
-F.addNameToDOM = (value) => {
+F.deleteName = e => {
+  e.preventDefault()
+
+  const parent = e.target.parentNode
+  const name = parent.dataset.value
+
+  socket.emit('put', {
+    verb: 'delete',
+    subject: 'name',
+    user: cookie('userId'),
+    name: name
+  })
+
+  parent.remove()
+  delete Data.names[name]
+}
+
+F.addNameToDOM = record => {
   const li = document.createElement('li')
+  const btn = document.createElement('button')
   const input = F.$('[name=\"name\"]')
-  if (value === undefined) {
-    value = input.value
+  if (!record) {
+    record.name = input.value
+    record.score = 0
+    record.matches = {}
   }
   // add to Global
-  window.Data.names[value] = {
-    name: value,
-    score: 0,
-    matches: {}
-  }
-  // add to client
+  window.Data.names[record.name] = record
+  // set up li
   li.className = 'name'
-  li.innerText = value
+  li.innerText = record.name
+  li.dataset.value = record.name
+  li.addEventListener('click', () => {
+    Data.names[record.name].score++
+    socket.emit('put', {
+      verb: 'update',
+      subject: 'name',
+      user: cookie('userId'),
+      nameObj: Data.names[record.name]
+    })
+  })
+  // set up button
+  btn.className= 'close'
+  btn.setAttribute('type', 'button')
+  btn.innerText = 'X'
+  btn.addEventListener('click', F.deleteName)
+
+  // add to client
+  li.appendChild(btn)
   F.$('.names').appendChild(li)
   // clear input
   input.value = ''
-  return value
+  return record.name
 },
 
-F.createName = (e) => {
+F.createName = e => {
   e.preventDefault()
 
   const value = F.addNameToDOM()
