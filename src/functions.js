@@ -45,9 +45,11 @@ F.addNameToDOM = record => {
   const btn = document.createElement('button')
   const input = F.$('[name=\"name\"]')
   if (!record) {
-    record.name = input.value
-    record.score = 0
-    record.matches = {}
+    record = {
+      name: input.value,
+      score: 0,
+      matches: {}
+    }
   }
   // add to Global
   window.Data.names[record.name] = record

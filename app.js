@@ -1,32 +1,37 @@
 'strict mode'
 
-const fs = require('fs')
-const mime = require('mime')
-const app = require('express')()
+const express = require('express')
+const app = express()
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const session = require('express-session')
+
 const config = require('./node/config')
 const socket = require('./node/socket')
 
+// configure express app
+app.use(express.static('public'))
+app.use(cookieParser())
+app.use(session({
+  name: 'connect.sessionId',
+  secret: 'stupor secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    secure: false,
+    maxAge: 604800000
+  }
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+require('./node/server/routes.js')(__dirname, app, passport)
+
+// set up server
 const server = app.listen(config.port, config.ip)
 console.log(`attempting to run server on port ${config.port}.`)
 socket.createNew(server)
 
-app.get(/.*/, (req, res) => {
-  var file = undefined
-  if (req.url === '/') {
-    file = __dirname+'/public/index.html'
-  } else if (req.url.match('favicon.ico')) {
-    return res.end()
-  } else {
-    file = req.url.replace('/', __dirname+'/public/')
-  }
-
-  fs.readFile(file, (err, data) => {
-    if (err) {
-      return console.error(err)
-    }
-    res.writeHead(200, {'Content-Type': mime.lookup(file)})
-    res.write(data)
-    res.end()
-  })
-})
 
