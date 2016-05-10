@@ -26,6 +26,8 @@ SASS v3.4.15
     - installation: use [NVM](https://github.com/creationix/nvm) or download [latest stable version](https://nodejs.org/en/)
   - Make sure NPM is up to date
     - installation: (`$ sudo npm install  -g npm`)
+  - * If you don't have XCode installed on your machine, you can download the command line tools:
+    - installation: `$ xcode-select --install`
   - Install dependencies: `$ npm install`
 
 ## Dev Watch
