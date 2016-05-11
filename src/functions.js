@@ -20,7 +20,7 @@ F.login = e => {
   }
 
   cookie('userId', userId)
-  window.location.pathname = '/create.html'
+  window.location.pathname = '/create'
 },
 
 F.deleteName = e => {

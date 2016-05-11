@@ -4,6 +4,8 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>Choosely</title>
+  <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,400italic' rel='stylesheet' type='text/css'>
+  <link href="/public/styles.css" rel="stylesheet" type="text/css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
@@ -12,14 +14,23 @@
     <legend>Welcome. Let's get you set up.</legend>
     <form id="sign-in">
       <label name="label-user">
-        Your name
-        <input name="user" type="text" placeholder="I.P. Freeley"/>
+        Your email
+        <input name="user" type="email" placeholder="my@email.com"/>
+      </label>
+      <label name="label-password">
+        Your password
+        <input name="user" type="password"/>
       </label>
       <label name="label-partner">
-        Your patner's name
-        <input name="partner" type="text" placeholder="Ben Dover"/>
+        Your patner's email
+        <input name="partner" type="email" placeholder="partner@email.com"/>
       </label>
-      <button type="button" id="login-btn">Sign In</button> 
+      <button type="button" id="login-btn">Log In</button>
+      <button type="button" id="signup-btn">Sign Up</button>
+    </form>
+    <form id="oauth">
+      <button type="button" id="twitter-btn">Twitter</button>
+      <button type="button" id="google-btn">Google</button>
     </form>
   </fieldset>
   <script src="/dist/app.js"></script>

@@ -38,15 +38,10 @@ CSS is written using SASS, and compiled with the following command (make sure yo
   - `$ sass --watch ./sass:./public`
 
 ## Run Locally
-In order to run this application on your local machine, you need both a Node and HTTP server running. A simple way to do the latter is with `http-server`.
-
-  - `$ sudo npm install -g http-server`
-
-Once that's done, you can run both servers from the main repo folder (`choosely/`), in two different Terminal windows: 
+In order to run this application on your local machine, you need the Node server running. You can do that from the main repo folder (`choosely/`), in a different Terminal window: 
 
   - `$ node app`
-  - `$ http-server -p 8008`
 
 Then you can load the page in any browser by navigating to `http://localhost:8008`.
 
-Note: you can quit either sever in Terminal by typing `ctrl-c`.
+Note: you can quit the sever in Terminal by typing `ctrl-c`.

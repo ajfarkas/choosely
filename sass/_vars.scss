@@ -1,62 +1,37 @@
 // # Colors
 // ## Color Names
-$light-red: #fff3f4;
-$red: #ff3d61;
-$green: #9dc871;
-$lighter-cyan: #b4edf1;
-$light-cyan: #bafffc;
-$cyan: #4ebac2;
-$lighter-blue: #e6f9fb;
-$light-blue: #d9eef0;
-$blue: #19537c;
-$dark-blue: #003e69;
-$dark-blue-trans: rgba(20,82,125,.9);
-$grey-blue: #6d90a8;
-$grey: #b1b1b1;
-$grey-plus: #d2d2d2;
-$light-grey: #eeeeee;
-$mid-grey: #f5f5f5;
-$dark-grey: #6c6c6c;
-$grey-trans: rgba(55,55,55,.8);
-$purple: #80f;
+
 
 // ## Main Colors
-$color1: #4a4a4a;
-$color2: $cyan;
-$color3: $red;
-$invert: #fff;
+$color1: black;
+$color2: skyblue;
+$color3: red;
+$invert: white;
 
 // ## Background Colors
-$background: $light-grey;
-$el-bg: white;
-$nav-bg: $dark-blue;
+$background: white;
+$bg-invert: black;
 
 // # Type
 // ## Font Families 
-$font-header: DIN Condensed, sans-serif;
-$font-primary: Avenir-Book, sans-serif;
+$font-primary: Playfair Display, serif;
+$font-secondary: Helvetica, sans-serif;
 
 // ## Font Sizes
 $font-lg: rem(18);
-$font-size: rem(16);
+$font-med: rem(16);
 $font-sm: rem(14);
-$font-tiny: rem(11);
 
 // ## Font Weights
 $font-weight: 300;
 
 // ## Type Colors
-$text-color:  #fff;
-$text-color2: $cyan;
-$link: $text-color2;
-$link-a: #73baf7;
+$text-color:  $color1;
+$text-color2: $invert;
+$link-a: $color3;
 
 // # Buttons
-// ## Basic
-$btn-color: $text-color2;
-$btn-text: $invert;
-$btn-select: $color3;
-$btn-active: #295859;
+
 
 
 // ## Footer
