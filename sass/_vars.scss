@@ -1,5 +1,10 @@
 // # Colors
 // ## Color Names
+$red: red;
+$green: #4edbb0;
+$light-green: #d3edc0;
+$blue: #1350bb;
+$light-blue: #7580d2;
 
 
 // ## Main Colors
@@ -7,6 +12,10 @@ $color1: black;
 $color2: skyblue;
 $color3: red;
 $invert: white;
+
+// ## Gradients
+$grad1: linear-gradient(to right, #{$blue}, #{$light-blue});
+$grad2: linear-gradient(to right, #{$green}, #{$light-green});
 
 // ## Background Colors
 $background: white;
@@ -29,9 +38,6 @@ $font-weight: 300;
 $text-color:  $color1;
 $text-color2: $invert;
 $link-a: $color3;
-
-// # Buttons
-
 
 
 // ## Footer

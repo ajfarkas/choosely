@@ -14,6 +14,11 @@
           transform: #{$command};
 }
 
+@mixin clip-path($path) {
+    -webkit-clip-path: #{$path};
+            clip-path: #{$path};
+}
+
 @mixin animation($name, $duration, $timing:"", $delay:"", $iteration:"", $direction:"") {
   -webkit-animation: $name $duration unquote(#{$timing}) unquote(#{$delay}) unquote(#{$iteration}) unquote(#{$direction});
   animation: $name $duration unquote(#{$timing}) unquote(#{$delay}) unquote(#{$iteration}) unquote(#{$direction});

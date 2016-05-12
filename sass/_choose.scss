@@ -1,6 +1,54 @@
+#choose {
+  overflow: hidden;
+}
+
+h2 {
+  font-size: rem(36);
+}
+h3 {
+  font-size: rem(24);
+  text-transform: uppercase;
+}
+
+.name {
+  position: fixed;
+  z-index: 99;
+  left: 50%;
+  @include transform(translateX(-50%));
+  color: white;
+}
+
+.choice {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+
+  & .svg-arrow.left {
+    position: absolute;
+    top: 10%;
+    left: 10vh;
+  }
+  & .svg-arrow.right {
+    position: absolute;
+    bottom: 10%;
+    right: 10vh;
+  }
+}
+
 .name-a {
   background-color: seagreen;
+  background-image: $grad1;
+
+  & .name { top: 10%; }
 }
 .name-b {
   background-color: skyblue;
+  background-image: $grad2;
+  @include clip-path(polygon(0% 20%, 0% 100%, 100% 100%, 100% 80%));
+
+  & .name { bottom: 10%; }
 }
+

@@ -8,22 +8,40 @@
   <link href="/public/styles.css" rel="stylesheet" type="text/css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body>
-  <div class="name-a">
-    <p class="left">&lt;</p>
+<body id="choose">
+  <div class="choice name-a">
+    <svg class="svg-arrow left">
+      <use xlink:href="#svg-arrow"/>
+    </svg>
     <div class="name">
-      <p class="heart">V</p>
+      <svg class="svg-heart">
+        <use xlink:href="#svg-heart"/>
+      </svg>
       <h2 data-value="Brandon">Brandon</h2>
       <h3 data-value="Farkas">Farkas</h3>
     </div>
   </div>
-  <div class="name-b">
-    <p class="right">&gt;</p>
+  <div class="choice name-b">
+    <svg class="svg-arrow right">
+      <use xlink:href="#svg-arrow"/>
+    </svg>
     <div class="name">
-      <p class="heart">V</p>
+      <svg class="svg-heart">
+        <use xlink:href="#svg-heart"/>
+      </svg>
       <h2 data-value="Willoughby">Willoughby</h2>
       <h3 data-value="Farkas-Madden">Farkas-Madden</h3>
     </div>
   </div>
+  <svg id="icon-defs" xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <defs>
+      <symbol id="svg-heart" viewBox="0 -1 28 26.5">
+        <path d="M13.9,4.1c9.3-8.8,18.5,2,10.8,9.5c-6.5,6.5-10.8,10.3-10.8,10.3S9.6,20.1,3.1,13.6C-4.4,6.8,5.9-5.7,13.9,4.1z"/>
+      </symbol>
+      <symbol id="svg-arrow" viewBox="0 0 28 48">
+        <path d="M4,4L24,24L4,44"/>
+      </symbol>
+    </defs>
+  </svg>
 </body>
 </html>

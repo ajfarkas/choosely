@@ -1,0 +1,25 @@
+.svg-heart {
+  fill: none;
+  stroke: $text-color2;
+  stroke-width: 1px;
+  
+  height: 30px;
+  width: 33px;
+
+  &:hover {
+    fill: $red;
+  }
+}
+
+.svg-arrow {
+  fill: none;
+  stroke: $text-color2;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  height: 24px;
+  width: 12px;
+
+  &.left { @include transform(rotate(180deg)); }
+}

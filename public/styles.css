@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  border: 0; }
+  border: none; }
 
 html {
   font-size: 62.5%; }
@@ -73,10 +73,75 @@ canvas {
 footer {
   height: 55px; }
 
+.svg-heart {
+  fill: none;
+  stroke: white;
+  stroke-width: 1px;
+  height: 30px;
+  width: 33px; }
+  .svg-heart:hover {
+    fill: red; }
+
+.svg-arrow {
+  fill: none;
+  stroke: white;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  height: 24px;
+  width: 12px; }
+  .svg-arrow.left {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg); }
+
+#choose {
+  overflow: hidden; }
+
+h2 {
+  font-size: 3.6rem; }
+
+h3 {
+  font-size: 2.4rem;
+  text-transform: uppercase; }
+
+.name {
+  position: fixed;
+  z-index: 99;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  color: white; }
+
+.choice {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  text-align: center; }
+  .choice .svg-arrow.left {
+    position: absolute;
+    top: 10%;
+    left: 10vh; }
+  .choice .svg-arrow.right {
+    position: absolute;
+    bottom: 10%;
+    right: 10vh; }
+
 .name-a {
-  background-color: seagreen; }
+  background-color: seagreen;
+  background-image: linear-gradient(to right, #1350bb, #7580d2); }
+  .name-a .name {
+    top: 10%; }
 
 .name-b {
-  background-color: skyblue; }
+  background-color: skyblue;
+  background-image: linear-gradient(to right, #4edbb0, #d3edc0);
+  -webkit-clip-path: polygon(0% 20%, 0% 100%, 100% 100%, 100% 80%);
+  clip-path: polygon(0% 20%, 0% 100%, 100% 100%, 100% 80%); }
+  .name-b .name {
+    bottom: 10%; }
 
 /*# sourceMappingURL=styles.css.map */
