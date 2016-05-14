@@ -74,23 +74,24 @@ footer {
   height: 55px; }
 
 .svg-heart {
-  fill: rgba(255, 255, 255, 0);
-  stroke: white;
+  fill: rgba(230, 0, 0, 0);
   stroke-width: 1px;
-  height: 30px;
-  width: 33px;
+  height: 24px;
+  width: 27px;
   transition: all linear .25s; }
 
 .svg-arrow {
   fill: none;
-  stroke: white;
   stroke-width: 8px;
   stroke-linecap: square;
   stroke-linejoin: miter;
   height: 26px;
   width: 13px;
-  opacity: .5; }
+  opacity: .3; }
+  .svg-arrow.right {
+    stroke: black; }
   .svg-arrow.left {
+    stroke: white;
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
     transform: rotate(180deg); }
@@ -111,21 +112,20 @@ h3 {
   left: 50%;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
-  color: white; }
+  transform: translateX(-50%); }
 
 .chosen .svg-heart {
   transition: all linear 250ms 250ms; }
 
 .chosen .svg-heart,
 :not(.chosen) .name:hover .svg-heart {
-  fill: red;
+  fill: rgba(230, 0, 0, 0.9);
   stroke: red;
   position: relative;
-  top: -2px;
-  height: 34px;
-  width: 37px;
-  margin-bottom: -4px; }
+  top: 0px;
+  height: 26px;
+  width: 29px;
+  margin-bottom: -2px; }
 
 .choice {
   z-index: 1;
@@ -146,17 +146,23 @@ h3 {
 
 .name-a {
   background-color: seagreen;
-  background-image: linear-gradient(to right, #1350bb, #7580d2); }
+  background-image: linear-gradient(to right, #1350bb, #7580d2);
+  color: white; }
   .name-a .name {
     top: 10%; }
+  .name-a .svg-heart {
+    stroke: white; }
 
 .name-b {
   background-color: skyblue;
   background-image: linear-gradient(to right, #4edbb0, #d3edc0);
+  color: black;
   -webkit-clip-path: polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%);
   clip-path: polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%); }
   .name-b .name {
     bottom: 10%; }
+  .name-b .svg-heart {
+    stroke: black; }
 
 .name-a.chosen {
   -webkit-animation: growNameA 0.3s ease forwards  ;

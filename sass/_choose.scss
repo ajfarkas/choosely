@@ -17,19 +17,18 @@ h3 {
   z-index: 99;
   left: 50%;
   @include transform(translateX(-50%));
-  color: white;
 }
 .chosen .svg-heart { transition: all linear 250ms 250ms; }
 .chosen .svg-heart,
 :not(.chosen) .name:hover .svg-heart {
   fill: $red;
-  stroke: $red;
+  stroke: $red-shadow;
 
   position: relative;
-  top: -2px;
-  height: 34px;
-  width: 37px;
-  margin-bottom: -4px;
+  top: 0px;
+  height: 26px;
+  width: 29px;
+  margin-bottom: -2px;
 }
 
 .choice {
@@ -56,15 +55,19 @@ h3 {
 .name-a {
   background-color: seagreen;
   background-image: $grad1;
+  color: $text-color2;
 
   & .name { top: 10%; }
+  & .svg-heart { stroke: $text-color2; }
 }
 .name-b {
   background-color: skyblue;
   background-image: $grad2;
+  color: $text-color;
   @include clip-path(polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%));
 
   & .name { bottom: 10%; }
+  & .svg-heart { stroke: $text-color; }
 }
 
 .name-a.chosen {

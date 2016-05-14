@@ -1,23 +1,27 @@
 .svg-heart {
-  fill: rgba(255,255,255,0);
-  stroke: $text-color2;
+  fill: $red-clear;
   stroke-width: 1px;
   
-  height: 30px;
-  width: 33px;
+  height: 24px;
+  width: 27px;
   transition: all linear .25s;
 }
 
 .svg-arrow {
   fill: none;
-  stroke: $text-color2;
   stroke-width: 8px;
   stroke-linecap: square;
   stroke-linejoin: miter;
 
   height: 26px;
   width: 13px;
-  opacity: .5;
+  opacity: .3;
 
-  &.left { @include transform(rotate(180deg)); }
+  &.right {
+    stroke: $text-color;
+  }
+  &.left {
+    stroke: $text-color2;
+    @include transform(rotate(180deg));
+  }
 }
