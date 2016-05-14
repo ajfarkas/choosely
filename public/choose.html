@@ -4,7 +4,7 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>Choosely | Choose!</title>
-  <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,400italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
   <link href="/public/styles.css" rel="stylesheet" type="text/css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
@@ -38,10 +38,18 @@
       <symbol id="svg-heart" viewBox="0 -1 28 26.5">
         <path d="M13.9,4.1c9.3-8.8,18.5,2,10.8,9.5c-6.5,6.5-10.8,10.3-10.8,10.3S9.6,20.1,3.1,13.6C-4.4,6.8,5.9-5.7,13.9,4.1z"/>
       </symbol>
-      <symbol id="svg-arrow" viewBox="0 0 28 48">
-        <path d="M4,4L24,24L4,44"/>
+      <symbol id="svg-arrow" viewBox="0 0 32 48">
+        <path d="M8,4L28,24L8,44"/>
       </symbol>
     </defs>
   </svg>
 </body>
+<script>
+  document.querySelector('.name-b').addEventListener('click', function() {
+    document.querySelector('.name-b').className += ' chosen'
+  })
+  document.querySelector('.name-a').addEventListener('click', function() {
+    document.querySelector('.name-a').className += ' chosen'
+  })
+</script>
 </html>
