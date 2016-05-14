@@ -5,7 +5,9 @@ module.exports = {
   // fast sourcemap, refs compiled code
   devtool: 'eval',
   entry: {
-    app: './src/main.js',
+    login: './src/login.js',
+    create: './src/create.js',
+    choose: './src/choose.js',
     test: './tests/testAll.js'},
   output: {
     path: path.join(__dirname, './public/dist'),

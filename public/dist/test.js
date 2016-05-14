@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports) {
 
-	eval("'use strict';\n\nQUnit.module('Initializations');\nQUnit.test('QUnit init', function (assert) {\n  assert.ok(true, 'QUnit is working.');\n});\nQUnit.test('socket init', function (assert) {\n  assert.ok(io(), 'socket.io is installed.');\n});\n\n/*****************\n ** WEBPACK FOOTER\n ** ./tests/testAll.js\n ** module id = 0\n ** module chunks = 1\n **/\n//# sourceURL=webpack:///./tests/testAll.js?");
+	eval("'use strict';\n\nQUnit.module('Initializations');\nQUnit.test('QUnit init', function (assert) {\n  assert.ok(true, 'QUnit is working.');\n});\nQUnit.test('socket init', function (assert) {\n  assert.ok(io(), 'socket.io is installed.');\n});\n\n/*****************\n ** WEBPACK FOOTER\n ** ./tests/testAll.js\n ** module id = 0\n ** module chunks = 3\n **/\n//# sourceURL=webpack:///./tests/testAll.js?");
 
 /***/ }
 /******/ ]);

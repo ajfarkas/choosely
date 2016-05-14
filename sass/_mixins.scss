@@ -19,9 +19,9 @@
             clip-path: #{$path};
 }
 
-@mixin animation($name, $duration, $timing:"", $delay:"", $iteration:"", $direction:"") {
-  -webkit-animation: $name $duration unquote(#{$timing}) unquote(#{$delay}) unquote(#{$iteration}) unquote(#{$direction});
-  animation: $name $duration unquote(#{$timing}) unquote(#{$delay}) unquote(#{$iteration}) unquote(#{$direction});
+@mixin animation($content...) {
+  -webkit-animation: #{$content};
+  animation: #{$content};
 }
 
 @mixin keyframes($name) {

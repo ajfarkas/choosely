@@ -3,10 +3,11 @@ const mime = require('mime')
 
 module.exports = function routes(dir, app, passport) {
   function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next()
-    }
-    res.redirect('/')
+    // if (req.isAuthenticated()) {
+    //   return next()
+    // }
+    // res.redirect('/')
+    return next()
   }
   
   // serve application files
