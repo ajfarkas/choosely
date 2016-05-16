@@ -223,7 +223,9 @@ h3 {
   left: 0;
   width: 100vw;
   height: 100vh;
-  text-align: center; }
+  text-align: center;
+  opacity: 1;
+  transition: opacity .75s ease; }
   .choice .svg-arrow.left {
     position: absolute;
     top: 10%;
@@ -237,6 +239,16 @@ h3 {
   background-color: seagreen;
   background-image: linear-gradient(to right, #1350bb, #7580d2);
   color: white; }
+  .name-a[data-color="1"] {
+    background-image: linear-gradient(to right, #1350bb, #7580d2); }
+  .name-a[data-color="3"] {
+    background-image: linear-gradient(to right, #73B1E8, #2C6EDE); }
+  .name-a[data-color="5"] {
+    background-image: linear-gradient(to right, #FF3663, #FF8450); }
+  .name-a[data-color="7"] {
+    background-image: linear-gradient(to right, #CBAEB4, #937F76); }
+  .name-a[data-color="9"] {
+    background-image: linear-gradient(to right, #B087D6, #B049D5); }
   .name-a .name {
     top: 10%; }
   .name-a .svg-heart {
@@ -248,6 +260,16 @@ h3 {
   color: black;
   -webkit-clip-path: polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%);
   clip-path: polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%); }
+  .name-b[data-color="2"] {
+    background-image: linear-gradient(to right, #4edbb0, #d3edc0); }
+  .name-b[data-color="4"] {
+    background-image: linear-gradient(to right, #EDD7C0, #EFE82E); }
+  .name-b[data-color="6"] {
+    background-image: linear-gradient(to right, #BAD0C6, #47DAD8); }
+  .name-b[data-color="8"] {
+    background-image: linear-gradient(to right, #C5F1EB, #7DBCDA); }
+  .name-b[data-color="10"] {
+    background-image: linear-gradient(to right, #C5F1D7, #DBF3FF); }
   .name-b .name {
     bottom: 10%; }
   .name-b .svg-heart {

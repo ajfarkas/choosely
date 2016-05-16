@@ -1,13 +1,29 @@
 // # Colors
 // ## Color Names
-$red: rgba(230, 0, 0, 0.9);;
+$red: #FF3663;
+$red2: #FF8450;
+$brown: #CBAEB4;
+$brown2: #937F76;
+$yellow: #EDD7C0;
+$yellow2: #EFE82E;
+$palegreen: #C5F1D7;
+$palegreen2: #DBF3FF;
 $green: #4edbb0;
-$light-green: #d3edc0;
-$blue: #1350bb;
-$light-blue: #7580d2;
+$green2: #d3edc0;
+$aqua: #BAD0C6;
+$aqua2: #47DAD8;
+$skyblue: #C5F1EB;
+$skyblue2: #7DBCDA;
+$blue: #73B1E8;
+$blue2: #2C6EDE;
+$darkblue: #1350bb;
+$darkblue2: #7580d2;
+$prince: #B087D6;
+$prince2: #B049D5;
 
-$red-clear: rgba(230, 0, 0, 0);
-$red-shadow: rgba(255, 0, 0, 1);
+$heart: rgba(230, 0, 0, 0.9);
+$heart-clear: rgba(230, 0, 0, 0);
+$heart-shadow: rgba(255, 0, 0, 1);
 
 // ## Main Colors
 $color1: black;
@@ -16,8 +32,16 @@ $color3: red;
 $invert: white;
 
 // ## Gradients
-$grad1: linear-gradient(to right, #{$blue}, #{$light-blue});
-$grad2: linear-gradient(to right, #{$green}, #{$light-green});
+$grad1: linear-gradient(to right, #{$darkblue}, #{$darkblue2});
+$grad2: linear-gradient(to right, #{$green}, #{$green2});
+$grad3: linear-gradient(to right, #{$blue}, #{$blue2});
+$grad4: linear-gradient(to right, #{$yellow}, #{$yellow2});
+$grad5: linear-gradient(to right, #{$red}, #{$red2});
+$grad6: linear-gradient(to right, #{$aqua}, #{$aqua2});
+$grad7: linear-gradient(to right, #{$brown}, #{$brown2});
+$grad8: linear-gradient(to right, #{$skyblue}, #{$skyblue2});
+$grad9: linear-gradient(to right, #{$prince}, #{$prince2});
+$grad10: linear-gradient(to right, #{$palegreen}, #{$palegreen2});
 
 // ## Background Colors
 $background: white;

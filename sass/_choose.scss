@@ -27,6 +27,8 @@ h3 {
   width: 100vw;
   height: 100vh;
   text-align: center;
+  opacity: 1;
+  transition: opacity .75s ease;
 
   & .svg-arrow.left {
     position: absolute;
@@ -44,6 +46,11 @@ h3 {
   background-color: seagreen;
   background-image: $grad1;
   color: $text-color2;
+  &[data-color="1"] { background-image: $grad1; }
+  &[data-color="3"] { background-image: $grad3; }
+  &[data-color="5"] { background-image: $grad5; }
+  &[data-color="7"] { background-image: $grad7; }
+  &[data-color="9"] { background-image: $grad9; }
 
   & .name { top: 10%; }
   & .svg-heart { stroke: $text-color2; }
@@ -53,6 +60,11 @@ h3 {
   background-image: $grad2;
   color: $text-color;
   @include clip-path(polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%));
+  &[data-color="2"] { background-image: $grad2; }
+  &[data-color="4"] { background-image: $grad4; }
+  &[data-color="6"] { background-image: $grad6; }
+  &[data-color="8"] { background-image: $grad8; }
+  &[data-color="10"] { background-image: $grad10; }
 
   & .name { bottom: 10%; }
   & .svg-heart { stroke: $text-color; }
@@ -73,8 +85,8 @@ h3 {
 .chosen .svg-heart { transition: all linear 250ms 250ms; }
 .chosen .svg-heart,
 :not(.chosen) .name:hover .svg-heart {
-  fill: $red;
-  stroke: $red-shadow;
+  fill: $heart;
+  stroke: $heart-shadow;
 
   position: relative;
   top: 0px;

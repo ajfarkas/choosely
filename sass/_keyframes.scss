@@ -1,0 +1,54 @@
+@include keyframes(growNameA) {
+  0% {
+    z-index: 10;
+    @include clip-path(polygon(100% 0%, 0% 0%, 0% 20%, 100% 80%, 100% 80%));
+  }
+  25% {
+    z-index: 10;
+    @include clip-path(polygon(100% 0%, 0% 0%, 0% 40%, 100% 100%, 100% 100%));
+  }
+  100% {
+    z-index: 10;
+    @include clip-path(polygon(100% 0%, 0% 0%, 0% 100%, 0% 100%, 100% 100%));
+  }
+}
+
+@include keyframes(growNameB) {
+  0% {
+    z-index: 10;
+    @include clip-path(polygon(0% 100%, 100% 100%, 100% 80%, 0% 20%, 0% 20%));
+  }
+  25% {
+    z-index: 10;
+    @include clip-path(polygon(0% 100%, 100% 100%, 100% 60%, 0% 0%, 0% 0%));
+  }
+  100% {
+    z-index: 10;
+    @include clip-path(polygon(0% 100%, 100% 100%, 100% 0%, 100% 0%, 0% 0%));
+  }
+}
+
+@include keyframes(sink) {
+  from {
+    @include transform(translate(-50%, 0%));
+  }
+  to {
+    top: 50%;
+    @include transform(translate(-50%, -50%));
+  }
+}
+
+@include keyframes(rise) {
+  from {
+    @include transform(translate(-50%, 0%));
+  }
+  to {
+    bottom: 50%;
+    @include transform(translate(-50%, 50%));
+  }
+}
+
+@include keyframes(fadeOut) {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
