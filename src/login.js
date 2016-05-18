@@ -1,6 +1,23 @@
 import connect from './realtime/connect'
-import F from './helpers/functions'
 import Help from './helpers/helpers'
-
+// init socket.io
 connect()
-Help.$('#login-btn').addEventListener('click', F.login)
+
+function login(e) {
+  e.preventDefault()
+  
+  let userId = undefined
+  const user = Help.$('[name=\"user\"]').value.toLowerCase()
+  const partner = Help.$('[name=\"partner\"]').value.toLowerCase()
+
+  if (user > partner) {
+    userId = `${user}_${partner}`
+  } else {
+    userId = `${partner}_${user}`
+  }
+
+  cookie('userId', userId)
+  window.location.pathname = '/create'
+}
+
+Help.$('#login-btn').addEventListener('click', login)

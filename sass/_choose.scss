@@ -29,16 +29,17 @@ h3 {
   text-align: center;
   opacity: 1;
   transition: opacity .75s ease;
+  @include user-select(none);
 
   & .svg-arrow.left {
     position: absolute;
     top: 10%;
-    left: 10vh;
+    left: 10vw;
   }
   & .svg-arrow.right {
     position: absolute;
     bottom: 10%;
-    right: 10vh;
+    right: 10vw;
   }
 }
 
@@ -84,7 +85,7 @@ h3 {
 
 .chosen .svg-heart { transition: all linear 250ms 250ms; }
 .chosen .svg-heart,
-:not(.chosen) .name:hover .svg-heart {
+:not(.chosen) .choice:hover .svg-heart {
   fill: $heart;
   stroke: $heart-shadow;
 

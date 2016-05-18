@@ -1,6 +1,7 @@
 export default function initSocket(cb) {
   window.Data = {
-    names: {}
+    names: {},
+    lastnames: ['Madden', 'Farkas', 'Farkas-Madden', 'Madden-Farkas']
   }
 
   window.socket = io()

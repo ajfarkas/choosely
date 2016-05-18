@@ -225,15 +225,19 @@ h3 {
   height: 100vh;
   text-align: center;
   opacity: 1;
-  transition: opacity .75s ease; }
+  transition: opacity .75s ease;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
   .choice .svg-arrow.left {
     position: absolute;
     top: 10%;
-    left: 10vh; }
+    left: 10vw; }
   .choice .svg-arrow.right {
     position: absolute;
     bottom: 10%;
-    right: 10vh; }
+    right: 10vw; }
 
 .name-a {
   background-color: seagreen;
@@ -293,7 +297,7 @@ h3 {
   transition: all linear 250ms 250ms; }
 
 .chosen .svg-heart,
-:not(.chosen) .name:hover .svg-heart {
+:not(.chosen) .choice:hover .svg-heart {
   fill: rgba(230, 0, 0, 0.9);
   stroke: red;
   position: relative;

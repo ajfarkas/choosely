@@ -2,23 +2,25 @@ import F from '../helpers/functions'
 
 const handlers = {
   connected: data => {
+    console.log('connectedHandler')
     F.readNames(data)
   },
   namesRead: data => {
-    if (window.location.pathname.match(/^create$/)) {
+    console.log('namesRead')
+    if (window.location.pathname.match(/\/create\b/)) {
       Object.keys(data).forEach(record => {
         F.addNameToDOM(data[record])
       })
-    } else if (window.location.pathname.match(/^choose$/)) {
+    } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names = data
     }
   },
   nameAdded: data => {
-    if (window.location.pathname.match(/^create$/)) {
+    if (window.location.pathname.match(/\/create\b/)) {
       if (window.Data.names[data.name] === undefined) {
         F.addNameToDOM(data) 
       }
-    } else if (window.location.pathname.match(/^choose$/)) {
+    } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names[data.name] = data
     }
   }
