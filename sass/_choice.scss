@@ -8,8 +8,12 @@ h2 {
   font-size: rem(36);
 }
 h3 {
-  font-size: rem(24);
+  font-size: rem(18);
   text-transform: uppercase;
+
+  @media (min-width: $bkpt-names) {
+    font-size: rem(24);
+  }
 }
 
 .name {

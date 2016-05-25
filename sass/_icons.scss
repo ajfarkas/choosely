@@ -1,10 +1,15 @@
 .svg-heart {
+  display: none;
   fill: $heart-clear;
   stroke-width: 1px;
   
   height: 24px;
   width: 27px;
   transition: all linear .25s;
+
+  @media (min-width: $bkpt-names) {
+    display: inline;
+  }
 }
 
 .svg-arrow {
