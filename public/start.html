@@ -3,25 +3,24 @@
 <head>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Create List | Choosely</title>
+  <title>Start | Choosely</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Playfair+Display:700' rel='stylesheet' type='text/css'>
   <link href="/public/create.css" rel="stylesheet" type="text/css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <h1>Choosely</h1>
-  <fieldset>
-    <legend>Let's start with a list of names.</legend>
-    <form id="names">
-      <label name="label-name">
-        Add a name
-        <input name="name" type="text" placeholder="Chris"/>
-      </label>
-      <button type="button" class="input-btn">+</button>
-    </form>
-  </fieldset>
-  <ul class="names">
-  </ul>
+  <main>
+    <h2>Step 1</h2>
+    <p class="instructions">Start your list of names.</p>
+    <p class="query">Will this list contain names for ladies or gents (or both)?</p>
+    <div class="slider-container">
+      <p class="slider-label">Masculine</p>
+      <div class="slider">
+        <div class="slider-knob"></div>
+      </div>
+      <p class="slider-label">Feminine</p>
+    </div>
+  </main>
   <script src="/dist/create.js"></script>
 </body>
 </html>

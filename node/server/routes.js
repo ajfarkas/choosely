@@ -35,6 +35,7 @@ module.exports = function routes(dir, app, passport) {
   )
   // logged in html files
   const insidePages = [
+    ['/start', 'start.html'],
     ['/create', 'create.html'],
     ['/choose', 'choose.html']
   ]
