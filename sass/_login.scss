@@ -1,0 +1,63 @@
+body {
+  background-color: $lightest-blue;
+}
+
+h1 {
+  margin: {
+    top: 20px;
+    bottom: 10px;
+  }
+  padding: 15px 0 31px;
+  text-align: center;
+  font-size: rem(44);
+  background: {
+    image: url('/icons/choosely-logo.svg');
+    repeat: no-repeat;
+    position: center;
+  }
+}
+
+fieldset {
+  text-align: center;
+}
+
+legend {
+  margin-bottom: 20px;
+  font-size: rem(18);
+}
+
+#sign-in,
+#oauth {
+  width: 80%;
+  margin-left: 10%;
+
+  & input {
+    @include appearance(none);
+    width: 100%;
+    font-size: rem(16);
+    margin: {
+      top: 4px;
+      bottom: 12px;
+    }
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 2px solid lightgrey;
+  }
+
+  & button {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+
+label {
+  display: block;
+  font: {
+    size: rem(15);
+    weight: 600;
+  }
+  text: {
+    align: left;
+    transform: uppercase;
+  }
+}

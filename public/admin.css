@@ -13,9 +13,9 @@ body {
   min-height: 100vh;
   box-sizing: border-box;
   background-color: white;
-  font-family: Playfair Display, serif;
+  font-family: Open Sans, sans-serif;
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.02rem;
   color: #3b3b3b; }
   @media screen and (max-device-width: 480px) and (orientation: landscape) {
@@ -54,15 +54,23 @@ li {
   cursor: default; }
 
 h1, h2, h3, h4, h5, h6, p, code {
-  font-weight: 700;
   line-height: 1.3; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Playfair Display, serif;
+  font-weight: 700; }
 
 button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   background-color: #9ae9e6;
-  color: #3b3b3b; }
+  color: #3b3b3b;
+  padding: 8px;
+  font-family: open sans, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase; }
 
 canvas {
   -webkit-transform: translate3d(0, 0, 0);
@@ -202,19 +210,48 @@ body {
   background-color: #e7f7f7; }
 
 h1 {
-  text-align: center; }
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 15px 0 31px;
+  text-align: center;
+  font-size: 4.4rem;
+  background-image: url("/icons/choosely-logo.svg");
+  background-repeat: no-repeat;
+  background-position: center; }
 
 fieldset {
   text-align: center; }
 
-#sign-in {
+legend {
+  margin-bottom: 20px;
+  font-size: 1.8rem; }
+
+#sign-in,
+#oauth {
   width: 80%;
   margin-left: 10%; }
-  #sign-in input {
-    width: 100%; }
+  #sign-in input,
+  #oauth input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    font-size: 1.6rem;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 2px solid lightgrey; }
+  #sign-in button,
+  #oauth button {
+    width: 100%;
+    margin-top: 15px; }
 
 label {
   display: block;
-  text-align: left; }
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase; }
 
-/*# sourceMappingURL=login.css.map */
+/*# sourceMappingURL=admin.css.map */
