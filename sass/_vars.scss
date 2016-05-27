@@ -23,6 +23,7 @@ $prince2: #b049d5;
 
 $lightest-blue: #e7f7f7;
 $bright-blue: #9ae9e6;
+$clear-blue: #68e0de;
 $black: #3b3b3b;
 
 $heart: rgba(230, 0, 0, 0.9);
@@ -46,6 +47,8 @@ $grad7: linear-gradient(to right, #{$brown}, #{$brown2});
 $grad8: linear-gradient(to right, #{$skyblue}, #{$skyblue2});
 $grad9: linear-gradient(to right, #{$prince}, #{$prince2});
 $grad10: linear-gradient(to right, #{$palegreen}, #{$palegreen2});
+
+$start-grad: linear-gradient(to bottom, #e9f8f8, #eff0f2);
 
 // ## Background Colors
 $background: white;

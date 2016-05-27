@@ -206,13 +206,43 @@ canvas {
     opacity: 1; }
   to {
     opacity: 0; } }
+#start {
+  display: flex;
+  flex-flow: column nowrap;
+  background-image: linear-gradient(to bottom, #e9f8f8, #eff0f2);
+  text-align: center; }
+
+header,
+main {
+  flex: 1 0;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center; }
+
+h2 {
+  font-family: Oswald, serif;
+  font-size: 3.6rem;
+  text-transform: uppercase; }
+
+.instructions {
+  margin-top: 10px;
+  font-size: 1.8rem; }
+
+.slider-container {
+  display: flex;
+  align-items: center; }
+
+.slider-label {
+  flex: 1 0 auto; }
+
 .slider {
+  flex: 0 auto;
   position: relative;
   width: 120px;
   height: 40px;
   border-radius: 20px;
   box-shadow: inset 0 1px 2px black;
-  background-color: skyblue; }
+  background-color: #68e0de; }
 
 .slider-knob {
   position: absolute;
@@ -222,7 +252,7 @@ canvas {
   height: 34px;
   background-color: white;
   border-radius: 17px;
-  border: 1px solid skyblue;
+  border: 1px solid #68e0de;
   box-shadow: 0 1px 1px 0 black;
   transition: left .5s linear; }
 
