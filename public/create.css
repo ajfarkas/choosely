@@ -228,12 +228,21 @@ h2 {
   margin-top: 10px;
   font-size: 1.8rem; }
 
+.query {
+  align-self: center;
+  max-width: 80%;
+  margin-bottom: 20px;
+  font-size: 2.2rem; }
+
 .slider-container {
   display: flex;
   align-items: center; }
 
 .slider-label {
-  flex: 1 0 auto; }
+  flex: 1 0 auto;
+  font-family: Oswald, serif;
+  font-size: 20px;
+  text-transform: uppercase; }
 
 .slider {
   flex: 0 auto;
