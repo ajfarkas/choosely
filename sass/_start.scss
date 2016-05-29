@@ -15,7 +15,7 @@ main {
 
 h2 {
   font: {
-    family: Oswald, serif;
+    family: $font-tertiary;
     size: rem(36);
   }
   text-transform: uppercase;
@@ -23,7 +23,7 @@ h2 {
 
 .instructions {
   margin-top: 10px;
-  font-size: rem(18);
+  font-size: rem(20);
 }
 
 .query {
@@ -41,10 +41,18 @@ h2 {
 .slider-label {
   flex: 1 0 auto;
   font: {
-    family: Oswald, serif;
+    family: $font-tertiary;
     size: 20px;
   }
   text-transform: uppercase;
+}
+.slider-label:first-of-type {
+  text-align: right;
+  margin-right: 10px;
+}
+.slider-label:last-of-type {
+  text-align: left;
+  margin-left: 10px;
 }
 
 .slider {

@@ -6,22 +6,26 @@ const F = {}
 F.deleteName = e => {
   e.preventDefault()
 
-  const parent = e.target.parentNode
-  const name = parent.dataset.value
+  return console.log('F.deleteName temp. disabled')
 
-  socket.emit('put', {
-    verb: 'delete',
-    subject: 'name',
-    user: cookie('userId'),
-    name: name
-  })
+  // const parent = e.target.parentNode
+  // const name = parent.dataset.value
 
-  parent.remove()
-  delete Data.names[name]
+  // socket.emit('put', {
+  //   verb: 'delete',
+  //   subject: 'name',
+  //   user: cookie('userId'),
+  //   name: name
+  // })
+
+  // parent.remove()
+  // delete Data.names[name]
 }
 
 F.addNameToDOM = record => {
   const li = document.createElement('li')
+  const num = document.createElement('p')
+  const name = document.createElement('p')
   const btn = document.createElement('button')
   const input = Help.$('[name=\"name\"]')
   if (!record) {
@@ -35,7 +39,6 @@ F.addNameToDOM = record => {
   window.Data.names[record.name] = record
   // set up li
   li.className = 'name'
-  li.innerText = record.name
   li.dataset.value = record.name
   li.addEventListener('click', () => {
     Data.names[record.name].score++
@@ -46,13 +49,21 @@ F.addNameToDOM = record => {
       nameObj: Data.names[record.name]
     })
   })
+
+  num.className = 'name-order'
+  num.innerText = Help.$$('.name').length + 1
+
+  name.className = 'name-label'
+  name.innerText = record.name
   // set up button
-  btn.className= 'close'
+  btn.className= 'edit-btn'
   btn.setAttribute('type', 'button')
-  btn.innerText = 'X'
+  btn.innerText = 'edit'
   btn.addEventListener('click', F.deleteName)
 
   // add to client
+  li.appendChild(num)
+  li.appendChild(name)
   li.appendChild(btn)
   Help.$('.names').appendChild(li)
   // clear input

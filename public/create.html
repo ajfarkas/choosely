@@ -4,24 +4,30 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>Create List | Choosely</title>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Playfair+Display:700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Oswald:400' rel='stylesheet' type='text/css'>
   <link href="/public/create.css" rel="stylesheet" type="text/css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <h1>Choosely</h1>
+  <header>
+    <h3>Create a List</h3>
+    <p class="list-kind">First Names</p>
+  </header>
+  <main>
+    <ul class="names">
+    </ul>
+  </main>
   <fieldset>
-    <legend>Let's start with a list of names.</legend>
+    <ul class="create-actions">
+      <li class="create-action">Add Last Name</li>
+      <li class="create-action">Finish</li>
+    </ul>
     <form id="names">
-      <label name="label-name">
-        Add a name
-        <input name="name" type="text" placeholder="Chris"/>
-      </label>
+      <input name="name" type="text" placeholder="Add a name"/>
       <button type="button" class="input-btn">+</button>
     </form>
   </fieldset>
-  <ul class="names">
-  </ul>
+  
   <script src="/dist/create.js"></script>
 </body>
 </html>

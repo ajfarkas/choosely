@@ -21,9 +21,11 @@ $darkblue2: #7580d2;
 $prince: #b087d6;
 $prince2: #b049d5;
 
+$gold: #fddd27;
 $lightest-blue: #e7f7f7;
 $bright-blue: #9ae9e6;
 $clear-blue: #68e0de;
+$grey: #dce0e0;
 $black: #3b3b3b;
 
 $heart: rgba(230, 0, 0, 0.9);
@@ -35,6 +37,7 @@ $color1: $black;
 $color2: skyblue;
 $color3: red;
 $invert: white;
+$highlight: $gold;
 
 // ## Gradients
 $grad1: linear-gradient(to right, #{$darkblue}, #{$darkblue2});
@@ -49,6 +52,7 @@ $grad9: linear-gradient(to right, #{$prince}, #{$prince2});
 $grad10: linear-gradient(to right, #{$palegreen}, #{$palegreen2});
 
 $start-grad: linear-gradient(to bottom, #e9f8f8, #eff0f2);
+$list-grad-boy: linear-gradient(to bottom, #{$skyblue2}, #c5b5d4);
 
 // ## Background Colors
 $background: white;
@@ -58,6 +62,7 @@ $bg-invert: black;
 // ## Font Families 
 $font-primary: Open Sans, sans-serif;
 $font-secondary: Playfair Display, serif;
+$font-tertiary: Oswald, serif;
 
 // ## Font Sizes
 $font-lg: rem(18);

@@ -50,7 +50,7 @@
 /* 1 */
 /***/ function(module, exports) {
 
-	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nfunction $(selector, container) {\n  container = container || document;\n  return container.querySelector(selector);\n}\n\nexports.default = {\n  $: $\n};\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/helpers/helpers.js\n ** module id = 1\n ** module chunks = 0 1 2\n **/\n//# sourceURL=webpack:///./src/helpers/helpers.js?");
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nfunction $(selector, container) {\n  container = container || document;\n  return container.querySelector(selector);\n}\n\nfunction $$(selector, container) {\n  container = container || document;\n  return container.querySelectorAll(selector);\n}\n\nexports.default = {\n  $: $, $$: $$\n};\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/helpers/helpers.js\n ** module id = 1\n ** module chunks = 0 1 2\n **/\n//# sourceURL=webpack:///./src/helpers/helpers.js?");
 
 /***/ },
 /* 2 */
