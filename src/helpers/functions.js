@@ -23,6 +23,7 @@ F.deleteName = e => {
 }
 
 F.addNameToDOM = record => {
+  const main = Help.$('main')
   const li = document.createElement('li')
   const num = document.createElement('p')
   const name = document.createElement('p')
@@ -68,6 +69,9 @@ F.addNameToDOM = record => {
   Help.$('.names').appendChild(li)
   // clear input
   input.value = ''
+  // keep last name on list onscreen
+  main.scrollTop = main.getBoundingClientRect().height
+
   return record.name
 },
 

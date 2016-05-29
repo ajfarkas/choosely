@@ -1,4 +1,11 @@
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100vh;
+}
+
 header {
+  flex: 0 0 auto;
   padding: 8px;
   background-color: $black;
   text-align: center;
@@ -12,6 +19,13 @@ h3 {
   }
   text-transform: uppercase;
   color: $highlight;
+}
+
+main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  background-color: $black;
 }
 
 .list-kind {
@@ -53,7 +67,7 @@ h3 {
 
   box-sizing: border-box;
   white-space: nowrap;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
   font: {
     size: rem(26);
@@ -85,5 +99,38 @@ h3 {
   border-right: 1px solid $invert;
   white-space: nowrap;
   text-transform: uppercase;
+}
 
+fieldset {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+input {
+  @include appearance(none);
+  width: 100%;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  font: {
+    family: $font-primary;
+    size: rem(26);
+    weight: 600;
+  }
+  color: $black;
+}
+
+.input-btn {
+  position: absolute;
+  bottom: rem(13);
+  right: rem(14);
+  width: rem(48);
+  height: rem(48);
+  padding: 0;
+  border-radius: rem(24);
+  font: {
+    size: rem(40);
+    weight: 400;
+  }
+  line-height: 1;
+  color: $invert;
 }
