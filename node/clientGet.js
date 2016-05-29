@@ -16,10 +16,10 @@ const get = {
     db.createValueStream({gte: `${data.user}_`, lte: `${data.user}_\xff`, valueEncoding: 'json'})
       .on('error', err => console.error(err))
       .on('data', d => {
-        if (Object.keys(names).indexOf(d.name) === -1) {
+        if (Object.keys(names).indexOf(d.id) === -1) {
           d.score = d.score === undefined ? 0 : d.score
           d.matches = d.matches === undefined ? {} : d.matches
-          names[d.name] = d
+          names[d.id] = d
           console.log(names)
         }
       })

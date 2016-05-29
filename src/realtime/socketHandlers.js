@@ -8,7 +8,8 @@ const handlers = {
   namesRead: data => {
     console.log('namesRead')
     if (window.location.pathname.match(/\/create\b/)) {
-      Object.keys(data).forEach(record => {
+      const sortedData = Object.keys(data).sort((a, b) => data[a].createDate > data[b].createDate)
+      sortedData.forEach(record => {
         F.addNameToDOM(data[record])
       })
     } else if (window.location.pathname.match(/\/choose\b/)) {
@@ -17,11 +18,11 @@ const handlers = {
   },
   nameAdded: data => {
     if (window.location.pathname.match(/\/create\b/)) {
-      if (window.Data.names[data.name] === undefined) {
+      if (window.Data.names[data.id] === undefined) {
         F.addNameToDOM(data) 
       }
     } else if (window.location.pathname.match(/\/choose\b/)) {
-      Data.names[data.name] = data
+      Data.names[data.id] = data
     }
   }
 }

@@ -22,6 +22,66 @@ F.deleteName = e => {
   // delete Data.names[name]
 }
 
+F.updateName = e => {
+  e.preventDefault()
+
+  const input = Help.$('#names input')
+  const button = Help.$('#names button')
+  const target = Help.$('.editing')
+  const id = target.dataset.value
+  const name = input.value
+  // update local Data Object
+  Data.names[id].name = name
+  // send to server
+  socket.emit('put', {
+    verb: 'update',
+    subject: 'name',
+    user: cookie('userId'),
+    nameObj: Data.names[id]
+  })
+  // reset input
+  input.value = ''
+  button.innerText = '+'
+  // reset selected name
+  target.dataset.name = name
+  Help.$('.name-label', target).innerText = name
+  target.className = target.className.replace(' editing', '')
+  // switch listeners to Create
+  button.removeEventListener('click', F.updateName)
+  input.removeEventListener('keypress', F.enterAndUpdateName)
+
+  button.addEventListener('click', F.createName)
+  input.addEventListener('keypress', F.enterAndCreateName)
+}
+
+F.enterAndUpdateName = e => {
+  if (e.keyCode === 13) {
+    e.preventDefault()
+    F.updateName(e)
+  } else {
+    return true
+  }
+}
+
+F.updateNameMode = e => {
+  e.preventDefault()
+
+  const parent = e.target.parentNode
+  const name = parent.dataset.name
+  const input = Help.$('#names input')
+  const button = Help.$('#names button')
+
+  parent.className += ' editing'
+  input.value = name
+  button.innerText = '√'
+  // switch listeners to Update
+  button.removeEventListener('click', F.createName)
+  input.removeEventListener('keypress', F.enterAndCreateName)
+
+  button.addEventListener('click', F.updateName)
+  input.addEventListener('keypress', F.enterAndUpdateName)
+}
+
 F.addNameToDOM = record => {
   const main = Help.$('main')
   const li = document.createElement('li')
@@ -30,26 +90,23 @@ F.addNameToDOM = record => {
   const btn = document.createElement('button')
   const input = Help.$('[name=\"name\"]')
   if (!record) {
-    record = {
-      name: input.value,
-      score: 0,
-      matches: {}
-    }
+    return console.error('no record provided!')
   }
   // add to Global
-  window.Data.names[record.name] = record
+  window.Data.names[record.id] = record
   // set up li
   li.className = 'name'
-  li.dataset.value = record.name
-  li.addEventListener('click', () => {
-    Data.names[record.name].score++
-    socket.emit('put', {
-      verb: 'update',
-      subject: 'name',
-      user: cookie('userId'),
-      nameObj: Data.names[record.name]
-    })
-  })
+  li.dataset.value = record.id
+  li.dataset.name = record.name
+  // li.addEventListener('click', () => {
+  //   Data.names[record.id].score++
+  //   socket.emit('put', {
+  //     verb: 'update',
+  //     subject: 'name',
+  //     user: cookie('userId'),
+  //     nameObj: Data.names[record.id]
+  //   })
+  // })
 
   num.className = 'name-order'
   num.innerText = Help.$$('.name').length + 1
@@ -60,7 +117,7 @@ F.addNameToDOM = record => {
   btn.className= 'edit-btn'
   btn.setAttribute('type', 'button')
   btn.innerText = 'edit'
-  btn.addEventListener('click', F.deleteName)
+  btn.addEventListener('click', F.updateNameMode)
 
   // add to client
   li.appendChild(num)
@@ -73,20 +130,28 @@ F.addNameToDOM = record => {
   main.scrollTop = main.getBoundingClientRect().height
 
   return record.name
-},
+}
 
 F.createName = e => {
   e.preventDefault()
 
-  const value = F.addNameToDOM()
   // send to server
   socket.emit('put', {
     verb: 'create',
     subject: 'name',
     user: cookie('userId'),
-    name: value
+    name: Help.$('#names input').value
   })
-},
+}
+
+F.enterAndCreateName = e => {
+  if (e.keyCode === 13) {
+    e.preventDefault()
+    F.createName(e)
+  } else {
+    return true
+  }
+}
 
 F.readNames = () => {
   socket.emit('get', {

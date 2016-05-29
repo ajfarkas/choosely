@@ -1,6 +1,7 @@
 // All DB WRITE functions
 
 const db = require('./data')
+const uuid = require('node-uuid')
 
 const put = {
   /* Create Name
@@ -12,18 +13,20 @@ const put = {
    *   - name: new name
   */
   createName: (client, data) => {
-    const lookup = `${data.user}_${data.name}`
     const info = {
+      id: uuid.v4(),
       name: data.name,
       score: 0,
-      matches: {}
+      matches: {},
+      createDate: Date.now()
     }
+    const lookup = `${data.user}_${info.id}`
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
         return console.error(err)
       }
-      console.log(`${data.name} saved to DB.`)
-      // client.emit('nameAdded', data)
+      console.log(`${info.name} saved to DB.`)
+      client.emit('nameAdded', info)
     })
   },
   /* Update Name
@@ -33,6 +36,7 @@ const put = {
    *   - subject (`str`): 'name'
    *   - user (`str`):  user concat partner name
    *   - nameObj ('Obj'):
+   *     - id (`uuid`): identifier for name obj
    *     - name (`str`): name in contest
    *     - score (`int`): value of this name's score
    *     - matches (`obj`): obj describing number of times (v)
@@ -40,7 +44,7 @@ const put = {
   */
   updateName: (client, data) => {
     const info = data.nameObj
-    const lookup = `${data.user}_${info.name}`
+    const lookup = `${data.user}_${info.id}`
     console.log(lookup)
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
@@ -55,15 +59,15 @@ const put = {
    *   - verb: 'delete'
    *   - subject: 'name'
    *   - user: user concat partner name
-   *   - name: name to remove from DB
+   *   - id (`uuid`): identifier for name to remove from db
   */
   deleteName: (client, data) => {
-    const lookup = `${data.user}_${data.name}`
+    const lookup = `${data.user}_${data.id}`
     db.del(lookup, err => {
       if (err) {
         return console.error(err)
       }
-      console.log(`${data.name} deleted from DB.`)
+      console.log(`${data.id} deleted from DB.`)
     })
   },
   error: func => {
