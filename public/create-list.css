@@ -226,7 +226,7 @@ h3 {
 
 main {
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 40px;
   overflow: auto;
   background-color: #3b3b3b; }
 
@@ -245,6 +245,9 @@ main {
   padding-bottom: 5px;
   border-top: 1px solid white;
   border-bottom: 1px solid white; }
+
+.editing {
+  background-color: #ff3663; }
 
 .name-order {
   flex: 0 auto;

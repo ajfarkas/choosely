@@ -6,27 +6,42 @@ const F = {}
 F.deleteName = e => {
   e.preventDefault()
 
-  return console.log('F.deleteName temp. disabled')
+  const parent = e.target.parentNode
+  const id = parent.dataset.value
 
-  // const parent = e.target.parentNode
-  // const name = parent.dataset.value
+  socket.emit('put', {
+    verb: 'delete',
+    subject: 'name',
+    user: cookie('userId'),
+    id: id
+  })
 
-  // socket.emit('put', {
-  //   verb: 'delete',
-  //   subject: 'name',
-  //   user: cookie('userId'),
-  //   name: name
-  // })
+  parent.remove()
+  delete Data.names[id]
+}
 
-  // parent.remove()
-  // delete Data.names[name]
+F.cancelUpdateNameMode = () => {
+  const input = Help.$('#names input')
+  const button = Help.$('#names button')
+  const target = Help.$('.editing')
+
+  // reset input
+  input.value = ''
+  button.innerText = '+'
+
+  target.className = target.className.replace(' editing', '')
+  // switch listeners to Create
+  button.removeEventListener('click', F.updateName)
+  input.removeEventListener('keypress', F.enterAndUpdateName)
+
+  button.addEventListener('click', F.createName)
+  input.addEventListener('keypress', F.enterAndCreateName)
 }
 
 F.updateName = e => {
   e.preventDefault()
 
   const input = Help.$('#names input')
-  const button = Help.$('#names button')
   const target = Help.$('.editing')
   const id = target.dataset.value
   const name = input.value
@@ -39,19 +54,12 @@ F.updateName = e => {
     user: cookie('userId'),
     nameObj: Data.names[id]
   })
-  // reset input
-  input.value = ''
-  button.innerText = '+'
+  
   // reset selected name
   target.dataset.name = name
   Help.$('.name-label', target).innerText = name
-  target.className = target.className.replace(' editing', '')
-  // switch listeners to Create
-  button.removeEventListener('click', F.updateName)
-  input.removeEventListener('keypress', F.enterAndUpdateName)
-
-  button.addEventListener('click', F.createName)
-  input.addEventListener('keypress', F.enterAndCreateName)
+  
+  F.cancelUpdateNameMode()
 }
 
 F.enterAndUpdateName = e => {
@@ -70,6 +78,15 @@ F.updateNameMode = e => {
   const name = parent.dataset.name
   const input = Help.$('#names input')
   const button = Help.$('#names button')
+  const prev = Help.$('.editing')
+  // clear any previous editing class or cancel edit
+  if (prev) {
+    if (prev === parent) {
+      return F.cancelUpdateNameMode()
+    } else {
+      prev.className = prev.className.replace(' editing', '')
+    }
+  }
 
   parent.className += ' editing'
   input.value = name

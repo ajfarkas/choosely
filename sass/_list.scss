@@ -23,7 +23,7 @@ h3 {
 
 main {
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 40px;
   overflow: auto;
   background-color: $black;
 }
@@ -50,6 +50,9 @@ main {
     top: 1px solid $invert;
     bottom: 1px solid $invert;
   }
+}
+.editing {
+  background-color: $red;
 }
 
 .name-order {
