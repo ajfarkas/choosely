@@ -46,6 +46,18 @@ module.exports = function routes(dir, app, passport) {
     })
   })
 
+  app.post('/loginreq', (req, res) => {
+    req.on('data', d => {
+      const data = new Buffer(d).toString()
+      const json = JSON.parse(data)
+      delete json.password
+
+      res.writeHead(200, {'Content-Type': 'application/json'})
+      res.write( JSON.stringify(json) )
+      res.end()
+    })
+  })
+
   // other files (css, js)
   app.get(/.*/, (req, res) => {
     console.log(dir+req.url)

@@ -1,25 +1,28 @@
-import F from '../helpers/functions'
+import Setup from '../helpers/func_setup'
+import Create from '../helpers/func_create'
+import Choose from '../helpers/func_choose'
 
 const handlers = {
   connected: data => {
     console.log('connectedHandler')
-    F.readNames(data)
+    Setup.readNames(data)
   },
   namesRead: data => {
     console.log('namesRead')
     if (window.location.pathname.match(/\/create\b/)) {
       const sortedData = Object.keys(data).sort((a, b) => data[a].createDate > data[b].createDate)
       sortedData.forEach(record => {
-        F.addNameToDOM(data[record])
+        Create.addNameToDOM(data[record])
       })
     } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names = data
+      Choose.initMatches(data)
     }
   },
   nameAdded: data => {
     if (window.location.pathname.match(/\/create\b/)) {
       if (window.Data.names[data.id] === undefined) {
-        F.addNameToDOM(data) 
+        Create.addNameToDOM(data) 
       }
     } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names[data.id] = data

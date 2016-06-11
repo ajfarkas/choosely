@@ -170,12 +170,4 @@ F.enterAndCreateName = e => {
   }
 }
 
-F.readNames = () => {
-  socket.emit('get', {
-    verb: 'read',
-    subject: 'names',
-    user: cookie('userId')
-  })
-}
-
-module.exports = F
+export default F
