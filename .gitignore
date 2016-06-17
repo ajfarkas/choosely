@@ -5,3 +5,4 @@ choosely.sublime-workspace
 .sass-cache/
 node_modules/
 choicesdb/
+public/dist/
