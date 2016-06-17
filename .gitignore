@@ -1,4 +1,7 @@
 .DS_Store
+choosely.sublime-project
+choosely.sublime-workspace
+
 .sass-cache/
 node_modules/
 choicesdb/
