@@ -1,14 +1,13 @@
 import getFetch from 'whatwg-fetch'
 import es6Promise from 'es6-promise'
-
-import Help from './helpers'
+import cookie from '../static/js.cookie.js'
 
 // init Promise for IE and maybe FF
 es6Promise.polyfill()
 
 const F = {}
 
-F.login = (username, password, partnername) => {
+F.login = (username, password, partnername, signup) => {
   const req = new Request(`${location.origin}/loginreq`, {
     method: 'post',
     headers: new Headers({
@@ -18,13 +17,19 @@ F.login = (username, password, partnername) => {
     body: JSON.stringify({
       username: username,
       password: password,
-      partnername: partnername
+      partnername: partnername,
+      signup: signup === true
     })
   })
 
   fetch(req)
     .then( res => res.json() )
-    .then( d => console.log(d) )
+    .then( d => {
+      // store user/partner ids, redir to list
+      const expiry = new Date(Date.now() + 604800000)
+      cookie('user_id', JSON.stringify(d), {expires: expiry})
+      window.location.pathname = '/create'
+    })
     .catch( e => console.error(e) )
 }
 

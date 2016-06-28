@@ -1,13 +1,15 @@
-import cookie from '../static/js.cookie.js'
-
 const F = {}
 
 F.readNames = () => {
-  socket.emit('get', {
-    verb: 'read',
-    subject: 'names',
-    user: cookie('userId')
-  })
+  if (Data.user.dbID) {
+    socket.emit('get', {
+      verb: 'read',
+      subject: 'names',
+      user: Data.user.dbID
+    })
+  } else {
+    alert('Data.user.dbID not found!')
+  }
 }
 
 export default F

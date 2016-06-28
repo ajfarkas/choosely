@@ -12,7 +12,7 @@ F.deleteName = e => {
   socket.emit('put', {
     verb: 'delete',
     subject: 'name',
-    user: cookie('userId'),
+    user: Data.user.dbID,
     id: id
   })
 
@@ -51,7 +51,7 @@ F.updateName = e => {
   socket.emit('put', {
     verb: 'update',
     subject: 'name',
-    user: cookie('userId'),
+    user: Data.user.dbID,
     nameObj: Data.names[id]
   })
   
@@ -156,7 +156,7 @@ F.createName = e => {
   socket.emit('put', {
     verb: 'create',
     subject: 'name',
-    user: cookie('userId'),
+    user: Data.user.dbID,
     name: Help.$('#names input').value
   })
 }

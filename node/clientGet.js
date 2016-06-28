@@ -2,39 +2,78 @@
 
 const db = require('./data')
 
-const get = {
-  /* Read Names
-   * Return all names associated with user account.
-   * Args: Data (`Obj`)
-   *   - verb: 'read'
-   *   - subject: 'names'
-   *   - user: user concat partner name
-  */
-  readNames: (client, data) => {
-    var names = {}
-    
-    db.createValueStream({gte: `${data.user}_`, lte: `${data.user}_\xff`, valueEncoding: 'json'})
-      .on('error', err => console.error(err))
-      .on('data', d => {
-        if (Object.keys(names).indexOf(d.id) === -1) {
-          d.score = d.score === undefined ? 0 : d.score
-          d.matches = d.matches === undefined ? {} : d.matches
-          names[d.id] = d
-          console.log(names)
-        }
-      })
-      .on('end', () => {
+const poolSize = 4
+
+const get = {}
+
+/* Read Names
+ * Return all names associated with user account.
+ * Args: data (`Obj`)
+ *   - verb: 'read'
+ *   - subject: 'names'
+ *   - user: user joined with partner uuid by `_`
+*/
+get.readNames = (client, data, cb) => {
+  var names = {}
+
+  db.createValueStream({gte: `${data.user}_`, lte: `${data.user}_\xff`, valueEncoding: 'json'})
+    .on('error', err => console.error(err))
+    .on('data', d => {
+      if (Object.keys(names).indexOf(d.id) === -1) {
+        names[d.id] = d
+      }
+    })
+    .on('end', () => {
+      if (typeof cb === 'function') {
+        cb(names)
+      } else {
         client.emit('namesRead', names)
+      }
+    })
+}
+/* Read Pool
+ * Return array of pools associated with user account.
+ * Args: data (`Obj`)
+ *   - verb: 'read'
+ *   - subject: 'pool'
+ *   - user: user joined with partner uuid by `_`
+*/
+get.readPool = (client, data, forceRefresh) => {
+  db.get(`${data.user}_pools`, (err, pools) => {
+    if (err && err.notFound || forceRefresh) {
+      // create Pool
+      get.readNames(client, data, names => {
+        const idArray = Object.keys(names)
+        const poolNum = idArray.length / poolSize
+        var p = poolNum
+        pools = []
+
+        for (; p > 0; p--) {
+          pools[p - 1] = []
+        }
+
+        idArray.forEach((name, i) => {
+          pools[i % poolNum].push(name)
+        })
+
+        client.emit('poolRead', pools)
       })
-  },
-  error: func => {
-    console.error(`${func} is not a socket.get function.`)
-  }
+    } else if (err) {
+      return console.error(err)
+    } else {
+      client.emit('poolRead', pools)
+    }
+  })
 }
 
+get.error = func => {
+  console.error(`${func} is not a socket.get function.`)
+}
+
+
 function socketGet(client, d) {
-  console.log('socketGet')
   const func = d.verb+d.subject.replace(/\w/, w => w.toUpperCase())
+  console.log(`socketGet ${func}`)
   if (get[func]) {
     get[func](client, d)
   } else {

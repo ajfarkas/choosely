@@ -9,17 +9,22 @@ const put = {
    * Args: data (`Obj`)
    *   - verb: 'create'
    *   - subject: 'name'
-   *   - user: user concat partner name
+   *   - user: user joined with partner uuid by `_`
    *   - name: new name
   */
   createName: (client, data) => {
     const info = {
       id: uuid.v4(),
       name: data.name,
-      score: 0,
-      matches: {},
       createDate: Date.now()
     }
+    data.user.split('_').forEach(id => {
+      info[id] = {
+        score: 0,
+        matches: {},
+        eliminated: false
+      }
+    })
     const lookup = `${data.user}_${info.id}`
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
@@ -34,13 +39,15 @@ const put = {
    * Args: data (`Obj`)
    *   - verb (`str`): 'create'
    *   - subject (`str`): 'name'
-   *   - user (`str`):  user concat partner name
+   *   - user (`str`):  user joined with partner uuid by `_`
    *   - nameObj ('Obj'):
    *     - id (`uuid`): identifier for name obj
    *     - name (`str`): name in contest
-   *     - score (`int`): value of this name's score
-   *     - matches (`obj`): obj describing number of times (v)
-   *       matched against other names (k).
+   *     - [user/partner UUID] (`obj`):
+   *       - score (`int`): number of wins associated with this name
+   *       - matches (`arr`): array of ids of other names this name was matched against.
+   *       - elimainated (`bool`): whether this name has been eliminated
+   *         from this user's bracket.
   */
   updateName: (client, data) => {
     const info = data.nameObj
@@ -58,7 +65,7 @@ const put = {
    * Args: data (`Obj`)
    *   - verb: 'delete'
    *   - subject: 'name'
-   *   - user: user concat partner name
+   *   - user: user joined with partner uuid by `_`
    *   - id (`uuid`): identifier for name to remove from db
   */
   deleteName: (client, data) => {

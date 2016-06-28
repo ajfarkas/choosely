@@ -1,5 +1,7 @@
 const fs = require('fs')
 const mime = require('mime')
+const db = require('../data')
+const login = require('./login')
 
 module.exports = function routes(dir, app, passport) {
   function isLoggedIn(req, res, next) {
@@ -46,15 +48,24 @@ module.exports = function routes(dir, app, passport) {
     })
   })
 
+  function writeIDs(res, ids) {
+    console.log('writeIDs', ids)
+    res.writeHead(200, {'Content-Type': 'application/json'})
+    res.write( JSON.stringify(ids) )
+    res.end()
+  }
   app.post('/loginreq', (req, res) => {
     req.on('data', d => {
       const data = new Buffer(d).toString()
       const json = JSON.parse(data)
-      delete json.password
+      console.log('loginreq')
 
-      res.writeHead(200, {'Content-Type': 'application/json'})
-      res.write( JSON.stringify(json) )
-      res.end()
+      if (json.signup) {
+        console.log('signup:'+json.signup)
+        login.signup(json, writeIDs.bind(null, res))
+      } else {
+        login.getIds(json, writeIDs.bind(null, res))
+      }
     })
   })
 

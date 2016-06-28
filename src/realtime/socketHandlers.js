@@ -1,11 +1,18 @@
 import Setup from '../helpers/func_setup'
 import Create from '../helpers/func_create'
 import Choose from '../helpers/func_choose'
+import cookie from '../static/js.cookie.js'
 
 const handlers = {
   connected: data => {
-    console.log('connectedHandler')
-    Setup.readNames(data)
+    console.log('connectedHandler', data)
+    if (cookie('user_id')) {
+      Object.assign(Data.user, JSON.parse(cookie('user_id')) )
+      Data.user.dbID = Data.user.partner > Data.user.user
+        ? `${Data.user.partner}_${Data.user.user}`
+        : `${Data.user.user}_${Data.user.partner}`
+    }
+    Setup.readNames()
   },
   namesRead: data => {
     console.log('namesRead')
@@ -16,7 +23,7 @@ const handlers = {
       })
     } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names = data
-      Choose.initMatches(data)
+      Choose.readPools()
     }
   },
   nameAdded: data => {
@@ -27,6 +34,9 @@ const handlers = {
     } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names[data.id] = data
     }
+  },
+  poolRead: data => {
+    console.log(data)
   }
 }
 

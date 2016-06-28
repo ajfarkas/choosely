@@ -1,11 +1,22 @@
 const F = {}
 
-F.initMatches = (names) => {
-  const idArray = Object.keys(names)
-  return idArray
+
+F.readPools = () => {
+  socket.emit('get', {
+    verb: 'read',
+    subject: 'pool',
+    user: Data.user.dbID
+  })
 }
 
-F.setNewMatch = () => {
+
+F.setNewPoolMatch = () => {
+}
+
+F.initBracket = () => {
+}
+
+F.setNewBracketMatch = () => {
 }
 
 export default F
