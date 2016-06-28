@@ -7,6 +7,7 @@ es6Promise.polyfill()
 
 const F = {}
 
+// Login and signup function
 F.login = (username, password, partnername, signup) => {
   const req = new Request(`${location.origin}/loginreq`, {
     method: 'post',

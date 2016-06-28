@@ -4,7 +4,14 @@ const db = require('../data')
 const uuid = require('node-uuid')
 
 const login = {
-  // get or create UUID for user and partner
+  /* Login
+   * get UUID for user and partner
+   * Args:
+   *   - data (`obj`):
+   *     - username (`str`): user email address
+   *     - password (`str`): user password
+   *     - partnername (`str`): partner email address
+  */
   getIds(data, cb) {
     console.log('getIDs', `username-${data.username}`)
     const ids = {}
@@ -29,7 +36,14 @@ const login = {
       })
     })
   },
-
+  /* signup
+   * create UUID for user and get UUID for partner
+   * Args:
+   *   - data (`obj`):
+   *     - username (`str`): user email address
+   *     - password (`str`): user password
+   *     - partnername (`str`): partner email address
+  */ 
   signup(data, cb) {
     console.log('signup', `username-${data.username}`)
     db.get(`username-${data.partnername}`, (err, partnerData) => {
@@ -56,42 +70,6 @@ const login = {
       })
     })
   }
-  // getId(kind, name, obj) {
-  //   console.log(kind, name, JSON.stringify(obj))
-  //   return new Promise((aye, nay) => {
-  //     db.get(`username-${name}`, (err, id) => {
-  //       if (err) {
-  //         return console.error(err)
-  //       }
-  //       console.log(kind, id)
-  //       const data = {}
-  //       data[kind] = id
-
-  //       if (obj) {
-  //         return Object.assign(obj, data)
-  //       } else {
-  //         return data
-  //       }
-  //     })
-  //   })
-  // }
 }
-
-
-
-// if (err.notFound) {
-//   id = uuid.v4()
-//   const partners = partnerId ? [partnerId]: []
-//   const nameData = {
-//     id: id,
-//     email: name,
-//     partners: partners
-//   }
-//   db.put(`username-${name}`, nameData, e => {
-//     if (e) {
-//       console.error(e)
-//     }
-//   })
-// }
 
 module.exports = login
