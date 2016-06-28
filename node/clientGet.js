@@ -39,7 +39,7 @@ get.readNames = (client, data, cb) => {
  *   - user: user joined with partner uuid by `_`
 */
 get.readPool = (client, data, forceRefresh) => {
-  db.get(`${data.user}_pools`, (err, pools) => {
+  db.get(`${data.user}_pools`, { valueEncoding: 'json' }, (err, pools) => {
     if (err && err.notFound || forceRefresh) {
       // create Pool
       get.readNames(client, data, names => {
@@ -57,10 +57,16 @@ get.readPool = (client, data, forceRefresh) => {
         })
 
         client.emit('poolRead', pools)
+        db.put(`${data.user}_pools`, pools, { valueEncoding: 'json' }, err2 => {
+          if (err2) {
+            return console.error(err2)
+          }
+        })
       })
     } else if (err) {
       return console.error(err)
     } else {
+      console.log('read stored pool')
       client.emit('poolRead', pools)
     }
   })

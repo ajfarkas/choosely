@@ -13,6 +13,7 @@ const put = {
    *   - name: new name
   */
   createName: (client, data) => {
+    console.log('createname: '+JSON.stringify(data))
     const info = {
       id: uuid.v4(),
       name: data.name,
@@ -50,6 +51,7 @@ const put = {
    *         from this user's bracket.
   */
   updateName: (client, data) => {
+    console.log('updatename: '+JSON.stringify(data))
     const info = data.nameObj
     const lookup = `${data.user}_${info.id}`
     console.log(lookup)

@@ -1,34 +1,12 @@
 import Help from './helpers/helpers'
 import connect from './realtime/connect'
+import F from './helpers/func_choose'
 import setHandlers from './realtime/socketHandlers'
 // connect socket.io
 connect(setHandlers)
 
 const choices = ['a', 'b']
 const curtain = Help.$('.curtain')
-const colorNum = 5
-
-function showChoices() {
-  // push solid bg to back so that names will be visible
-  curtain.setAttribute('style', `${curtain.getAttribute('style')} z-index: -1;`)
-  // hack to force transition animation
-  setTimeout(() => {
-    choices.forEach(choice => {
-      Help.$(`.name-${choice}`).setAttribute('style', '')
-    })
-  }, 20)
-}
-
-function refreshChoices(names) {
-  // randomize background colors (dark set on top, light on bottom)
-  Help.$('.name-a').dataset.color = Math.ceil(Math.random() * colorNum) * 2 - 1
-  Help.$('.name-b').dataset.color = Math.ceil(Math.random() * colorNum) * 2
-  choices.forEach((choice, i) => {   
-    Help.$(`.name-${choice} h2`).innerText = names[i]
-    Help.$(`.name-${choice} h2`).dataset.value = names[i]
-  })
-  showChoices()
-}
 
 function hideChoices() {
   // set bg to selected choice bg
@@ -42,7 +20,7 @@ function hideChoices() {
   })
   chosen.className = chosen.className.replace(' chosen', '')
   // replace names with new set
-  refreshChoices(['Seamus', 'Alfred'])
+  F.newPoolMatch()
 }
 
 function choose(choice) {
@@ -52,6 +30,7 @@ function choose(choice) {
   choice.className += ' chosen'
   // allow for .chosen animation (see _choose.scss)
   setTimeout(hideChoices, 1650)
+  F.resolvePoolMatch(choice.val())
   return true
 }
 

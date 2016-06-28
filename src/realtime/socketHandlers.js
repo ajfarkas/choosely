@@ -15,7 +15,7 @@ const handlers = {
     Setup.readNames()
   },
   namesRead: data => {
-    console.log('namesRead')
+    console.log('namesRead', data)
     if (window.location.pathname.match(/\/create\b/)) {
       const sortedData = Object.keys(data).sort((a, b) => data[a].createDate > data[b].createDate)
       sortedData.forEach(record => {
@@ -36,7 +36,11 @@ const handlers = {
     }
   },
   poolRead: data => {
-    console.log(data)
+    Data.pools = data
+    if (Data.names.undefined) {
+      delete Data.names.undefined
+    }
+    Choose.newPoolMatch()
   }
 }
 
