@@ -1,7 +1,8 @@
 // Login functions for /loginreq route
 
-const db = require('../data')
-const uuid = require('node-uuid')
+// const user = require('../models/user'),
+const db = require('../data'),
+      uuid = require('node-uuid')
 
 const login = {
   /* Login
@@ -15,18 +16,19 @@ const login = {
   getIds(data, cb) {
     console.log('getIDs', `username-${data.username}`)
     const ids = {}
-    db.get(`username-${data.partnername}`, (err, partnerData) => {
+    db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (err, partnerData) => {
       if (err) {
         return console.error(err)
       }
-      partnerID = partnerData ? JSON.parse(partnerData).id : undefined
+      partnerID = partnerData ? partnerData._id : undefined
       ids.partner = partnerID
-      db.get(`username-${data.username}`, (err2, userData) => {
+      db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err2, userData) => {
         if (err2) {
           return console.error(err2)
         }
-        userID = userData ? JSON.parse(userData).id : undefined
+        userID = userData ? userData._id : undefined
         ids.user = userID
+        console.log(userData)
 
         if (typeof cb === 'function') {
           cb(ids)
@@ -46,18 +48,26 @@ const login = {
   */ 
   signup(data, cb) {
     console.log('signup', `username-${data.username}`)
-    db.get(`username-${data.partnername}`, (err, partnerData) => {
+    // check if partner has already signed up
+    db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (err, partnerData) => {
       if (err && !err.notFound) {
         return console.error(err)
       }
-      const partnerID = partnerData ? JSON.parse(partnerData).id : undefined
+      const notFound = err && err.notFound
+      const partner = {},
+            partnerID = notFound ? uuid.v4() : partnerData._id
+      partner[data.partnername] = partnerID
+      
+      const id = !notFound && partnerData.partners && partnerData.partners[data.username]
+        ? partnerData.partners[data.username]
+        : uuid.v4()
 
-      const id = uuid.v4()
       const nameData = {
-        id: id,
+        _id: id,
         email: data.username,
-        partners: partnerID ? [partnerID] : []
+        partners: partner
       }
+      console.log(nameData)
       db.put(`username-${data.username}`, nameData, { valueEncoding: 'json' }, e => {
         if (e) {
           return console.error(e)

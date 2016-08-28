@@ -1,4 +1,66 @@
-const bcrypt = require('bcrypt')
+// User login/signup functions
 
-const db = require('../data')
+const bcrypt = require('bcrypt-nodejs'),
+      uuid = require('node-uuid')
 
+const User = {}
+
+// `password` is `string`
+User.hashPass = (password, cb) => {
+  const SaltFactor = 5
+
+  bcrypt.genSalt(SaltFactor, (err, salt) => {
+    if (err) {
+      return console.error(err)
+    }
+
+    bcrypt.hash(password, salt, null, (errB, hash) => {
+      if (errB) {
+        return console.error(errB)
+      }
+      cb(hash)
+    })
+  })
+
+}
+/* `candidate` is user-input password `string`
+ * `hashedPass` is saved and hashed password `string`
+ * `cb` is callback function, which is passed an `error` and `boolean`
+*/
+User.comparePass = (candidate, hashedPass, cb) => {
+  console.log(`comparepass: ${candidate}, ${hashedPass}`)
+  return bcrypt.compare(candidate, hashedPass, (err, isMatch) => {
+    if (typeof cb === 'function') {
+      if (err) {
+        return cb(err)
+      }
+      return cb(null, isMatch)
+    } else {
+      if (err) {
+        return console.error(err)
+      }
+      return isMatch
+    }
+  })
+}
+
+/* `data` is `json object` of UserSchema
+ * `cb` is callback function, which is passed the user object
+*/
+User.createUser = (data, cb) => {
+  const user = {  
+    email: data.email.toLowerCase(),
+    profile: data.profile,
+    resetPasswordToken: data.resetPasswordToken || null,
+    resetPasswordExpires: data.resetPasswordExpires || null
+  }
+
+  User.hashPass(data.password, hash => {
+    user.hash = hash
+    user._id = uuid.v4()
+    cb(user)
+  })
+  
+}
+
+module.exports = User

@@ -14,7 +14,7 @@ const get = {}
  *   - user: user joined with partner uuid by `_`
 */
 get.readNames = (client, data, cb) => {
-  var names = {}
+  const names = {}
 
   db.createValueStream({gte: `${data.user}_`, lte: `${data.user}_\xff`, valueEncoding: 'json'})
     .on('error', err => console.error(err))
@@ -45,11 +45,10 @@ get.readPool = (client, data, forceRefresh) => {
       get.readNames(client, data, names => {
         const idArray = Object.keys(names)
         const poolNum = idArray.length / poolSize
-        var p = poolNum
         pools = []
 
-        for (; p > 0; p--) {
-          pools[p - 1] = []
+        for (; poolNum > 0; poolNum--) {
+          pools[poolNum - 1] = []
         }
 
         idArray.forEach((name, i) => {
