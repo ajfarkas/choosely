@@ -30,7 +30,7 @@ function choose(choice) {
   choice.className += ' chosen'
   // allow for .chosen animation (see _choose.scss)
   setTimeout(hideChoices, 1650)
-  F.resolvePoolMatch(choice.val())
+  F.resolvePoolMatch(choice.dataset.value)
   return true
 }
 

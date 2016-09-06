@@ -36,6 +36,7 @@ const handlers = {
     }
   },
   poolRead: data => {
+    console.log('pool read')
     Data.pools = data
     if (Data.names.undefined) {
       delete Data.names.undefined
@@ -49,7 +50,7 @@ export default function setHandlers(cb) {
     socket.on(event, handlers[event])
   })
 
-  if (cb) {
+  if (typeof cb === 'function') {
     return cb()
   }
 }

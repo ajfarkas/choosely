@@ -37,6 +37,7 @@ F.refreshChoices = names => {
 }
 
 F.newPoolMatch = () => {
+  console.log('new pool match')
   const allPools = Data.pools.join(',').split(',')
   const poolSize = Data.pools[0].length
   const poolOngoing = Object.keys(Data.names).some(id => {
@@ -55,6 +56,7 @@ F.newPoolMatch = () => {
 }
 
 F.resolvePoolMatch = (id) => {
+  console.log(id)
   // do cool stuff with id of winning name
 }
 

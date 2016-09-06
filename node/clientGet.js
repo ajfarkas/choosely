@@ -42,19 +42,22 @@ get.readPool = (client, data, forceRefresh) => {
   db.get(`${data.user}_pools`, { valueEncoding: 'json' }, (err, pools) => {
     if (err && err.notFound || forceRefresh) {
       // create Pool
-      get.readNames(client, data, names => {
+      console.log('creating new pool.')
+      get.readNames(client, data, (names) => {
         const idArray = Object.keys(names)
-        const poolNum = idArray.length / poolSize
+        const poolNum = Math.ceil(idArray.length / poolSize)
+        var i = poolNum
         pools = []
 
-        for (; poolNum > 0; poolNum--) {
-          pools[poolNum - 1] = []
+        console.log(idArray, poolNum)
+        for (; i > 0; i--) {
+          pools[i - 1] = []
         }
-
-        idArray.forEach((name, i) => {
-          pools[i % poolNum].push(name)
+        console.log(pools)
+        idArray.forEach((name, j) => {
+          pools[j % poolNum].push(name)
         })
-
+        console.log('pool created', pools)
         client.emit('poolRead', pools)
         db.put(`${data.user}_pools`, pools, { valueEncoding: 'json' }, err2 => {
           if (err2) {
