@@ -25,6 +25,7 @@ F.showChoices = () => {
 }
 
 F.refreshChoices = names => {
+  Data.currentMatch = names
   // randomize background colors (dark set on top, light on bottom)
   Help.$('.name-a').dataset.color = Math.ceil(Math.random() * colorNum) * 2 - 1
   Help.$('.name-b').dataset.color = Math.ceil(Math.random() * colorNum) * 2
@@ -56,8 +57,18 @@ F.newPoolMatch = () => {
 }
 
 F.resolvePoolMatch = (id) => {
-  console.log(id)
-  // do cool stuff with id of winning name
+  Data.currentMatch.forEach((contestant, i) => {
+    const nameData = Data.names[contestant][Data.user.user]
+    const competitor = Data.currentMatch[-i + 1]
+
+    if (contestant === id) {
+      nameData.matches[competitor] = 1
+      nameData.score++
+    } else {
+      nameData.matches[competitor] = 0
+    }
+  })
+  // TODO: save data to server
 }
 
 F.readBrackets = () => {

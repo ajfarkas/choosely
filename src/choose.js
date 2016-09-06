@@ -24,13 +24,16 @@ function hideChoices() {
 }
 
 function choose(choice) {
+  // allow for event Listeners or manual choice
   if (choice.isTrusted) {
     choice = this
   }
+  const choiceID = choice.querySelector('h2').dataset.value
+
   choice.className += ' chosen'
   // allow for .chosen animation (see _choose.scss)
   setTimeout(hideChoices, 1650)
-  F.resolvePoolMatch(choice.dataset.value)
+  F.resolvePoolMatch(choiceID)
   return true
 }
 

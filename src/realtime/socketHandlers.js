@@ -38,6 +38,7 @@ const handlers = {
   poolRead: data => {
     console.log('pool read')
     Data.pools = data
+    Data.currentMatch = []
     if (Data.names.undefined) {
       delete Data.names.undefined
     }
