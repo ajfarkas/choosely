@@ -38,7 +38,7 @@ const put = {
   /* Update Name
    * Add name to user account.
    * Args: data (`Obj`)
-   *   - verb (`str`): 'create'
+   *   - verb (`str`): 'update'
    *   - subject (`str`): 'name'
    *   - user (`str`):  user joined with partner uuid by `_`
    *   - nameObj ('Obj'):
@@ -60,6 +60,7 @@ const put = {
         return console.error(err)
       }
       console.log(`${data.nameObj.name} updated in DB:\n${JSON.stringify(data.nameObj)}`)
+      client.emit('nameUpdated', info)
     })
   },
   /* Delete Name
@@ -77,8 +78,28 @@ const put = {
         return console.error(err)
       }
       console.log(`${data.id} deleted from DB.`)
+      client.emit('nameDeleted', data.id)
     })
   },
+  /* Update Pool
+   * update user-partner pool.
+   * Args: data (`Obj`)
+   *   - verb (`str`): 'update'
+   *   - subject (`str`): 'pool'
+   *   - user (`str`): user joined with partner uuid by `_`
+   *   - pool ('arr'): array of arrays or uuid pairs
+  */
+  updatePool: (client, data) => {
+    console.log('updatepool: '+JSON.stringify(data.user))
+    db.put(`${data.user}_pools`, data.pools, { valueEncoding: 'json' }, err => {
+      if (err) {
+        return console.error(err)
+      }
+      console.log(`${data.user}_pools updated in DB:\n${JSON.stringify(data.pool)}`)
+      client.emit('poolUpdated', data.pool)
+    })
+  },
+
   error: func => {
     console.error(`${func} is not a socket.put function.`)
   }

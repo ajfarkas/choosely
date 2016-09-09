@@ -13,6 +13,14 @@ F.readPools = () => {
   })
 }
 
+F.readBracket = () => {
+  socket.emit('get', {
+    verb: 'read',
+    subject: 'bracket',
+    user: Data.user.dbID
+  })
+}
+
 F.showChoices = () => {
   // push solid bg to back so that names will be visible
   curtain.setAttribute('style', `${curtain.getAttribute('style')} z-index: -1;`)
@@ -24,8 +32,9 @@ F.showChoices = () => {
   }, 20)
 }
 
-F.refreshChoices = names => {
-  Data.currentMatch = names
+F.refreshChoices = poolIndex => {
+  Data.currentMatch = poolIndex
+  const names = Data.pools[poolIndex]
   // randomize background colors (dark set on top, light on bottom)
   Help.$('.name-a').dataset.color = Math.ceil(Math.random() * colorNum) * 2 - 1
   Help.$('.name-b').dataset.color = Math.ceil(Math.random() * colorNum) * 2
@@ -39,27 +48,21 @@ F.refreshChoices = names => {
 
 F.newPoolMatch = () => {
   console.log('new pool match')
-  const allPools = Data.pools.join(',').split(',')
-  const poolSize = Data.pools[0].length
-  const poolOngoing = Object.keys(Data.names).some(id => {
-    const poolPosition = allPools.indexOf(id)
-    const poolNum = Math.floor(poolPosition / poolSize)
-    return Data.pools[poolNum].some(name => {
-      if (id !== name && Data.names[id][Data.user.user].matches[name] === undefined) {
-        F.refreshChoices([id, name])
-        return true
-      }
-    })
-  })
-  if (!poolOngoing) {
-    alert('pool play is done!')
+  const poolLen = Data.pools.length
+  if (poolLen) {
+    const index = Math.floor(Math.random() * poolLen)
+    F.refreshChoices(index)
+  } else {
+    console.log('pool play is done!')
+    F.readBracket()
   }
 }
 
 F.resolvePoolMatch = (id) => {
-  Data.currentMatch.forEach((contestant, i) => {
+  const match = Data.pools[Data.currentMatch]
+  match.forEach((contestant, i) => {
     const nameData = Data.names[contestant][Data.user.user]
-    const competitor = Data.currentMatch[-i + 1]
+    const competitor = match[-i + 1]
 
     if (contestant === id) {
       nameData.matches[competitor] = 1
@@ -67,11 +70,26 @@ F.resolvePoolMatch = (id) => {
     } else {
       nameData.matches[competitor] = 0
     }
+    // save data to server
+    socket.emit('put', {
+      verb: 'update',
+      subject: 'name',
+      user: Data.user.dbID,
+      nameObj: Data.names[contestant]
+    })
+
   })
-  // TODO: save data to server
+  Data.pools.splice(Data.currentMatch, 1)
+  socket.emit('put', {
+    verb: 'update',
+    subject: 'pool',
+    user: Data.user.dbID,
+    pool: Data.pools
+  })
 }
 
-F.readBrackets = () => {
+F.newBracketMatch = () => {
+
 }
 
 F.resolveBracketMatch = () => {
