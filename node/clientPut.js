@@ -68,11 +68,11 @@ const put = {
    * Args: data (`Obj`)
    *   - verb: 'delete'
    *   - subject: 'name'
-   *   - user: user joined with partner uuid by `_`
+   *   - team: user joined with partner uuid by `_`
    *   - id (`uuid`): identifier for name to remove from db
   */
   deleteName: (client, data) => {
-    const lookup = `${data.user}_name_${data.id}`
+    const lookup = `${data.team}_name_${data.id}`
     db.del(lookup, err => {
       if (err) {
         return console.error(err)

@@ -4,8 +4,6 @@ import Help from './helpers'
 const F = {}
 
 F.deleteName = e => {
-  e.preventDefault()
-
   const parent = e.target.parentNode
   const id = parent.dataset.value
 
@@ -45,6 +43,12 @@ F.updateName = e => {
   const target = Help.$('.editing')
   const id = target.dataset.value
   const name = input.value
+  // delete name if blank
+  if (!name.length) {
+    F.cancelUpdateNameMode()
+    return F.deleteName({ target: { parentNode: target } })
+  }
+
   // update local Data Object
   Data.names[id].name = name
   // send to server
@@ -91,6 +95,8 @@ F.updateNameMode = e => {
   parent.className += ' editing'
   input.value = name
   button.innerText = '√'
+  // focus on input
+  input.focus()
   // switch listeners to Update
   button.removeEventListener('click', F.createName)
   input.removeEventListener('keypress', F.enterAndCreateName)
