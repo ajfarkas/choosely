@@ -80,6 +80,7 @@ F.resolvePoolMatch = (id) => {
 
   })
   Data.pools.splice(Data.currentMatch, 1)
+  console.log(Data.pools)
   socket.emit('put', {
     verb: 'update',
     subject: 'pool',

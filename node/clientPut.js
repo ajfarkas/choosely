@@ -13,7 +13,7 @@ const put = {
    *   - name: new name
   */
   createName: (client, data) => {
-    console.log('createname: '+JSON.stringify(data))
+    console.log(`createname: ${data.name}`)
     const info = {
       id: uuid.v4(),
       name: data.name,
@@ -26,7 +26,7 @@ const put = {
         eliminated: false
       }
     })
-    const lookup = `${data.user}_${info.id}`
+    const lookup = `${data.user}_name_${info.id}`
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
         return console.error(err)
@@ -51,15 +51,15 @@ const put = {
    *         from this user's bracket.
   */
   updateName: (client, data) => {
-    console.log('updatename: '+JSON.stringify(data))
+    console.log(`\nupdatename: \n${JSON.stringify(data)}\n\n`)
     const info = data.nameObj
-    const lookup = `${data.user}_${info.id}`
-    console.log(lookup)
+    const lookup = `${data.user}_name_${info.id}`
+
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
         return console.error(err)
       }
-      console.log(`${data.nameObj.name} updated in DB:\n${JSON.stringify(data.nameObj)}`)
+      console.log(`${data.nameObj.name} updated in DB.`)
       client.emit('nameUpdated', info)
     })
   },
@@ -72,7 +72,7 @@ const put = {
    *   - id (`uuid`): identifier for name to remove from db
   */
   deleteName: (client, data) => {
-    const lookup = `${data.user}_${data.id}`
+    const lookup = `${data.user}_name_${data.id}`
     db.del(lookup, err => {
       if (err) {
         return console.error(err)
@@ -90,12 +90,12 @@ const put = {
    *   - pool ('arr'): array of arrays or uuid pairs
   */
   updatePool: (client, data) => {
-    console.log('updatepool: '+JSON.stringify(data.user))
-    db.put(`${data.user}_pools`, data.pools, { valueEncoding: 'json' }, err => {
+    console.log(`updatepool: ${data.user}`)
+    db.put(`${data.user}_pools`, data.pool, { valueEncoding: 'json' }, err => {
       if (err) {
         return console.error(err)
       }
-      console.log(`${data.user}_pools updated in DB:\n${JSON.stringify(data.pool)}`)
+      console.log(`${data.user}_pools updated in DB:\n${data.pool}`)
       client.emit('poolUpdated', data.pool)
     })
   },
