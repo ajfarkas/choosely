@@ -5,7 +5,7 @@ F.readNames = () => {
     socket.emit('get', {
       verb: 'read',
       subject: 'names',
-      user: Data.user.dbID
+      team: Data.user.dbID
     })
   } else {
     alert('Data.user.dbID not found!')

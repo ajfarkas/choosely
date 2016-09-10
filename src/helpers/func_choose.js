@@ -9,7 +9,7 @@ F.readPools = () => {
   socket.emit('get', {
     verb: 'read',
     subject: 'pool',
-    user: Data.user.dbID
+    team: Data.user.dbID
   })
 }
 
@@ -17,7 +17,8 @@ F.readBracket = () => {
   socket.emit('get', {
     verb: 'read',
     subject: 'bracket',
-    user: Data.user.dbID
+    team: Data.user.dbID,
+    user: Data.user.user
   })
 }
 
@@ -32,9 +33,9 @@ F.showChoices = () => {
   }, 20)
 }
 
-F.refreshChoices = poolIndex => {
-  Data.currentMatch = poolIndex
-  const names = Data.pools[poolIndex]
+F.refreshChoices = (index, kind) => {
+  Data.currentMatch = index
+  const names = Data[kind][index]
   // randomize background colors (dark set on top, light on bottom)
   Help.$('.name-a').dataset.color = Math.ceil(Math.random() * colorNum) * 2 - 1
   Help.$('.name-b').dataset.color = Math.ceil(Math.random() * colorNum) * 2
@@ -51,7 +52,7 @@ F.newPoolMatch = () => {
   const poolLen = Data.pools.length
   if (poolLen) {
     const index = Math.floor(Math.random() * poolLen)
-    F.refreshChoices(index)
+    F.refreshChoices(index, 'pools')
   } else {
     console.log('pool play is done!')
     F.readBracket()
@@ -63,18 +64,19 @@ F.resolvePoolMatch = (id) => {
   match.forEach((contestant, i) => {
     const nameData = Data.names[contestant][Data.user.user]
     const competitor = match[-i + 1]
+    const wins = nameData.matches[competitor] || 0
 
     if (contestant === id) {
-      nameData.matches[competitor] = 1
+      nameData.matches[competitor] = wins + 1
       nameData.score++
     } else {
-      nameData.matches[competitor] = 0
+      nameData.matches[competitor] = wins
     }
     // save data to server
     socket.emit('put', {
       verb: 'update',
       subject: 'name',
-      user: Data.user.dbID,
+      team: Data.user.dbID,
       nameObj: Data.names[contestant]
     })
 
@@ -84,16 +86,52 @@ F.resolvePoolMatch = (id) => {
   socket.emit('put', {
     verb: 'update',
     subject: 'pool',
-    user: Data.user.dbID,
+    team: Data.user.dbID,
     pool: Data.pools
   })
 }
 
 F.newBracketMatch = () => {
-
+  console.log('new bracket match')
+  const bracketLen = Data.bracket.length
+  if (bracketLen) {
+    const index = Math.floor(Math.random() * bracketLen)
+    F.refreshChoices(index, 'bracket')
+  } else {
+    console.log('bracket play is done!')
+  }
 }
 
-F.resolveBracketMatch = () => {
+F.resolveBracketMatch = (id) => {
+  const match = Data.bracket[Data.currentMatch]
+  match.forEach((contestant, i) => {
+    const nameData = Data.names[contestant][Data.user.user]
+    const competitor = match[-i + 1]
+    const wins = nameData.matches[competitor] || 0
+
+    if (contestant === id) {
+      nameData.matches[competitor] = wins + 1
+      nameData.score++
+    } else {
+      nameData.matches[competitor] = wins
+      nameData.eliminated = true
+    }
+    // save data to server
+    socket.emit('put', {
+      verb: 'update',
+      subject: 'name',
+      team: Data.user.dbID,
+      nameObj: Data.names[contestant]
+    })
+  })
+  Data.bracket.splice(Data.currentMatch, 1)
+  console.log(Data.bracket)
+  socket.emit('put', {
+    verb: 'update',
+    subject: 'bracket',
+    team: Data.user.dbID,
+    bracket: Data.bracket
+  })
 }
 
 export default F

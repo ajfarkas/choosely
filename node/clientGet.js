@@ -11,12 +11,12 @@ const get = {}
  * Args: data (`Obj`)
  *   - verb: 'read'
  *   - subject: 'names'
- *   - user: user joined with partner uuid by `_`
+ *   - team: user joined with partner uuid by `_`
 */
 get.readNames = (client, data, cb) => {
   const names = {}
 
-  db.createValueStream({gte: `${data.user}_name_`, lte: `${data.user}_name_\xff`, valueEncoding: 'json'})
+  db.createValueStream({gte: `${data.team}_name_`, lte: `${data.team}_name_\xff`, valueEncoding: 'json'})
     .on('error', err => console.error(`readNames: ${err}`))
     .on('data', d => {
       if (Object.keys(names).indexOf(d.id) === -1) {
@@ -24,7 +24,6 @@ get.readNames = (client, data, cb) => {
       }
     })
     .on('end', () => {
-      console.log(names)
       if (typeof cb === 'function') {
         cb(names)
       } else {
@@ -37,11 +36,10 @@ get.readNames = (client, data, cb) => {
  * Args: data (`Obj`)
  *   - verb: 'read'
  *   - subject: 'pool'
- *   - user: user joined with partner uuid by `_`
+ *   - team: user joined with partner uuid by `_`
 */
 get.readPool = (client, data, forceRefresh) => {
-  console.log(data)
-  db.get(`${data.user}_pools`, { valueEncoding: 'json' }, (err, pools) => {
+  db.get(`${data.team}_pools`, { valueEncoding: 'json' }, (err, pools) => {
     if (err && err.notFound || forceRefresh) {
       // create Pool
       console.log('creating new pool.')
@@ -79,7 +77,7 @@ get.readPool = (client, data, forceRefresh) => {
 
         console.log('pool created', pools)
         client.emit('poolRead', pools)
-        db.put(`${data.user}_pools`, pools, { valueEncoding: 'json' }, err2 => {
+        db.put(`${data.team}_pools`, pools, { valueEncoding: 'json' }, err2 => {
           if (err2) {
             return console.error(`poolCreate: ${err2}`)
           }
@@ -96,24 +94,29 @@ get.readPool = (client, data, forceRefresh) => {
 }
 
 /* Read Bracket
- * Return array of pools associated with user account.
+ * Return array of pools associated with team account.
  * Args: data (`Obj`)
  *   - verb: 'read'
  *   - subject: 'bracket'
- *   - user: user joined with partner uuid by `_`
+ *   - user: current user uuid
+ *   - team: user joined with partner uuid by `_`
 */
 get.readBracket = (client, data, forceRefresh) => {
-  db.get(`${data.user}_bracket`, { valueEncoding: 'json' }, (err, bracket) => {
-    if (err && err.notFound || forceRefresh) {
+  db.get(`${data.team}_bracket`, { valueEncoding: 'json' }, (err, bracket) => {
+    if (err && err.notFound || !bracket.length || forceRefresh) {
       // create bracket
       console.log('creating new bracket.')
       bracket = []
 
       get.readNames(client, data, names => {
-        nameArr = Object.keys(names)
+        // remove eliminated names
+        const nameArr = Object.keys(names).filter(name => {
+          return !names[name][data.user].eliminated
+        })
+        console.log(nameArr)
         // sort names, alternating best/worst seed
         nameArr.sort((a, b) => {
-          const users = data.user.split('_')
+          const users = data.team.split('_')
           const matchesA = users.reduce((c, d) => {
             return (Object.keys(names[a][c].matches).length + Object.keys(names[a][d].matches).length)
           })
@@ -129,21 +132,21 @@ get.readBracket = (client, data, forceRefresh) => {
 
           return scoreA/matchesA > scoreB/matchesB
         })
-
-        for (; nameArr.length > 0;) {
+        // match hi seed to low seed, rm bye
+        for (; nameArr.length > 1;) {
           bracket.push([
             nameArr.shift(),
             nameArr.pop()
           ])
         }
 
-        console.log('bracket created', bracket)
-        // client.emit('bracketRead', bracket)
-        // db.put(`${data.user}_bracket`, bracket, { valueEncoding: 'json' }, err2 => {
-        //   if (err2) {
-        //     return console.error(err2)
-        //   }
-        // })
+        console.log('bracket created')
+        client.emit('bracketRead', bracket)
+        db.put(`${data.team}_bracket`, bracket, { valueEncoding: 'json' }, err2 => {
+          if (err2) {
+            return console.error(err2)
+          }
+        })
       })
       
     } else if (err) {

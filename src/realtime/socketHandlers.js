@@ -39,10 +39,15 @@ const handlers = {
     console.log('pool read')
     Data.pools = data
     Data.currentMatch = 0
-    if (Data.names.undefined) {
-      delete Data.names.undefined
-    }
+
     Choose.newPoolMatch()
+  },
+  bracketRead: data => {
+    console.log('bracket read')
+    Data.bracket = data
+    Data.currentMatch = 0
+
+    Choose.newBracketMatch()
   }
 }
 

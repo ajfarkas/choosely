@@ -20,7 +20,19 @@ function hideChoices() {
   })
   chosen.className = chosen.className.replace(' chosen', '')
   // replace names with new set
-  F.newPoolMatch()
+  if (Data.pools.length) {
+    F.newPoolMatch()
+  } else if (Data.bracket.length) {
+    F.newBracketMatch()
+  } else {
+    const remaining = Object.keys(Data.names).filter(name => 
+      !Data.names[name][Data.user.user].eliminated)
+    if (remaining.length > 1) {
+      F.readBracket()
+    } else {
+      alert(`We have a winner!\nCongrats to ${Data.names[remaining].name}!`)
+    }
+  }
 }
 
 function choose(choice) {
@@ -33,7 +45,13 @@ function choose(choice) {
   choice.className += ' chosen'
   // allow for .chosen animation (see _choose.scss)
   setTimeout(hideChoices, 1650)
-  F.resolvePoolMatch(choiceID)
+  if (Data.pools.length) {
+    F.resolvePoolMatch(choiceID)
+  } else if (Data.bracket.length) {
+    F.resolveBracketMatch(choiceID)
+  } else {
+    return console.error('Choose: both brackets and pools are unavailable')
+  }
   return true
 }
 

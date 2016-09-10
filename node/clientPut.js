@@ -9,7 +9,7 @@ const put = {
    * Args: data (`Obj`)
    *   - verb: 'create'
    *   - subject: 'name'
-   *   - user: user joined with partner uuid by `_`
+   *   - team: user joined with partner uuid by `_`
    *   - name: new name
   */
   createName: (client, data) => {
@@ -19,14 +19,14 @@ const put = {
       name: data.name,
       createDate: Date.now()
     }
-    data.user.split('_').forEach(id => {
+    data.team.split('_').forEach(id => {
       info[id] = {
         score: 0,
         matches: {},
         eliminated: false
       }
     })
-    const lookup = `${data.user}_name_${info.id}`
+    const lookup = `${data.team}_name_${info.id}`
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
         return console.error(err)
@@ -40,7 +40,7 @@ const put = {
    * Args: data (`Obj`)
    *   - verb (`str`): 'update'
    *   - subject (`str`): 'name'
-   *   - user (`str`):  user joined with partner uuid by `_`
+   *   - team (`str`):  user joined with partner uuid by `_`
    *   - nameObj ('Obj'):
    *     - id (`uuid`): identifier for name obj
    *     - name (`str`): name in contest
@@ -51,9 +51,9 @@ const put = {
    *         from this user's bracket.
   */
   updateName: (client, data) => {
-    console.log(`\nupdatename: \n${JSON.stringify(data)}\n\n`)
+    console.log(`updatename: ${data.nameObj.id}`)
     const info = data.nameObj
-    const lookup = `${data.user}_name_${info.id}`
+    const lookup = `${data.team}_name_${info.id}`
 
     db.put(lookup, info, { valueEncoding: 'json' }, err => {
       if (err) {
@@ -86,17 +86,35 @@ const put = {
    * Args: data (`Obj`)
    *   - verb (`str`): 'update'
    *   - subject (`str`): 'pool'
-   *   - user (`str`): user joined with partner uuid by `_`
+   *   - team (`str`): user joined with partner uuid by `_`
    *   - pool ('arr'): array of arrays or uuid pairs
   */
   updatePool: (client, data) => {
-    console.log(`updatepool: ${data.user}`)
-    db.put(`${data.user}_pools`, data.pool, { valueEncoding: 'json' }, err => {
+    console.log(`updatepool: ${data.team}`)
+    db.put(`${data.team}_pools`, data.pool, { valueEncoding: 'json' }, err => {
       if (err) {
         return console.error(err)
       }
-      console.log(`${data.user}_pools updated in DB:\n${data.pool}`)
+      console.log(`${data.team}_pools updated in DB:\n${data.pool}`)
       client.emit('poolUpdated', data.pool)
+    })
+  },
+  /* Update Bracket
+   * update user-partner bracket.
+   * Args: data (`Obj`)
+   *   - verb (`str`): 'update'
+   *   - subject (`str`): 'bracket'
+   *   - team (`str`): user joined with partner uuid by `_`
+   *   - bracket ('arr'): array of arrays or uuid pairs
+  */
+  updateBracket: (client, data) => {
+    console.log(`updateBracket: ${data.team}`)
+    db.put(`${data.team}_bracket`, data.bracket, { valueEncoding: 'json' }, err => {
+      if (err) {
+        return console.error(err)
+      }
+      console.log(`${data.team}_bracket updated in DB.`)
+      client.emit('poolUpdated', data.bracket)
     })
   },
 

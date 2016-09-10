@@ -1,4 +1,4 @@
-import cookie from '../static/js.cookie.js'
+// import cookie from '../static/js.cookie.js'
 import Help from './helpers'
 
 const F = {}
@@ -12,7 +12,7 @@ F.deleteName = e => {
   socket.emit('put', {
     verb: 'delete',
     subject: 'name',
-    user: Data.user.dbID,
+    team: Data.user.dbID,
     id: id
   })
 
@@ -51,7 +51,7 @@ F.updateName = e => {
   socket.emit('put', {
     verb: 'update',
     subject: 'name',
-    user: Data.user.dbID,
+    team: Data.user.dbID,
     nameObj: Data.names[id]
   })
   
@@ -115,15 +115,6 @@ F.addNameToDOM = record => {
   li.className = 'name'
   li.dataset.value = record.id
   li.dataset.name = record.name
-  // li.addEventListener('click', () => {
-  //   Data.names[record.id].score++
-  //   socket.emit('put', {
-  //     verb: 'update',
-  //     subject: 'name',
-  //     user: cookie('userId'),
-  //     nameObj: Data.names[record.id]
-  //   })
-  // })
 
   num.className = 'name-order'
   num.innerText = Help.$$('.name').length + 1
@@ -156,7 +147,7 @@ F.createName = e => {
   socket.emit('put', {
     verb: 'create',
     subject: 'name',
-    user: Data.user.dbID,
+    team: Data.user.dbID,
     name: Help.$('#names input').value
   })
 }
