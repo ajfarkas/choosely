@@ -1,7 +1,6 @@
 // User login/signup functions
 
-const bcrypt = require('bcrypt-nodejs'),
-      uuid = require('node-uuid')
+const bcrypt = require('bcrypt-nodejs')
 
 const User = {}
 
@@ -42,25 +41,6 @@ User.comparePass = (candidate, hashedPass, cb) => {
       return isMatch
     }
   })
-}
-
-/* `data` is `json object` of UserSchema
- * `cb` is callback function, which is passed the user object
-*/
-User.createUser = (data, cb) => {
-  const user = {  
-    email: data.email.toLowerCase(),
-    profile: data.profile,
-    resetPasswordToken: data.resetPasswordToken || null,
-    resetPasswordExpires: data.resetPasswordExpires || null
-  }
-
-  User.hashPass(data.password, hash => {
-    user.hash = hash
-    user._id = uuid.v4()
-    cb(user)
-  })
-  
 }
 
 module.exports = User

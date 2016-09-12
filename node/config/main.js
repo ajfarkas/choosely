@@ -4,7 +4,9 @@ const config = {
     ip: '127.0.0.1',
     db: './choicesdb',
     token: null,
-    prettyHtml: true
+    prettyHtml: true,
+    secret: 'TOP_SECRET',
+    tokenExpLen: 10080
   }
 }
 

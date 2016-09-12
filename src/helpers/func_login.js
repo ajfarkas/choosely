@@ -9,7 +9,8 @@ const F = {}
 
 // Login and signup function
 F.login = (username, password, partnername, signup) => {
-  const req = new Request(`${location.origin}/loginreq`, {
+  const path = signup === true ? 'signupreq' : 'loginreq'
+  const req = new Request(`${location.origin}/${path}`, {
     method: 'post',
     headers: new Headers({
       Accept: 'application/json',
@@ -18,8 +19,7 @@ F.login = (username, password, partnername, signup) => {
     body: JSON.stringify({
       username: username,
       password: password,
-      partnername: partnername,
-      signup: signup === true
+      partnername: partnername
     })
   })
 
@@ -29,7 +29,7 @@ F.login = (username, password, partnername, signup) => {
       // store user/partner ids, redir to list
       const expiry = new Date(Date.now() + 604800000)
       cookie('user_id', JSON.stringify(d), {expires: expiry})
-      window.location.pathname = '/create'
+      window.location.pathname = '/create/first'
     })
     .catch( e => console.error(e) )
 }

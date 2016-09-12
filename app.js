@@ -1,33 +1,35 @@
 'strict mode'
 
-const express = require('express')
-const app = express()
-const cookieParser = require('cookie-parser')
-const passport = require('passport')
-const session = require('express-session')
-
-const config = require('./node/config')
-const socket = require('./node/socket')
+const express = require('express'),
+      app = express(),
+      cookieParser = require('cookie-parser'),
+      bodyParser = require('body-parser'),
+      // session = require('express-session'),
+      config = require('./node/config/main'),
+      socket = require('./node/socket')
 
 // configure express app
 app.use(express.static('public'))
 app.use(cookieParser())
-app.use(session({
-  name: 'connect.sessionId',
-  secret: 'stupor secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    path: '/',
-    httpOnly: true,
-    secure: false,
-    maxAge: 604800000
-  }
-}))
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+// app.use(session({
+//   name: 'connect.sessionId',
+//   secret: 'stupor secret',
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     path: '/',
+//     httpOnly: true,
+//     secure: false,
+//     maxAge: 604800000
+//   }
+// }))
+// app.use(passport.initialize())
+// app.use(passport.session())
 
-require('./node/server/routes.js')(__dirname, app, passport)
+const router = require('./node/server/routes.js')
+router(__dirname, app)
 
 // set up server
 const server = app.listen(config.port, config.ip)

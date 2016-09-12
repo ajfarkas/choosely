@@ -167,4 +167,14 @@ F.enterAndCreateName = e => {
   }
 }
 
+F.toggleFirstLast = e => {
+  e.preventDefault()
+
+  if (location.pathname.match(/\blast\b/)) {
+    location.pathname = 'create/first'
+  } else {
+    location.pathname = 'create/last'
+  }
+}
+
 export default F

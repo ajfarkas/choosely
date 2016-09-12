@@ -1,9 +1,12 @@
-const fs = require('fs')
-const mime = require('mime')
-const db = require('../data')
-const login = require('./login')
+const fs = require('fs'),
+      mime = require('mime'),
+      express = require('express'),
+      db = require('../data'),
+      passportService = require('../config/passport'),
+      authController = require('../controllers/auth'),
+      passport = require('passport')
 
-module.exports = function routes(dir, app, passport) {
+module.exports = function routes(dir, app) {
   function isLoggedIn(req, res, next) {
     // if (req.isAuthenticated()) {
     //   return next()
@@ -38,7 +41,7 @@ module.exports = function routes(dir, app, passport) {
   // logged in html files
   const insidePages = [
     ['/start', 'start.html'],
-    ['/create', 'create.html'],
+    ['/create/*', 'create.html'],
     ['/choose', 'choose.html']
   ]
 
@@ -55,18 +58,13 @@ module.exports = function routes(dir, app, passport) {
     res.end()
   }
   app.post('/loginreq', (req, res) => {
-    req.on('data', d => {
-      const data = new Buffer(d).toString()
-      const json = JSON.parse(data)
-      console.log('loginreq')
-
-      if (json.signup) {
-        console.log('signup:'+json.signup)
-        login.signup(json, writeIDs.bind(null, res))
-      } else {
-        login.getIds(json, writeIDs.bind(null, res))
-      }
-    })
+    console.log('login attempt')
+    console.log(req.body)
+    authController.getIDs(req.body, writeIDs.bind(null, res))
+  })
+  app.post('/signupreq', (req, res) => {
+    console.log('signup attempt')
+    authController.signup(req.body, writeIDs.bind(null, res))
   })
 
   // other files (css, js)
