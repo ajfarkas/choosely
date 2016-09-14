@@ -58,12 +58,12 @@ module.exports = function routes(dir, app) {
     res.end()
   }
   app.post('/loginreq', (req, res) => {
-    console.log('login attempt')
+    console.log('loginreq')
     console.log(req.body)
-    authController.getIDs(req.body, writeIDs.bind(null, res))
+    authController.login(req.body, writeIDs.bind(null, res))
   })
   app.post('/signupreq', (req, res) => {
-    console.log('signup attempt')
+    console.log('signupreq')
     authController.signup(req.body, writeIDs.bind(null, res))
   })
 

@@ -29,6 +29,14 @@ F.login = (username, password, partnername, signup) => {
       // store user/partner ids, redir to list
       const expiry = new Date(Date.now() + 604800000)
       cookie('user_id', JSON.stringify(d), {expires: expiry})
+
+      d.user.dbID = d.user.partner > d.user.user
+        ? `${d.user.partner}_${d.user.user}`
+        : `${d.user.user}_${d.user.partner}`
+
+      localStorage.token = d.token
+      localStorage.userData = JSON.stringify(d.user)
+
       window.location.pathname = '/create/first'
     })
     .catch( e => console.error(e) )

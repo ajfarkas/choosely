@@ -6,12 +6,7 @@ import cookie from '../static/js.cookie.js'
 const handlers = {
   connected: data => {
     console.log('connectedHandler', data)
-    if (cookie('user_id')) {
-      Object.assign(Data.user, JSON.parse(cookie('user_id')) )
-      Data.user.dbID = Data.user.partner > Data.user.user
-        ? `${Data.user.partner}_${Data.user.user}`
-        : `${Data.user.user}_${Data.user.partner}`
-    }
+    Data.user = JSON.parse(localStorage.userData)
     Setup.readNames()
   },
   namesRead: data => {
