@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken'),
       user = require('../models/user'),
       config = require('../config/main'),
       db = require('../data'),
-      uuid = require('node-uuid')
+      uuid = require('node-uuid'),
+      loginErr = 'Your login details could not be verified.'
 
 /* generateToken
  * create JSON Web Token
@@ -14,6 +15,15 @@ const jwt = require('jsonwebtoken'),
 const generateToken = data => jwt.sign(data, config.secret, {
   expiresIn: config.tokenExpLen
 })
+
+const extractJWT = req => {
+  const auth = req.headers.authorization
+  if ( auth && auth.match(/^JWT\s.*/) ) {
+    return auth.replace('JWT ', '')
+  } else {
+    throw new Error('No JWT in headers.')
+  }
+}
 
 const Auth = {}
 /* getIDs
@@ -36,9 +46,9 @@ Auth.getIDs = (data, cb) => {
     db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err2, userData) => {
       if (err2) {
         if (err2.notFound) {
-          return cb({error: 'That email/password combination is invalid.'})
+          return cb(null, false, {error: loginErr})
         }
-        return console.error(err2)
+        return cb(err2, null)
       }
 
       userID = userData._id
@@ -47,7 +57,7 @@ Auth.getIDs = (data, cb) => {
         ? partnerData._id
         : userData.partners[data.partnername]
 
-      return cb(ids)
+      return cb(null, ids)
     })
   })
 },
@@ -59,15 +69,17 @@ Auth.getIDs = (data, cb) => {
  *     - partnername (`str`): partner email address
  *   - cb (`function`): callback function
 */
-Auth.login =(data, cb) => {
+Auth.login =(req, res, cb) => {
   console.log('login attempt.')
-  Auth.getIDs(data, ids => {
-    const res = {
-      token: 'JWT '+generateToken(ids),
-      user: ids
+  Auth.getIDs(req.body, (err, ids) => {
+    if (err) {
+      cb(err)
     }
 
-    return cb(res)
+    res.status(200).json({
+      token: 'JWT '+generateToken(ids),
+      user: ids
+    })
   })
 },
 /* signup
@@ -79,8 +91,9 @@ Auth.login =(data, cb) => {
  *     - partnername (`str`): partner email address
  *   - cb (`function`): callback function
 */ 
-Auth.signup = (data, cb) => {
-  console.log('signup', `username-${data.username}`)
+Auth.signup = (req, res, cb) => {
+  const data = req.body
+  console.log('signup', data, `username-${data.username}`, cb)
   db.get(`usernames-${data.username}`, {valueEncoding: 'json'}, (err, existing) => {
     if (err && !err.notFound) {
       return console.error(err)
@@ -114,29 +127,36 @@ Auth.signup = (data, cb) => {
         resetPasswordToken: null,
         resetPasswordExpires: null
       }
-      user.hashPass(data.password, hash => nameData.hash = hash)
+      user.hashPass(data.password, hash => {
+        nameData.hash = hash
 
-      db.put(`username-${data.username}`, nameData, { valueEncoding: 'json' }, e => {
-        if (e) {
-          return console.error(e)
-        }
-        console.log(`put successful: username-${data.username}`)
+        db.put(`username-${data.username}`, nameData, { valueEncoding: 'json' }, e => {
+          if (e) {
+            return cb(e)
+          }
+          console.log(`put successful: username-${data.username}`)
 
-        const userData = {
-          user: id,
-          partner: partnerID
-        }
-        const tokenData = {
-          token: 'JWT '+generateToken(userData),
-          user: userData
-        }
-        
-        return cb(tokenData)
-      })
+          const userData = {
+            user: id,
+            partner: partnerID
+          }
+          
+          res.status(201).json({
+            token: 'JWT '+generateToken(userData),
+            user: userData
+          })
+        }) // end db.put
+
+      }) // end user.hashpass
       
-    })
+    }) // end db.get user
 
-  })
+  }) // end db.get partner
+}
+/*
+*/
+Auth.jwtAuthWS = () => {
+  // do stuff
 }
 
 

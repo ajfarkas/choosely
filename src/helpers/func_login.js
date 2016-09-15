@@ -24,8 +24,16 @@ F.login = (username, password, partnername, signup) => {
   })
 
   fetch(req)
-    .then( res => res.json() )
+    .then( res => {
+      if (res.status === 400) {
+        return res.json()
+      } else if (res.status === 401) {
+        return res.text()
+      }
+    })
     .then( d => {
+      console.log(d)
+      window.RES = d
       // store user/partner ids, redir to list
       const expiry = new Date(Date.now() + 604800000)
       cookie('user_id', JSON.stringify(d), {expires: expiry})

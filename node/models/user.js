@@ -27,7 +27,6 @@ User.hashPass = (password, cb) => {
  * `cb` is callback function, which is passed an `error` and `boolean`
 */
 User.comparePass = (candidate, hashedPass, cb) => {
-  console.log(`comparepass: ${candidate}, ${hashedPass}`)
   return bcrypt.compare(candidate, hashedPass, (err, isMatch) => {
     if (typeof cb === 'function') {
       if (err) {

@@ -1,12 +1,13 @@
 const fs = require('fs'),
       mime = require('mime'),
-      express = require('express'),
-      db = require('../data'),
       passportService = require('../config/passport'),
       authController = require('../controllers/auth'),
       passport = require('passport')
 
+const requireLogin = passport.authenticate('local', { session: false })
+
 module.exports = function routes(dir, app) {
+
   function isLoggedIn(req, res, next) {
     // if (req.isAuthenticated()) {
     //   return next()
@@ -51,21 +52,10 @@ module.exports = function routes(dir, app) {
     })
   })
 
-  function writeIDs(res, ids) {
-    console.log('writeIDs', ids)
-    res.writeHead(200, {'Content-Type': 'application/json'})
-    res.write( JSON.stringify(ids) )
-    res.end()
-  }
-  app.post('/loginreq', (req, res) => {
-    console.log('loginreq')
-    console.log(req.body)
-    authController.login(req.body, writeIDs.bind(null, res))
-  })
-  app.post('/signupreq', (req, res) => {
-    console.log('signupreq')
-    authController.signup(req.body, writeIDs.bind(null, res))
-  })
+  app.post('/loginreq', requireLogin, authController.login)
+  
+  app.post('/signupreq', authController.signup)
+  
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {
