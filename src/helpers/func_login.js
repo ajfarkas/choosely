@@ -25,15 +25,18 @@ F.login = (username, password, partnername, signup) => {
 
   fetch(req)
     .then( res => {
-      if (res.status === 400) {
+      if (res.status === 200) {
         return res.json()
       } else if (res.status === 401) {
-        return res.text()
+        const e = new CustomEvent('error')
+        e.message = 'Your login details could not be verified.'
+        return e
       }
     })
     .then( d => {
-      console.log(d)
-      window.RES = d
+      if (d.type === 'error') {
+        return document.dispatchEvent(d)
+      }
       // store user/partner ids, redir to list
       const expiry = new Date(Date.now() + 604800000)
       cookie('user_id', JSON.stringify(d), {expires: expiry})

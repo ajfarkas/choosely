@@ -254,4 +254,7 @@ label {
   text-align: left;
   text-transform: uppercase; }
 
+.error-msg {
+  color: #ff3663; }
+
 /*# sourceMappingURL=admin.css.map */

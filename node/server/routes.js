@@ -4,7 +4,10 @@ const fs = require('fs'),
       authController = require('../controllers/auth'),
       passport = require('passport')
 
-const requireLogin = passport.authenticate('local', { session: false })
+const requireLogin = passport.authenticate('local', {
+  session: false,
+  failureFlash: true
+})
 
 module.exports = function routes(dir, app) {
 

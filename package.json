@@ -25,6 +25,7 @@
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.3.4",
     "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.1",
     "es6-promise": "^3.2.1",
     "express": "^4.13.4",

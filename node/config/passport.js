@@ -7,7 +7,7 @@ const passport = require('passport'),
       // extractJWT = passportJWT.ExtractJwt,
       db = require('../data')
 
-const localOpts = { failureFlash: true },
+const localOpts = { },
       loginErr = 'Your login details could not be verified.'
 
 const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
@@ -34,7 +34,7 @@ const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
       if (isMatch) {
         return cb(null, data)
       } else {
-        return cb(null, false, { message: loginErr })
+        return cb(null, false, { error: loginErr })
       }
     })
   })
