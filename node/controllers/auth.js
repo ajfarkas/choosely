@@ -40,13 +40,16 @@ Auth.getIDs = (data, cb) => {
   const ids = {}
   db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (err, partnerData) => {
     if (err && !err.notFound) {
-      return console.error(err)
+      return console.error(`Auth.getIDs err: ${JSON.stringify(err)}`)
     }
 
     db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err2, userData) => {
       if (err2) {
         if (err2.notFound) {
-          return cb(null, false, {error: loginErr})
+          return cb({
+            status: 401,
+            message: loginErr
+          })
         }
         return cb(err2, null)
       }
@@ -72,8 +75,13 @@ Auth.getIDs = (data, cb) => {
 Auth.login =(req, res, cb) => {
   console.log('login attempt.')
   Auth.getIDs(req.body, (err, ids) => {
+    console.log(`Auth.login Err: ${JSON.stringify(err)}`)
     if (err) {
-      cb(err)
+      if (err.status) {
+        return res.status(err.status).json(err)
+      } else {
+        return cb(err)
+      }
     }
 
     res.status(200).json({
@@ -93,17 +101,14 @@ Auth.login =(req, res, cb) => {
 */ 
 Auth.signup = (req, res, cb) => {
   const data = req.body
-  console.log('signup', data, `username-${data.username}`, cb)
-  db.get(`usernames-${data.username}`, {valueEncoding: 'json'}, (err, existing) => {
+  console.log('signup', `username-${data.username}`)
+  db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err, existing) => {
     if (err && !err.notFound) {
       return console.error(err)
     } else if (existing) {
+      console.log('user already exists')
       existentialErr = {error: 'That email address is already in use.'}
-      if (typeof cb === 'function') {
-        return cb(existentialErr)
-      } else {
-        return existentialErr
-      }
+      return res.status(409).json(existentialErr)
     }
 
     // check if partner has already signed up
@@ -149,9 +154,9 @@ Auth.signup = (req, res, cb) => {
 
       }) // end user.hashpass
       
-    }) // end db.get user
+    }) // end db.get partner
 
-  }) // end db.get partner
+  }) // end db.get user
 }
 /*
 */

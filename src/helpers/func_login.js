@@ -25,17 +25,13 @@ F.login = (username, password, partnername, signup) => {
 
   fetch(req)
     .then( res => {
-      if (res.status === 200) {
-        return res.json()
-      } else if (res.status === 401) {
-        const e = new CustomEvent('error')
-        e.message = 'Your login details could not be verified.'
-        return e
-      }
+      return res.json()
     })
     .then( d => {
-      if (d.type === 'error') {
-        return document.dispatchEvent(d)
+      if (d.error) {
+        const e = new CustomEvent('error')
+        e.message = d.error
+        return document.dispatchEvent(e)
       }
       // store user/partner ids, redir to list
       const expiry = new Date(Date.now() + 604800000)
