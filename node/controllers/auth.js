@@ -37,32 +37,28 @@ const Auth = {}
 */
 Auth.getIDs = (data, cb) => {
   console.log('getIDs', `username-${data.username}`)
-  const ids = {}
-  db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (err, partnerData) => {
-    if (err && !err.notFound) {
-      return console.error(`Auth.getIDs err: ${JSON.stringify(err)}`)
+
+  db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err2, userData) => {
+    if (err2) {
+      if (err2.notFound) {
+        return cb({
+          status: 401,
+          message: loginErr
+        })
+      }
+      return cb(err2, null)
+    }
+ 
+    const ids = {
+      user: userData._id,
+      partner: data.partnername
+      ? userData.partners[data.partnername]
+      : userData.partners[Object.keys(userData.partners)[0]]
     }
 
-    db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err2, userData) => {
-      if (err2) {
-        if (err2.notFound) {
-          return cb({
-            status: 401,
-            message: loginErr
-          })
-        }
-        return cb(err2, null)
-      }
-
-      userID = userData._id
-      ids.user = userID
-      ids.partner = partnerData
-        ? partnerData._id
-        : userData.partners[data.partnername]
-
-      return cb(null, ids)
-    })
+    return cb(null, ids)
   })
+
 },
 /* login
  * Args:
