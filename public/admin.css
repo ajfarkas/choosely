@@ -223,7 +223,6 @@ fieldset {
   text-align: center; }
 
 legend {
-  margin-bottom: 20px;
   font-size: 1.8rem; }
 
 #sign-in,
@@ -255,6 +254,7 @@ label {
   text-transform: uppercase; }
 
 .error-msg {
+  margin: 5px 0;
   color: #ff3663; }
 
 /*# sourceMappingURL=admin.css.map */

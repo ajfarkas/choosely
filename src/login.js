@@ -23,9 +23,15 @@ function login(signup) {
 
   F.login(username, password, partnername, signup)
 }
-
+// login
 Help.$('#login-btn').addEventListener('click', login)
 Help.$('#signup-btn').addEventListener('click', login.bind(null, true))
 document.addEventListener('error', e => {
   Help.$('.error-msg').innerText = e.message
 })
+// clear errors on input
+Help.$$('input').forEach(el => el.addEventListener('focus', () => {
+  const e = new CustomEvent('error')
+  e.message = '\u00a0'
+  document.dispatchEvent(e)
+}) )

@@ -22,7 +22,6 @@ fieldset {
 }
 
 legend {
-  margin-bottom: 20px;
   font-size: rem(18);
 }
 
@@ -63,5 +62,6 @@ label {
 }
 
 .error-msg {
+  margin: 5px 0;
   color: $red;
 }
