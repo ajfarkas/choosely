@@ -86,3 +86,5 @@ button {
 }
 
 canvas { @include hardwareAcceleration(); }
+
+input:invalid { outline: 2px solid $red; }

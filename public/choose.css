@@ -77,6 +77,9 @@ canvas {
   -ms-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
 
+input:invalid {
+  outline: 2px solid #ff3663; }
+
 .svg-heart {
   display: none;
   fill: rgba(230, 0, 0, 0);
