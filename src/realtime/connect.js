@@ -2,7 +2,7 @@ export default function initSocket(cb) {
   window.Data = {
     user: {},
     names: {},
-    lastnames: ['Madden', 'Farkas', 'Farkas-Madden', 'Madden-Farkas'],
+    lastnames: {},
     pools: [],
     bracket: []
   }

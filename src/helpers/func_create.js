@@ -4,12 +4,15 @@ import Help from './helpers'
 const F = {}
 
 F.deleteName = e => {
-  const parent = e.target.parentNode
-  const id = parent.dataset.value
+  const parent = e.target.parentNode,
+        id = parent.dataset.value,
+        subject = location.pathname.match('create/last')
+          ? 'lastname'
+          : 'name'
 
   socket.emit('put', {
     verb: 'delete',
-    subject: 'name',
+    subject: subject,
     team: Data.user.dbID,
     id: id
   })
@@ -51,10 +54,14 @@ F.updateName = e => {
 
   // update local Data Object
   Data.names[id].name = name
+
+  const subject = location.pathname.match('create/last')
+    ? 'lastname'
+    : 'name'
   // send to server
   socket.emit('put', {
     verb: 'update',
-    subject: 'name',
+    subject: subject,
     team: Data.user.dbID,
     nameObj: Data.names[id]
   })
@@ -148,11 +155,13 @@ F.addNameToDOM = record => {
 
 F.createName = e => {
   e.preventDefault()
-
+  const subject = location.pathname.match('create/last')
+    ? 'lastname'
+    : 'name'
   // send to server
   socket.emit('put', {
     verb: 'create',
-    subject: 'name',
+    subject: subject,
     team: Data.user.dbID,
     name: Help.$('#names input').value
   })

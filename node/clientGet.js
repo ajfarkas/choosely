@@ -31,6 +31,31 @@ get.readNames = (client, data, cb) => {
       }
     })
 }
+/* Read Last Names
+ * Return all last names associated with user account.
+ * Args: data (`Obj`)
+ *   - verb: 'read'
+ *   - subject: 'lastnames'
+ *   - team: user joined with partner uuid by `_`
+*/
+get.readLastnames = (client, data, cb) => {
+  const lastnames = {}
+
+  db.createValueStream({gte: `${data.team}_lastname_`, lte: `${data.team}_lastname_\xff`, valueEncoding: 'json'})
+    .on('error', err => console.error(`readlastnames: ${err}`))
+    .on('data', d => {
+      if (Object.keys(lastnames).indexOf(d.id) === -1) {
+        lastnames[d.id] = d
+      }
+    })
+    .on('end', () => {
+      if (typeof cb === 'function') {
+        cb(lastnames)
+      } else {
+        client.emit('lastnamesRead', lastnames)
+      }
+    })
+}
 /* Read Pool
  * Return array of pools associated with user account.
  * Args: data (`Obj`)

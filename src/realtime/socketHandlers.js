@@ -7,7 +7,12 @@ const handlers = {
   connected: data => {
     console.log('connectedHandler', data)
     Data.user = JSON.parse(localStorage.userData)
-    Setup.readNames()
+    if (!location.pathname.match('create/last')) {
+      Setup.readNames()
+    }
+    if (!location.pathname.match('create/first')) {
+      Setup.readLastnames()
+    }
   },
   namesRead: data => {
     console.log('namesRead', data)
@@ -21,6 +26,18 @@ const handlers = {
       Choose.readPools()
     }
   },
+  lastnamesRead: data => {
+    console.log('lastnamesRead', data)
+    if (window.location.pathname.match(/\/create\b/)) {
+      const sortedData = Object.keys(data).sort((a, b) => data[a].createDate > data[b].createDate)
+      sortedData.forEach(record => {
+        Create.addNameToDOM(data[record])
+      })
+    } else if (window.location.pathname.match(/\/choose\b/)) {
+      Data.lastnames = data
+      // Choose.readPools()
+    } 
+  },
   nameAdded: data => {
     if (window.location.pathname.match(/\/create\b/)) {
       if (window.Data.names[data.id] === undefined) {
@@ -28,6 +45,15 @@ const handlers = {
       }
     } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.names[data.id] = data
+    }
+  },
+  lastnameAdded: data => {
+    if (window.location.pathname.match(/\/create\b/)) {
+      if (window.Data.names[data.id] === undefined) {
+        Create.addNameToDOM(data) 
+      }
+    } else if (window.location.pathname.match(/\/choose\b/)) {
+      Data.lastnames[data.id] = data
     }
   },
   poolRead: data => {

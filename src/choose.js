@@ -5,8 +5,8 @@ import setHandlers from './realtime/socketHandlers'
 // connect socket.io
 connect(setHandlers)
 
-const choices = ['a', 'b']
-const curtain = Help.$('.curtain')
+const choices = ['a', 'b'],
+      curtain = Help.$('.curtain')
 
 function hideChoices() {
   // set bg to selected choice bg
@@ -60,11 +60,12 @@ function cycleLastname(choice) {
     choice.stopPropagation()
     choice = this
   }
-  const lname = choice.dataset.value
-  const i = Data.lastnames.indexOf(lname)
-  // console.log(lname, i, i % Data.lastnames.length)
-  const newName = Data.lastnames[(i + 1) % Data.lastnames.length]
-  choice.innerText = newName
+  const lname = choice.dataset.value,
+        lastnames = Object.keys(Data.lastnames),
+        i = lastnames.indexOf(lname),
+        newName = lastnames[(i + 1) % lastnames.length]
+
+  choice.innerText = Data.lastnames[newName].name
   choice.dataset.value = newName
 }
 
@@ -82,9 +83,9 @@ document.addEventListener('keydown', e => {
     choose(Help.$('.name-a'))
   } else if (e.keyCode === 39) {
     choose(Help.$('.name-b'))
-  } else if (e.keyCode === 38 && Data.lastnames.length > 1) {
+  } else if (e.keyCode === 38 && Object.keys(lastnames).length > 1) {
     cycleLastname(Help.$('.name-a h3'))
-  } else if (e.keyCode === 40 && Data.lastnames.length > 1) {
+  } else if (e.keyCode === 40 && Object.keys(lastnames).length > 1) {
     cycleLastname(Help.$('.name-b h3'))
   }
 })

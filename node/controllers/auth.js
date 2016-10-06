@@ -71,8 +71,8 @@ Auth.getIDs = (data, cb) => {
 Auth.login =(req, res, cb) => {
   console.log('login attempt.')
   Auth.getIDs(req.body, (err, ids) => {
-    console.log(`Auth.login Err: ${JSON.stringify(err)}`)
     if (err) {
+      console.log(`Auth.login Err: ${JSON.stringify(err)}`)
       if (err.status) {
         return res.status(err.status).json(err)
       } else {

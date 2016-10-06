@@ -35,14 +35,22 @@ F.showChoices = () => {
 
 F.refreshChoices = (index, kind) => {
   Data.currentMatch = index
-  const names = Data[kind][index]
+  const names = Data[kind][index],
+        lastnames = Object.keys(Data.lastnames),
+        lnLen = lastnames.length
+
   // randomize background colors (dark set on top, light on bottom)
   Help.$('.name-a').dataset.color = Math.ceil(Math.random() * colorNum) * 2 - 1
   Help.$('.name-b').dataset.color = Math.ceil(Math.random() * colorNum) * 2
   choices.forEach((choice, i) => {
     console.log(names[i])
+    const lastIndex = Math.floor(Math.random() * lnLen)
+    // set firstnames
     Help.$(`.name-${choice} h2`).innerText = Data.names[names[i]].name
     Help.$(`.name-${choice} h2`).dataset.value = names[i]
+    // set lastnames
+    Help.$(`.name-${choice} h3`).innerText = Data.lastnames[lastnames[lastIndex]].name
+    Help.$(`.name-${choice} h3`).dataset.value = lastnames[lastIndex]
   })
   F.showChoices()
 }
@@ -125,7 +133,6 @@ F.resolveBracketMatch = (id) => {
     })
   })
   Data.bracket.splice(Data.currentMatch, 1)
-  console.log(Data.bracket)
   socket.emit('put', {
     verb: 'update',
     subject: 'bracket',

@@ -13,7 +13,6 @@ const localLogin = (req, res, cb) => {
       failureFlash: false
     },
     (err, user, info) => {
-      console.log(err, user, info)
       if (err) {
         if (err.status) {
           res.status(err.status).json(err)

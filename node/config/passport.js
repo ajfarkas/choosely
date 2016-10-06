@@ -11,10 +11,9 @@ const localOpts = { },
       loginErr = 'Your login details could not be verified.'
 
 const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
-  console.log('locallogin', email)
+  console.log('locallogin passport', email)
   // call user info from database and use comparePass from models/user.
   return db.get(`username-${email}`, { valueEncoding: 'json' }, (err, data) => {
-    console.log('local login get db')
     if (err) {
       console.log('err1: ', err)
       if (err.notFound) {

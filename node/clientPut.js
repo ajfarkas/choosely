@@ -36,7 +36,7 @@ const put = {
     })
   },
   /* Update Name
-   * Add name to user account.
+   * Update name on user account.
    * Args: data (`Obj`)
    *   - verb (`str`): 'update'
    *   - subject (`str`): 'name'
@@ -79,6 +79,71 @@ const put = {
       }
       console.log(`${data.id} deleted from DB.`)
       client.emit('nameDeleted', data.id)
+    })
+  },
+  /* Create Last Name
+   * Add last name to user account.
+   * Args: data (`Obj`)
+   *   - verb: 'create'
+   *   - subject: 'lastname'
+   *   - team: user joined with partner uuid by `_`
+   *   - name: new last name
+  */
+  createLastname: (client, data) => {
+    console.log(`updateLastname: ${data.name}`)
+    const info = {
+      id: uuid.v4(),
+      name: data.name,
+      createDate: Date.now()
+    }
+    const lookup = `${data.team}_lastname_${info.id}`
+    db.put(lookup, info, { valueEncoding: 'json' }, err => {
+      if (err) {
+        return console.error(`createLastname Err: ${err}`)
+      }
+      console.log(`lastname ${info.name} saved to DB.`)
+      client.emit('lastnameAdded', info)
+    })
+  },
+    /* Update Last Name
+   * Update last name on user account.
+   * Args: data (`Obj`)
+   *   - verb (`str`): 'update'
+   *   - subject (`str`): 'lastname'
+   *   - team (`str`):  user joined with partner uuid by `_`
+   *   - nameObj ('Obj'):
+   *     - id (`uuid`): identifier for name obj
+   *     - name (`str`): name in contest
+  */
+  updateLastname: (client, data) => {
+    console.log(`updatelastname: ${data.nameObj.id}`)
+    const info = data.nameObj
+    const lookup = `${data.team}_lastname_${info.id}`
+
+    db.put(lookup, info, { valueEncoding: 'json' }, err => {
+      if (err) {
+        return console.error(err)
+      }
+      console.log(`${data.nameObj.name} updated in DB.`)
+      client.emit('lastnameUpdated', info)
+    })
+  },
+  /* Delete Name
+   * Delete name from user account.
+   * Args: data (`Obj`)
+   *   - verb: 'delete'
+   *   - subject: 'lastname'
+   *   - team: user joined with partner uuid by `_`
+   *   - id (`uuid`): identifier for name to remove from db
+  */
+  deleteLastname: (client, data) => {
+    const lookup = `${data.team}_lastname_${data.id}`
+    db.del(lookup, err => {
+      if (err) {
+        return console.error(err)
+      }
+      console.log(`${data.id} deleted from DB.`)
+      client.emit('lastnameDeleted', data.id)
     })
   },
   /* Update Pool
