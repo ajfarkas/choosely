@@ -8,6 +8,8 @@ connect(setHandlers)
 const choices = ['a', 'b'],
       curtain = Help.$('.curtain')
 
+let listen = undefined
+
 function hideChoices() {
   // set bg to selected choice bg
   const chosen = Help.$('.chosen')
@@ -33,9 +35,12 @@ function hideChoices() {
       alert(`We have a winner!\nCongrats to ${Data.names[remaining].name}!`)
     }
   }
+  listen(true)
 }
 
 function choose(choice) {
+  // stop multiple choices before new names are shown
+  listen(false)
   // allow for event Listeners or manual choice
   if (choice.isTrusted) {
     choice = this
@@ -70,13 +75,7 @@ function cycleLastname(choice) {
   choice.dataset.value = newName
 }
 
-// listeners
-choices.forEach(choice => {
-  Help.$(`.name-${choice}`).addEventListener('click', choose)
-  Help.$(`.name-${choice} h3`).addEventListener('click', cycleLastname)
-})
-
-document.addEventListener('keydown', e => {
+function keyChoose(e) {
   if (Help.$('.chosen')) {
     return false
   }
@@ -89,4 +88,18 @@ document.addEventListener('keydown', e => {
   } else if (e.keyCode === 40 && Object.keys(lastnames).length > 1) {
     cycleLastname(Help.$('.name-b h3'))
   }
-})
+}
+
+// add listeners
+listen = add => {
+  const op = add ? 'add' : 'remove'
+  choices.forEach(choice => {
+    Help.$(`.name-${choice}`)[`${op}EventListener`]('click', choose)
+    Help.$(`.name-${choice} h3`)[`${op}EventListener`]('click', cycleLastname)
+  })
+
+  document[`${op}EventListener`]('keydown', keyChoose)
+  console.log(`${op}EventListener`)
+}
+// make it so
+listen(true)
