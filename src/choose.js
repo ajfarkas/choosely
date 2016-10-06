@@ -40,15 +40,16 @@ function choose(choice) {
   if (choice.isTrusted) {
     choice = this
   }
-  const choiceID = choice.querySelector('h2').dataset.value
+  const choiceID = Help.$('h2', choice).dataset.value
+  const lastnameID = Help.$('h3', choice).dataset.value
 
   choice.className += ' chosen'
   // allow for .chosen animation (see _choose.scss)
   setTimeout(hideChoices, 1650)
   if (Data.pools.length) {
-    F.resolvePoolMatch(choiceID)
+    F.resolvePoolMatch(choiceID, lastnameID)
   } else if (Data.bracket.length) {
-    F.resolveBracketMatch(choiceID)
+    F.resolveBracketMatch(choiceID, lastnameID)
   } else {
     return console.error('Choose: both brackets and pools are unavailable')
   }

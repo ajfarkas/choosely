@@ -23,6 +23,7 @@ const put = {
       info[id] = {
         score: 0,
         matches: {},
+        lastnames: {},
         eliminated: false
       }
     })
@@ -46,7 +47,8 @@ const put = {
    *     - name (`str`): name in contest
    *     - [user/partner UUID] (`obj`):
    *       - score (`int`): number of wins associated with this name
-   *       - matches (`arr`): array of ids of other names this name was matched against.
+   *       - matches (`obj`): `int` matched to number of times this name won against given name UUID.
+   *       - lastnames (`obj`): `int` matched to number of times this lastname UUID was chosen.
    *       - elimainated (`bool`): whether this name has been eliminated
    *         from this user's bracket.
   */

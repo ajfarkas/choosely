@@ -67,15 +67,18 @@ F.newPoolMatch = () => {
   }
 }
 
-F.resolvePoolMatch = (id) => {
+F.resolvePoolMatch = (id, lastnameID) => {
   const match = Data.pools[Data.currentMatch]
   match.forEach((contestant, i) => {
     const nameData = Data.names[contestant][Data.user.user]
     const competitor = match[-i + 1]
     const wins = nameData.matches[competitor] || 0
+    const lastnameWins = nameData.lastnames[lastnameID] || 0
 
     if (contestant === id) {
+      // matches & lastnames are constucted in case keys are undefined.
       nameData.matches[competitor] = wins + 1
+      nameData.lastnames[lastnameID] = lastnameWins + 1
       nameData.score++
     } else {
       nameData.matches[competitor] = wins
@@ -110,15 +113,18 @@ F.newBracketMatch = () => {
   }
 }
 
-F.resolveBracketMatch = (id) => {
+F.resolveBracketMatch = (id, lastnameID) => {
   const match = Data.bracket[Data.currentMatch]
   match.forEach((contestant, i) => {
     const nameData = Data.names[contestant][Data.user.user]
     const competitor = match[-i + 1]
     const wins = nameData.matches[competitor] || 0
+    const lastnameWins = nameData.lastnames[lastnameID] || 0
 
     if (contestant === id) {
+      // matches & lastnames are constucted in case keys are undefined.
       nameData.matches[competitor] = wins + 1
+      nameData.lastnames[lastnameID] = lastnameWins + 1
       nameData.score++
     } else {
       nameData.matches[competitor] = wins

@@ -35,7 +35,6 @@ const handlers = {
       })
     } else if (window.location.pathname.match(/\/choose\b/)) {
       Data.lastnames = data
-      // Choose.readPools()
     } 
   },
   nameAdded: data => {
