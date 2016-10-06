@@ -1,4 +1,3 @@
-// import cookie from '../static/js.cookie.js'
 import Help from './helpers'
 
 const F = {}

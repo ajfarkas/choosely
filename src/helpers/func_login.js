@@ -1,6 +1,5 @@
 import getFetch from 'whatwg-fetch'
 import es6Promise from 'es6-promise'
-import cookie from '../static/js.cookie.js'
 
 // init Promise for IE and maybe FF
 es6Promise.polyfill()
@@ -34,9 +33,6 @@ F.login = (username, password, partnername, signup) => {
         return document.dispatchEvent(e)
       }
       // store user/partner ids, redir to list
-      const expiry = new Date(Date.now() + 604800000)
-      cookie('user_id', JSON.stringify(d), {expires: expiry})
-
       d.user.dbID = d.user.partner > d.user.user
         ? `${d.user.partner}_${d.user.user}`
         : `${d.user.user}_${d.user.partner}`

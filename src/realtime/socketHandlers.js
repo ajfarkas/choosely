@@ -1,7 +1,6 @@
 import Setup from '../helpers/func_setup'
 import Create from '../helpers/func_create'
 import Choose from '../helpers/func_choose'
-import cookie from '../static/js.cookie.js'
 
 const handlers = {
   connected: data => {
