@@ -1,4 +1,12 @@
 export default function initSocket(cb) {
+  // check for jwt
+  if (!location.pathname.match(/^\/$|^\/login$/)) {
+    if (!localStorage.token) {
+      localStorage.clear()
+      location.pathname = '/login'
+    }
+  }
+
   window.Data = {
     user: {},
     names: {},

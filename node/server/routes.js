@@ -26,6 +26,29 @@ const localLogin = (req, res, cb) => {
   )(req, res, cb)
 }
 
+// const jwtLogin = (req, res, cb) => {
+//   console.log('jwtLogin')
+//   return passport.authenticate(
+//     'jwt',
+//     {
+//       session: true,
+//       failureFlash: false
+//     },
+//     (err, user, info) => {
+//       if (err) {
+//         if (err.status) {
+//           res.status(err.status).json(err)
+//         } else {
+//           res.status(500).json(err)
+//         }
+//       } else {
+//         console.log('jwt good to go')
+//         cb(req, res)
+//       }
+//     }
+//   )(req, res)
+// }
+
 module.exports = function routes(dir, app) {
   // serve application files
   function serveFile(res, file) {
@@ -39,29 +62,29 @@ module.exports = function routes(dir, app) {
       res.end()
     })
   }
-  // logged out html files
-  const outsidePages = [
-    ['/', 'index.html'],
-    ['/login', 'login.html'],
-    ['/logout', 'logout.html']
-  ]
-  outsidePages.forEach(page => 
-    app.get(page[0], (req, res) => {
-      serveFile(res, page[1])
-    })
-  )
   // logged in html files
   const insidePages = [
     ['/start', 'start.html'],
     ['/create/*', 'create.html'],
     ['/choose', 'choose.html']
   ]
-
   insidePages.forEach(page => {
-    app.get(page[0], (req, res) => {
+    app.get(page[0], (req, res) =>
       serveFile(res, page[1])
-    })
+    )
   })
+
+  // logged out html files
+  const outsidePages = [
+    ['/', 'index.html'],
+    ['/login', 'index.html'],
+    ['/logout', 'index.html']
+  ]
+  outsidePages.forEach(page => 
+    app.get(page[0], (req, res) =>
+      serveFile(res, page[1])
+    )
+  )
 
   app.post('/loginreq', localLogin)
   

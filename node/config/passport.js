@@ -1,10 +1,10 @@
 const passport = require('passport'),
-      // passportJWT = require('passport-jwt'),
+      passportJWT = require('passport-jwt'),
       user = require('../models/user'),
-      // config = require('./main'),
+      config = require('./main'),
       LocalStrategy = require('passport-local'),
-      // jwtStrategy = passportJWT.Strategy,
-      // extractJWT = passportJWT.ExtractJwt,
+      JwtStrategy = passportJWT.Strategy,
+      extractJWT = passportJWT.ExtractJwt,
       db = require('../data')
 
 const localOpts = { },
@@ -15,11 +15,11 @@ const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
   // call user info from database and use comparePass from models/user.
   return db.get(`username-${email}`, { valueEncoding: 'json' }, (err, data) => {
     if (err) {
-      console.log('err1: ', err)
+      
       if (err.notFound) {
         return cb({ status: 401, error: loginErr })
       } else {
-        return console.error('localLogin, passport.js: ', err)
+        return console.error(`login get user: ${JSON.stringify(err)}`)
       }
     }
 
@@ -37,12 +37,31 @@ const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
   })
 })
 
-// const jwtOpts = {
-//   // check auth headers
-//   jwtFromRequest: extractJWT.fromAuthHeader(),
-//   secretOrKey: config.secret
-// }
+const jwtOpts = {
+  // check auth headers
+  jwtFromRequest: extractJWT.fromAuthHeader(),
+  secretOrKey: config.secret
+}
 
-// const jwtLogin = undefined
+const jwtLogin = new JwtStrategy(jwtOpts, (info, cb) => {
+  console.log(info)
+  // check for user in db
+  db.get(`username-${info.user}`, { valueEncoding: 'json' }, (err, data) => {
+    if (err) {
+      if (err.notFound) {
+        return cb({ status: 401, error: loginErr })
+      } else {
+        return console.error(`jwtLogin get err: ${JSON.stringify(err)}`)
+      }
+    }
+
+    if (data.partners.indexOf(info.partner) < 0) {
+      return cb({ status: 401, error: loginErr })
+    } else {
+      return cb(null, data)
+    }
+  })
+})
 
 passport.use(localLogin)
+passport.use(jwtLogin)
