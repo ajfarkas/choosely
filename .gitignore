@@ -2,6 +2,9 @@
 choosely.sublime-project
 choosely.sublime-workspace
 
+node/config/smtp.js
+node/config/main.js
+
 .sass-cache/
 node_modules/
 choicesdb/

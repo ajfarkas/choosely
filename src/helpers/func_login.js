@@ -23,9 +23,7 @@ F.login = (username, password, partnername, signup) => {
   })
 
   fetch(req)
-    .then( res => {
-      return res.json()
-    })
+    .then( res => res.json() )
     .then( d => {
       if (d.error) {
         const e = new CustomEvent('error')
@@ -41,6 +39,27 @@ F.login = (username, password, partnername, signup) => {
       localStorage.userData = JSON.stringify(d.user)
 
       window.location.pathname = '/create/first'
+    })
+    .catch( e => console.error(e) )
+}
+
+// Reset Password function
+F.resetPassword = (email) => {
+  const req = new Request(`${location.origin}/forgot`, {
+    method: 'post',
+    headers: new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      username: email
+    })
+  }) 
+
+  fetch(req)
+    .then( res => res.json() )
+    .then( d => {
+      console.log(d)
     })
     .catch( e => console.error(e) )
 }

@@ -89,6 +89,8 @@ module.exports = function routes(dir, app) {
   app.post('/loginreq', localLogin)
   
   app.post('/signupreq', authController.signup)
+
+  app.post('/forgot', authController.forgotPassword)
   
 
   // other files (css, js)

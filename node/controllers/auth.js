@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken'),
       config = require('../config/main'),
       db = require('../data'),
       uuid = require('node-uuid'),
+      crypto = require('crypto'),
+      mail = require('./mail'),
       loginErr = 'Your login details could not be verified.'
 
 /* generateToken
@@ -158,6 +160,49 @@ Auth.signup = (req, res, cb) => {
 */
 Auth.jwtAuthWS = () => {
   // do stuff
+}
+
+/* Forgot Password
+*/
+Auth.forgotPassword = (req, res, cb) => {
+  const email = req.body.username
+  console.log(`forgotPassword ${email}`)
+
+  db.get(`username-${email}`, { valueEncoding: 'json'}, (e, data) => {
+    if (e) {
+      console.error(`Auth.forgotPassword Err: ${JSON.stringify(e)}`)
+      return res.status(422).json({ error: 'Your request could not be processed as entered. Plase try again.' })
+    }
+
+    crypto.randomBytes(48, (err, buf) => {
+      if (err) {
+        return cb(err)
+      }
+
+      const resetToken = buf.toString('hex')
+
+      data.resetPasswordToken = resetToken
+      data.resetPasswordExpires = Date.now() + 600000 // 10 minutes
+
+      db.put(`username-${email}`, data, { valueEncoding: 'json' }, putErr => {
+        if (putErr) {
+          return cb(putErr)
+        }
+
+        const msg = {
+          to: email,
+          subject: 'Choosely: Reset Password',
+          text: 'You\'re receiving this email because you (or someone else) requested that your accound password be reset.\n\n'+
+            'Follow this link to complete the password reset process:\n\n'+
+            'http://'+req.headers.host+'/reset/'+resetToken+'\n\n'+
+            'If you didn\'t request a reset, simply ignore this message.'
+        }
+
+        mail.send(msg)
+        cb()
+      }) // end put
+    }) // end crypto
+  }) // end get
 }
 
 

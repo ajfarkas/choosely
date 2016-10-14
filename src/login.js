@@ -23,6 +23,21 @@ function login(signup) {
 
   F.login(username, password, partnername, signup)
 }
+
+function resetPassword() {
+  const username = Help.$('#username').value
+
+  const e = new CustomEvent('error')
+  if (!username) {
+    e.message = 'Your email address is required.'
+  }
+  if (e.message) {
+    return document.dispatchEvent(e)
+  }
+
+  F.resetPassword(username)
+}
+
 // login
 Help.$('#login-btn').addEventListener('click', login)
 Help.$('#signup-btn').addEventListener('click', login.bind(null, true))
@@ -35,3 +50,5 @@ Help.$$('input').forEach(el => el.addEventListener('focus', () => {
   e.message = '\u00a0'
   document.dispatchEvent(e)
 }) )
+// reset password
+Help.$('#reset-pw').addEventListener('click', resetPassword)
