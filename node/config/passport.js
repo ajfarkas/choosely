@@ -11,21 +11,21 @@ const localOpts = { },
       loginErr = 'Your login details could not be verified.'
 
 const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
-  console.log('locallogin passport', email)
+  console.log('locallogin passport', email, password)
   // call user info from database and use comparePass from models/user.
   return db.get(`username-${email}`, { valueEncoding: 'json' }, (err, data) => {
+    console.log(err, data)
     if (err) {
-      
       if (err.notFound) {
         return cb({ status: 401, error: loginErr })
       } else {
-        return console.error(`login get user: ${JSON.stringify(err)}`)
+        return console.error(`login get user ERR: ${JSON.stringify(err)}`)
       }
     }
 
     user.comparePass(password, data.hash, (compareErr, isMatch) => {
       if (compareErr) {
-        console.error('comparePass err: ', compareErr)
+        console.error('comparePass ERR: ', compareErr)
         return cb(compareErr)
       }
       if (isMatch) {
@@ -51,7 +51,7 @@ const jwtLogin = new JwtStrategy(jwtOpts, (info, cb) => {
       if (err.notFound) {
         return cb({ status: 401, error: loginErr })
       } else {
-        return console.error(`jwtLogin get err: ${JSON.stringify(err)}`)
+        return console.error(`jwtLogin get ERR: ${JSON.stringify(err)}`)
       }
     }
 

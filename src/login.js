@@ -9,7 +9,7 @@ function login(signup) {
   const password = Help.$('#password').value
   const partnername = Help.$('#partnername').value
   
-  const e = new CustomEvent('error')
+  const e = new CustomEvent('message')
   if (!username) {
     e.message = 'Your email address is required.'
   } else if (!password) {
@@ -24,10 +24,10 @@ function login(signup) {
   F.login(username, password, partnername, signup)
 }
 
-function resetPassword() {
+function forgotPassword() {
   const username = Help.$('#username').value
 
-  const e = new CustomEvent('error')
+  const e = new CustomEvent('message')
   if (!username) {
     e.message = 'Your email address is required.'
   }
@@ -35,20 +35,25 @@ function resetPassword() {
     return document.dispatchEvent(e)
   }
 
-  F.resetPassword(username)
+  F.forgotPassword(username)
 }
 
 // login
 Help.$('#login-btn').addEventListener('click', login)
 Help.$('#signup-btn').addEventListener('click', login.bind(null, true))
-document.addEventListener('error', e => {
-  Help.$('.error-msg').innerText = e.message
+
+// display errors/messages
+document.addEventListener('message', e => {
+  Help.$('.message').innerText = e.message
 })
+
 // clear errors on input
 Help.$$('input').forEach(el => el.addEventListener('focus', () => {
-  const e = new CustomEvent('error')
+  const e = new CustomEvent('message')
   e.message = '\u00a0'
   document.dispatchEvent(e)
 }) )
+
 // reset password
-Help.$('#reset-pw').addEventListener('click', resetPassword)
+Help.$('#forgot-pw').addEventListener('click', forgotPassword)
+

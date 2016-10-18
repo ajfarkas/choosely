@@ -6,6 +6,7 @@ module.exports = {
   devtool: 'eval',
   entry: {
     login: './src/login.js',
+    reset: './src/reset.js',
     create: './src/create.js',
     choose: './src/choose.js',
     test: './tests/testAll.js'},

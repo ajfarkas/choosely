@@ -112,7 +112,7 @@ Auth.signup = (req, res, cb) => {
     // check if partner has already signed up
     db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (pErr, partnerData) => {
       if (pErr && !pErr.notFound) {
-        return console.error(pErr)
+        return cb(pErr)
       }
       const notFound = pErr && pErr.notFound
       const partner = {},
@@ -193,17 +193,89 @@ Auth.forgotPassword = (req, res, cb) => {
           to: email,
           subject: 'Choosely: Reset Password',
           text: 'You\'re receiving this email because you (or someone else) requested that your accound password be reset.\n\n'+
-            'Follow this link to complete the password reset process:\n\n'+
+            'Follow this link within the next 10 minutes to complete the password reset process:\n\n'+
             'http://'+req.headers.host+'/reset/'+resetToken+'\n\n'+
             'If you didn\'t request a reset, simply ignore this message.'
         }
 
-        mail.send(msg)
-        cb()
+        mail.send(msg, (mailErr, info) => {
+          if (mailErr) {
+            return console.error(`Auth.forgotPassword ${mailErr}`)
+          }
+
+          if (info.accepted && info.accepted[0] === email) {
+            res.status(200).json({
+              message: `Reset link sent to ${email}.`
+            })
+          } else if (info.rejected && info.rejected[0]) {
+            res.status(422).json({
+              error: `Reset message rejected by ${info.rejected[0]}.`
+            })
+          }
+        })
       }) // end put
     }) // end crypto
   }) // end get
 }
 
+/* Verify Reset Password Token
+*/
+Auth.verifyResetToken = (req, res, cb) => {
+  const email = req.body.username,
+        password = req.body.password,
+        token = req.params.token
+  console.log('verify', email, password, token)
+  db.get(`username-${email}`, { valueEncoding: 'json' }, (err, data) => {
+    if (err) {
+      console.error(`Auth.verifyResetToken ${err}`)
+      return cb(err)
+    }
+
+    if (
+      !data.resetPasswordExpires ||
+      !data.resetPasswordToken ||
+      data.resetPasswordExpires <= Date.now() ||
+      data.resetPasswordToken !== token
+    ) {
+      return res.status(422).json({
+        error: 'Your token is no longer valid. Please try resetting your password again.'
+      })
+    }
+
+    user.hashPass(password, hash => {
+      data.hash = hash
+      data.resetPasswordExpires = null
+      data.resetPasswordToken = null
+
+      db.put(`username-${email}`, data, { valueEncoding: 'json' }, putErr => {
+        if (putErr) {
+          console.error(`Auth.verifyResetToken put ${putErr}`)
+          res.status(422).json({
+            error: 'Password reset failed. Please try submitting again.'
+          })
+          return cb(putErr)
+        }
+
+        const msg = {
+          to: email,
+          subject: 'Choosely password changed',
+          text: 'Your password has recently been changed.\n\n'+
+            'If you did not request this change please contact us immediately.\n'
+        }
+
+        mail.send(msg)
+
+        if (typeof cb === 'function') {
+          return cb(true)
+        } else {
+          res.status(200).json({
+            message: 'Password reset successful. Go forth and choose.'
+          })
+        }
+      })
+    })
+
+  })
+}
 
 module.exports = Auth

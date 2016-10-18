@@ -78,7 +78,8 @@ module.exports = function routes(dir, app) {
   const outsidePages = [
     ['/', 'index.html'],
     ['/login', 'index.html'],
-    ['/logout', 'index.html']
+    ['/logout', 'index.html'],
+    ['/reset/:token', 'reset.html']
   ]
   outsidePages.forEach(page => 
     app.get(page[0], (req, res) =>
@@ -91,6 +92,7 @@ module.exports = function routes(dir, app) {
   app.post('/signupreq', authController.signup)
 
   app.post('/forgot', authController.forgotPassword)
+  app.post('/resetreq/:token', authController.verifyResetToken, localLogin)
   
 
   // other files (css, js)

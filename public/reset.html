@@ -6,31 +6,24 @@
   <title>Choosely</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Playfair+Display:700' rel='stylesheet' type='text/css'>
   <link href="/public/admin.css" rel="stylesheet" type="text/css">
-  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h1>Chooseli</h1>
   <fieldset>
-    <legend>Welcome! Let's get you set up.</legend>
+    <legend>Use this form to reset your password.</legend>
     <p class="message">&nbsp;</p>
-    <form id="sign-in">
+    <form id="reset">
       <label name="label-user">
         <p>Your email</p>
         <input id="username" name="user" type="email" placeholder="my@email.com"/>
       </label>
       <label name="label-password">
-        <p>Your password</p>
+        <p>New password</p>
         <input id="password" name="password" type="password" placeholder="••••••••"/>
       </label>
-      <label name="label-partner">
-        <p>Your partner's email</p>
-        <input id="partnername" name="partner" type="email" placeholder="partner@email.com"/>
-      </label>
-      <button type="button" id="login-btn">Sign In</button>
-      <button type="button" id="signup-btn">Sign Up</button>
-      <p id="forgot-pw" class="func-link">Forgot your password?</p>
+      <button type="button" id="reset-btn">Reset Password</button>
     </form>
   </fieldset>
-  <script src="/dist/login.js"></script>
+  <script src="/dist/reset.js"></script>
 </body>
 </html>

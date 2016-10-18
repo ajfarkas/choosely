@@ -26,7 +26,7 @@ F.login = (username, password, partnername, signup) => {
     .then( res => res.json() )
     .then( d => {
       if (d.error) {
-        const e = new CustomEvent('error')
+        const e = new CustomEvent('message')
         e.message = d.error
         return document.dispatchEvent(e)
       }
@@ -43,8 +43,8 @@ F.login = (username, password, partnername, signup) => {
     .catch( e => console.error(e) )
 }
 
-// Reset Password function
-F.resetPassword = (email) => {
+// Forgot Password function
+F.forgotPassword = email => {
   const req = new Request(`${location.origin}/forgot`, {
     method: 'post',
     headers: new Headers({
@@ -59,7 +59,40 @@ F.resetPassword = (email) => {
   fetch(req)
     .then( res => res.json() )
     .then( d => {
-      console.log(d)
+      if (d.message || d.error) {
+        const e = new CustomEvent('message')
+        e.message = d.message || d.error
+        return document.dispatchEvent(e)
+      }
+    })
+    .catch( e => console.error(e) )
+}
+
+// Reset password function
+F.resetPassword = (email, password) => {
+  const token = location.pathname.match(/reset\/(.*)/)[1]
+  const req = new Request(`${location.origin}/resetreq/${token}`, {
+    method: 'post',
+    headers: new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      username: email,
+      password: password
+    })
+  })
+
+  fetch(req)
+    .then( res => res.json() )
+    .then( d => {
+      if (d.message || d.error) {
+        const e = new CustomEvent('message')
+        e.message = d.message || d.error
+        return document.dispatchEvent(e)
+      } else {
+        F.login(email, password)
+      }
     })
     .catch( e => console.error(e) )
 }
