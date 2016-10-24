@@ -34,7 +34,8 @@ function forgotPassword() {
   if (e.message) {
     return document.dispatchEvent(e)
   }
-
+  // reset password only once
+  Help.$('#forgot-pw').removeEventListener('click', forgotPassword)
   F.forgotPassword(username)
 }
 

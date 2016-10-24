@@ -4,7 +4,8 @@ import F from './helpers/func_login'
 function resetPassword() {
   const username = Help.$('#username').value,
         password = Help.$('#password').value
-
+  // reset only once
+  Help.$('#reset-btn').removeEventListener('click', resetPassword)
   F.resetPassword(username, password)
 }
 
