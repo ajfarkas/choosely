@@ -1,9 +1,9 @@
 import Help from './helpers/helpers'
-import connect from './realtime/connect'
+import init from './helpers/init'
 import F from './helpers/func_choose'
 import setHandlers from './realtime/socketHandlers'
 // connect socket.io
-connect(setHandlers)
+init(setHandlers)
 
 const choices = ['a', 'b'],
       curtain = Help.$('.curtain')

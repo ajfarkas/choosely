@@ -30,13 +30,8 @@ F.login = (username, password, partnername, signup) => {
         e.message = d.error
         return document.dispatchEvent(e)
       }
-      // store user/partner ids, redir to list
-      d.user.dbID = d.user.partner > d.user.user
-        ? `${d.user.partner}_${d.user.user}`
-        : `${d.user.user}_${d.user.partner}`
-
+      // store JWT and redirect
       localStorage.token = d.token
-      localStorage.userData = JSON.stringify(d.user)
 
       window.location.pathname = '/create/first'
     })

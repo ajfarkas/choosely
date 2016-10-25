@@ -2,7 +2,8 @@ const fs = require('fs'),
       mime = require('mime'),
       passportService = require('../config/passport'),
       authController = require('../controllers/auth'),
-      passport = require('passport')
+      passport = require('passport'),
+      names = require('../api/names')
 
 const localLogin = (req, res, cb) => {
   console.log('localLogin')
@@ -87,13 +88,14 @@ module.exports = function routes(dir, app) {
     )
   )
 
+  // login/signup requests
   app.post('/loginreq', localLogin)
-  
   app.post('/signupreq', authController.signup)
-
   app.post('/forgot', authController.forgotPassword)
   app.post('/resetreq/:token', authController.verifyResetToken, localLogin)
   
+  // API requests
+  app.get('/names/:op/:kind/', names)
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {

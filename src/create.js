@@ -1,14 +1,19 @@
-import connect from './realtime/connect'
+import init from './helpers/init'
 import F from './helpers/func_create'
 import Help from './helpers/helpers'
 import setHandlers from './realtime/socketHandlers'
+import names from './helpers/fetch_names'
 
-connect(setHandlers)
+init(setHandlers)
 
-if (location.pathname === '/create/last') {
+const whichName = location.pathname.match(/create\/(\w*)\/?/)[1]
+// read names from API
+names.read(whichName)
+
+if (whichName === 'last') {
   Help.$('.list-kind').innerText = 'Last Names'
   Help.$('#add-family').innerText = 'Add First Name'
-} else {
+} else if (whichName === 'first') {
   Help.$('.list-kind').innerText = 'First Names'
   Help.$('#add-family').innerText = 'Add Last Name'
 }

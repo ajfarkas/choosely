@@ -5,7 +5,6 @@ import Choose from '../helpers/func_choose'
 const handlers = {
   connected: data => {
     console.log('connectedHandler', data)
-    Data.user = JSON.parse(localStorage.userData)
     if (!location.pathname.match('create/last')) {
       Setup.readNames()
     }

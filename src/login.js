@@ -1,8 +1,8 @@
-import connect from './realtime/connect'
+import init from './helpers/init'
 import Help from './helpers/helpers'
 import F from './helpers/func_login'
 // init socket.io
-connect()
+init()
 
 function login(signup) {  
   const username = Help.$('#username').value
