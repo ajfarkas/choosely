@@ -1,5 +1,11 @@
 const Names = {}
 
+/* Read Names
+ * Read team names from db
+ * Arg:
+ *   - kind ('str'): 'first' || 'last'
+ * Res: JSON obj containing name data
+*/
 Names.read = (kind) => {
   const req = new Request(
     `${location.origin}/names/read/${kind}/`,

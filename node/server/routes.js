@@ -95,7 +95,7 @@ module.exports = function routes(dir, app) {
   app.post('/resetreq/:token', authController.verifyResetToken, localLogin)
   
   // API requests
-  app.get('/names/:op/:kind/', names)
+  app.get('/names/:op/:kind/', authController.jwtAuth, names)
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {

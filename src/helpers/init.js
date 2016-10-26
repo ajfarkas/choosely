@@ -13,7 +13,7 @@ export default function initSocket(cb) {
     : null
 
   if (!location.pathname.match(/^\/$|^\/login$|^\/logout$/)) {
-    if (!decoded) {
+    if (!decoded || decoded.exp <= Date.now()/1000) {
       localStorage.clear()
       return location.pathname = '/login'
     }

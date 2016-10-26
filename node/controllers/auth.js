@@ -158,8 +158,17 @@ Auth.signup = (req, res, cb) => {
 }
 /*
 */
-Auth.jwtAuthWS = () => {
-  // do stuff
+Auth.jwtAuth = (req, res, cb) => {
+  const token = req.headers.authorization.replace(/^JWT\s/, '')
+
+  jwt.verify(token, config.secret, (err, data) => {
+    if (err) {
+      console.error('jwtAuth Err', err)
+      return res.status(401).json({ error: 'Your credentials could not be verified.' })
+    }
+
+    return cb(null, data)
+  })
 }
 
 /* Forgot Password
