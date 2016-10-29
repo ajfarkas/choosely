@@ -8,8 +8,14 @@ init(setHandlers)
 
 const whichName = location.pathname.match(/create\/(\w*)\/?/)[1]
 // read names from API
-names.read(whichName)
+names.read(whichName, data => {
+  const sortedData = Object.keys(data).sort((a, b) => data[a].createDate > data[b].createDate)
+  sortedData.forEach(record => {
+    F.addNameToDOM(data[record])
+  })
+})
 
+// Setup firstname/lastname
 if (whichName === 'last') {
   Help.$('.list-kind').innerText = 'Last Names'
   Help.$('#add-family').innerText = 'Add First Name'
@@ -18,10 +24,9 @@ if (whichName === 'last') {
   Help.$('#add-family').innerText = 'Add Last Name'
 }
 
+// add listeners
 Help.$('#add-family').addEventListener('click', F.toggleFirstLast)
 // use input value to create new name
-Help.$('#names .input-btn').addEventListener('click', () => {
-  names.create(Help.$('#names input').value, whichName, F.addNameToDOM)
-})
-Help.$('[name=\"name\"]').addEventListener('keypress', F.enterAndCreateName)
+Help.$('#names .input-btn').addEventListener('click', F.createName)
+Help.$('[name=\"name\"]').addEventListener('keypress', F.createName)
 Help.$('#finish-list').addEventListener('click', () => location.pathname = '/choose')

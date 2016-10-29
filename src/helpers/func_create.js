@@ -1,4 +1,5 @@
 import Help from './helpers'
+import names from './fetch_names'
 
 const F = {}
 
@@ -32,13 +33,16 @@ F.cancelUpdateNameMode = () => {
   target.className = target.className.replace(' editing', '')
   // switch listeners to Create
   button.removeEventListener('click', F.updateName)
-  input.removeEventListener('keypress', F.enterAndUpdateName)
+  input.removeEventListener('keypress', F.updateName)
 
   button.addEventListener('click', F.createName)
-  input.addEventListener('keypress', F.enterAndCreateName)
+  input.addEventListener('keypress', F.createName)
 }
 
 F.updateName = e => {
+  if (e.type === 'keypress' && e.keyCode !== 13) {
+    return false
+  }
   e.preventDefault()
 
   const input = Help.$('#names input')
@@ -54,31 +58,16 @@ F.updateName = e => {
   // update local Data Object
   Data.names[id].name = name
 
-  const subject = location.pathname.match('create/last')
-    ? 'lastname'
-    : 'name'
-  // send to server
-  socket.emit('put', {
-    verb: 'update',
-    subject: subject,
-    team: Data.user.dbID,
-    nameObj: Data.names[id]
-  })
+  names.update(
+    Data.names[id],
+    location.pathname.match(/create\/(\w*)\/?/)[1]
+  )
   
   // reset selected name
   target.dataset.name = name
   Help.$('.name-label', target).innerText = name
   
   F.cancelUpdateNameMode()
-}
-
-F.enterAndUpdateName = e => {
-  if (e.keyCode === 13) {
-    e.preventDefault()
-    F.updateName(e)
-  } else {
-    return true
-  }
 }
 
 F.updateNameMode = e => {
@@ -105,10 +94,10 @@ F.updateNameMode = e => {
   input.focus()
   // switch listeners to Update
   button.removeEventListener('click', F.createName)
-  input.removeEventListener('keypress', F.enterAndCreateName)
+  input.removeEventListener('keypress', F.createName)
 
   button.addEventListener('click', F.updateName)
-  input.addEventListener('keypress', F.enterAndUpdateName)
+  input.addEventListener('keypress', F.updateName)
 }
 
 F.addNameToDOM = record => {
@@ -153,26 +142,15 @@ F.addNameToDOM = record => {
 }
 
 F.createName = e => {
-  e.preventDefault()
-  const subject = location.pathname.match('create/last')
-    ? 'lastname'
-    : 'name'
-  // send to server
-  socket.emit('put', {
-    verb: 'create',
-    subject: subject,
-    team: Data.user.dbID,
-    name: Help.$('#names input').value
-  })
-}
-
-F.enterAndCreateName = e => {
-  if (e.keyCode === 13) {
-    e.preventDefault()
-    F.createName(e)
-  } else {
-    return true
+  if (e.type === 'keypress' && e.keyCode !== 13) {
+    return false
   }
+  e.preventDefault()
+  names.create(
+    Help.$('#names input').value,
+    location.pathname.match(/create\/(\w*)\/?/)[1],
+    F.addNameToDOM
+  )
 }
 
 F.toggleFirstLast = e => {

@@ -5,12 +5,12 @@ import Choose from '../helpers/func_choose'
 const handlers = {
   connected: data => {
     console.log('connectedHandler', data)
-    if (!location.pathname.match('create/last')) {
-      Setup.readNames()
-    }
-    if (!location.pathname.match('create/first')) {
-      Setup.readLastnames()
-    }
+    // if (!location.pathname.match('create/last')) {
+    //   Setup.readNames()
+    // }
+    // if (!location.pathname.match('create/first')) {
+    //   Setup.readLastnames()
+    // }
   },
   namesRead: data => {
     console.log('namesRead', data)
