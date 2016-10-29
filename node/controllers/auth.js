@@ -18,15 +18,6 @@ const generateToken = data => jwt.sign(data, config.secret, {
   expiresIn: config.tokenExpLen
 })
 
-const extractJWT = req => {
-  const auth = req.headers.authorization
-  if ( auth && auth.match(/^JWT\s.*/) ) {
-    return auth.replace('JWT ', '')
-  } else {
-    throw new Error('No JWT in headers.')
-  }
-}
-
 const Auth = {}
 /* getIDs
  * get UUID for user and partner
@@ -233,7 +224,7 @@ Auth.verifyResetToken = (req, res, cb) => {
   const email = req.body.username,
         password = req.body.password,
         token = req.params.token
-  console.log('verify', email, password, token)
+  console.log('verify', email)
   db.get(`username-${email}`, { valueEncoding: 'json' }, (err, data) => {
     if (err) {
       console.error(`Auth.verifyResetToken ${err}`)

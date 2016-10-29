@@ -25,4 +25,26 @@ Names.read = (kind) => {
     .catch(err => console.error(err))
 }
 
+Names.create = (name, kind, cb) => {
+  const req = new Request(
+    `${location.origin}/names/create/${kind}/`,
+    {
+      method: 'post',
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: localStorage.token
+      }),
+      body: JSON.stringify({
+        name: name
+      })
+    }
+  )
+
+  fetch(req)
+    .then(res => res.json())
+    .then(data => cb(data))
+    .catch(err => console.error(err))
+}
+
 export default Names

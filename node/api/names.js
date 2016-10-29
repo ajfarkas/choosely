@@ -1,18 +1,18 @@
 const Op = {},
       db = require('../data'),
       Help = require('./helpers'),
-      jwtDecode = require('jwt-decode')
+      jwtDecode = require('jwt-decode'),
+      uuid = require('node-uuid')
 
 /* Read Names
  * Return all names associated with user account.
  * method: 'get'
  * req.body:
  *   - Authorization: JSON Web Token
- * res:
+ * response:
  *   - `Obj` containing nameID:nameData
 */
-Op.read = (req, res, cb) => {
-  console.log('read')
+Op.read = (req, res) => {
   const names = {},
         kind = req.params.kind,
         jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
@@ -26,13 +26,48 @@ Op.read = (req, res, cb) => {
       }
     })
     .on('end', () => {
-      // if (typeof cb === 'function') {
-      //   cb(names)
-      // } else {
-      console.log('end')
       res.status(200).json(names)
-      // }
     })
+}
+
+/* Create Names
+ * Create name and associate with team account.
+ * method: 'post'
+ * req.body:
+ *   - Authorization: JSON Web Token
+ *   - name (`str`): name to create
+ *   - kind (`str`): 'first' || 'last'
+ * response:
+ *   - `Obj` containing name data
+*/
+
+Op.create = (req, res) => {
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
+  const kind = req.params.kind
+  const info = {
+    id: uuid.v4(),
+    name: req.body.name,
+    createDate: Date.now()
+  }
+  const team = Help.getTeamID(jwt)
+
+  team.split('_').forEach(id => {
+    info[id] = {
+      score: 0,
+      matches: {},
+      lastnames: {},
+      eliminated: false
+    }
+  })
+
+  const lookup = `${team}_${kind}name_${info.id}`
+  db.put(lookup, info, { valueEncoding: 'json' }, err => {
+    if (err) {
+      return console.error(err)
+    }
+    console.log(`${info.name} saved to DB.`)
+    res.status(201).json(info)
+  })
 }
 
 module.exports = (req, res, cb) => {

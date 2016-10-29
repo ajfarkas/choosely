@@ -20,6 +20,8 @@ if (whichName === 'last') {
 
 Help.$('#add-family').addEventListener('click', F.toggleFirstLast)
 // use input value to create new name
-Help.$('#names .input-btn').addEventListener('click', F.createName)
+Help.$('#names .input-btn').addEventListener('click', () => {
+  names.create(Help.$('#names input').value, whichName, F.addNameToDOM)
+})
 Help.$('[name=\"name\"]').addEventListener('keypress', F.enterAndCreateName)
 Help.$('#finish-list').addEventListener('click', () => location.pathname = '/choose')

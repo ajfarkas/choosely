@@ -6,7 +6,7 @@ const fs = require('fs'),
       names = require('../api/names')
 
 const localLogin = (req, res, cb) => {
-  console.log('localLogin')
+  console.log('localLogin!')
   return passport.authenticate(
     'local',
     {
@@ -27,33 +27,10 @@ const localLogin = (req, res, cb) => {
   )(req, res, cb)
 }
 
-// const jwtLogin = (req, res, cb) => {
-//   console.log('jwtLogin')
-//   return passport.authenticate(
-//     'jwt',
-//     {
-//       session: true,
-//       failureFlash: false
-//     },
-//     (err, user, info) => {
-//       if (err) {
-//         if (err.status) {
-//           res.status(err.status).json(err)
-//         } else {
-//           res.status(500).json(err)
-//         }
-//       } else {
-//         console.log('jwt good to go')
-//         cb(req, res)
-//       }
-//     }
-//   )(req, res)
-// }
-
 module.exports = function routes(dir, app) {
   // serve application files
   function serveFile(res, file) {
-    console.log(file)
+    console.log('servefile: ', file)
     fs.readFile(`${dir}/public/${file}`, (err, data) => {
       if (err) {
         return console.error(`Routes serveFile err: ${JSON.stringify(err)}`)
@@ -96,10 +73,11 @@ module.exports = function routes(dir, app) {
   
   // API requests
   app.get('/names/:op/:kind/', authController.jwtAuth, names)
+  app.post('/names/:op/:kind/', authController.jwtAuth, names)
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {
-    console.log(dir+req.url)
+    console.log('get other files', dir+req.url)
     fs.readFile(dir+req.url, (err, data) => {
       if (err) {
         return console.error(`Routes readFile Err: ${JSON.stringify(err)}`)

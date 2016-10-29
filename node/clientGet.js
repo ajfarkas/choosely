@@ -106,7 +106,6 @@ get.readPool = (client, data, forceRefresh) => {
           if (err2) {
             return console.error(`poolCreate: ${err2}`)
           }
-          console.log(pools)
         })
       })
     } else if (err) {
@@ -138,7 +137,7 @@ get.readBracket = (client, data, forceRefresh) => {
         const nameArr = Object.keys(names).filter(name => {
           return !names[name][data.user].eliminated
         })
-        console.log(nameArr)
+        console.log('readBracket nameArr:',nameArr)
         // sort names, alternating best/worst seed
         nameArr.sort((a, b) => {
           const users = data.team.split('_')
