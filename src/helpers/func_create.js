@@ -5,17 +5,12 @@ const F = {}
 
 F.deleteName = e => {
   const parent = e.target.parentNode,
-        id = parent.dataset.value,
-        subject = location.pathname.match('create/last')
-          ? 'lastname'
-          : 'name'
-
-  socket.emit('put', {
-    verb: 'delete',
-    subject: subject,
-    team: Data.user.dbID,
-    id: id
-  })
+        id = parent.dataset.value
+        
+  names.delete(
+    id,
+    location.pathname.match(/create\/(\w*)\/?/)[1]
+  )
 
   parent.remove()
   delete Data.names[id]

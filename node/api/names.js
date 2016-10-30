@@ -7,7 +7,7 @@ const Op = {},
 /* Read Names
  * Return all names associated with user account.
  * method: 'get'
- * req.body:
+ * req.headers: 
  *   - Authorization: JSON Web Token
  * response:
  *   - `Obj` containing nameID:nameData
@@ -33,8 +33,9 @@ Op.read = (req, res) => {
 /* Create Names
  * Create name and associate with team account.
  * method: 'post'
- * req.body:
+ * req.headers: 
  *   - Authorization: JSON Web Token
+ * req.body:
  *   - name (`str`): name to create
  *   - kind (`str`): 'first' || 'last'
  * response:
@@ -69,6 +70,17 @@ Op.create = (req, res) => {
   })
 }
 
+/* Update Names
+ * Update existing name associated with team account.
+ * method: 'post'
+ * req.headers: 
+ *   - Authorization: JSON Web Token
+ * req.body: (`obj`) nameData
+ *   - id (`uuid`): required. ID of name to update
+ *   - all other nameData fields are optional.
+ * response:
+ *   - `Obj` containing name data
+*/
 Op.update = (req, res) => {
   const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
   const team = Help.getTeamID(jwt)
@@ -76,7 +88,7 @@ Op.update = (req, res) => {
   const info = req.body
 
   if (!info || !info.id) {
-    res.status(422).json({ error: 'request is missing body or name ID' })
+    return res.status(422).json({ error: 'request is missing body or name ID' })
   }
 
   const lookup = `${team}_${kind}name_${info.id}`
@@ -96,6 +108,35 @@ Op.update = (req, res) => {
       console.log(`${info.name} updated.`)
       res.status(200).json(entry)
     })
+  })
+}
+
+/* Delete Names
+ * Delete existing name associated with team account.
+ * method: 'post'
+ * req.headers: 
+ *   - Authorization: JSON Web Token
+ * req.body:
+ *   - id (`uuid`): required. ID of name to delete
+ * response:
+ *   - `Obj` { id: 'id of deleted name' }
+*/
+Op.delete = (req, res) => {
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
+  const team = Help.getTeamID(jwt)
+  const kind = req.params.kind
+  const id = req.body.id
+
+  if (!id) {
+    return res.status(422).json({ error: 'request is missing name ID.'})
+  }
+
+  db.del(`${team}_${kind}name_${id}`, err => {
+    if (err) {
+      return console.error(err)
+    }
+    console.log(`${id} deleted from DB.`)
+    res.status(200).json({ id: id })
   })
 }
 
