@@ -2,7 +2,7 @@ import Help from './helpers/helpers'
 import init from './helpers/init'
 import F from './helpers/func_choose'
 import setHandlers from './realtime/socketHandlers'
-// connect socket.io
+
 init(setHandlers)
 
 const choices = ['a', 'b'],
@@ -27,12 +27,12 @@ function hideChoices() {
   } else if (Data.bracket.length) {
     F.newBracketMatch()
   } else {
-    const remaining = Object.keys(Data.names).filter(name => 
-      !Data.names[name][Data.user.user].eliminated)
+    const remaining = Object.keys(Data.firstnames).filter(name => 
+      !Data.firstnames[name][Data.user.user].eliminated)
     if (remaining.length > 1) {
       F.readBracket()
     } else {
-      alert(`We have a winner!\nCongrats to ${Data.names[remaining].name}!`)
+      alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining].name}!`)
     }
   }
   listen(true)

@@ -22,7 +22,10 @@ Names.read = (kind, cb) => {
   fetch(req)
     .then(res => res.json())
     .then(data => cb(data))
-    .catch(err => console.error(err))
+    .catch(err => {
+      console.log(kind, req)
+      console.error(err)
+    })
 }
 /* Create Names
  * Create name and associate with team account.

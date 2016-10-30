@@ -13,7 +13,7 @@ F.deleteName = e => {
   )
 
   parent.remove()
-  delete Data.names[id]
+  delete Data.firstnames[id]
 }
 
 F.cancelUpdateNameMode = () => {
@@ -51,10 +51,10 @@ F.updateName = e => {
   }
 
   // update local Data Object
-  Data.names[id].name = name
+  Data.firstnames[id].name = name
 
   names.update(
-    Data.names[id],
+    Data.firstnames[id],
     location.pathname.match(/create\/(\w*)\/?/)[1]
   )
   
@@ -106,7 +106,7 @@ F.addNameToDOM = record => {
     return console.error('no record provided!')
   }
   // add to Global
-  window.Data.names[record.id] = record
+  window.Data.firstnames[record.id] = record
   // set up li
   li.className = 'name'
   li.dataset.value = record.id

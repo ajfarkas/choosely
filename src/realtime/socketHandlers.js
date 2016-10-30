@@ -5,12 +5,6 @@ import Choose from '../helpers/func_choose'
 const handlers = {
   connected: data => {
     console.log('connectedHandler', data)
-    // if (!location.pathname.match('create/last')) {
-    //   Setup.readNames()
-    // }
-    // if (!location.pathname.match('create/first')) {
-    //   Setup.readLastnames()
-    // }
   },
   namesRead: data => {
     console.log('namesRead', data)
@@ -20,7 +14,7 @@ const handlers = {
         Create.addNameToDOM(data[record])
       })
     } else if (window.location.pathname.match(/\/choose\b/)) {
-      Data.names = data
+      Data.firstnames = data
       Choose.readPools()
     }
   },
@@ -37,16 +31,16 @@ const handlers = {
   },
   nameAdded: data => {
     if (window.location.pathname.match(/\/create\b/)) {
-      if (window.Data.names[data.id] === undefined) {
+      if (window.Data.firstnames[data.id] === undefined) {
         Create.addNameToDOM(data) 
       }
     } else if (window.location.pathname.match(/\/choose\b/)) {
-      Data.names[data.id] = data
+      Data.firstnames[data.id] = data
     }
   },
   lastnameAdded: data => {
     if (window.location.pathname.match(/\/create\b/)) {
-      if (window.Data.names[data.id] === undefined) {
+      if (window.Data.firstnames[data.id] === undefined) {
         Create.addNameToDOM(data) 
       }
     } else if (window.location.pathname.match(/\/choose\b/)) {

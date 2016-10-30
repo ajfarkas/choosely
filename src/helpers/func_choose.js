@@ -46,7 +46,7 @@ F.refreshChoices = (index, kind) => {
     console.log(names[i])
     const lastIndex = Math.floor(Math.random() * lnLen)
     // set firstnames
-    Help.$(`.name-${choice} h2`).innerText = Data.names[names[i]].name
+    Help.$(`.name-${choice} h2`).innerText = Data.firstnames[names[i]].name
     Help.$(`.name-${choice} h2`).dataset.value = names[i]
     // set lastnames
     Help.$(`.name-${choice} h3`).innerText = Data.lastnames[lastnames[lastIndex]].name
@@ -70,7 +70,7 @@ F.newPoolMatch = () => {
 F.resolvePoolMatch = (id, lastnameID) => {
   const match = Data.pools[Data.currentMatch]
   match.forEach((contestant, i) => {
-    const nameData = Data.names[contestant][Data.user.user]
+    const nameData = Data.firstnames[contestant][Data.user.user]
     const competitor = match[-i + 1]
     const wins = nameData.matches[competitor] || 0
     const lastnameWins = nameData.lastnames[lastnameID] || 0
@@ -88,7 +88,7 @@ F.resolvePoolMatch = (id, lastnameID) => {
       verb: 'update',
       subject: 'name',
       team: Data.user.dbID,
-      nameObj: Data.names[contestant]
+      nameObj: Data.firstnames[contestant]
     })
 
   })
@@ -116,7 +116,7 @@ F.newBracketMatch = () => {
 F.resolveBracketMatch = (id, lastnameID) => {
   const match = Data.bracket[Data.currentMatch]
   match.forEach((contestant, i) => {
-    const nameData = Data.names[contestant][Data.user.user]
+    const nameData = Data.firstnames[contestant][Data.user.user]
     const competitor = match[-i + 1]
     const wins = nameData.matches[competitor] || 0
     const lastnameWins = nameData.lastnames[lastnameID] || 0
@@ -135,7 +135,7 @@ F.resolveBracketMatch = (id, lastnameID) => {
       verb: 'update',
       subject: 'name',
       team: Data.user.dbID,
-      nameObj: Data.names[contestant]
+      nameObj: Data.firstnames[contestant]
     })
   })
   Data.bracket.splice(Data.currentMatch, 1)

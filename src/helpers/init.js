@@ -1,11 +1,12 @@
 import getFetch from 'whatwg-fetch'
 import es6Promise from 'es6-promise'
 import jwtDecode from 'jwt-decode'
+import names from './fetch_names'
 
 // init Promise for IE and maybe FF
 es6Promise.polyfill()
 
-export default function initSocket(cb) {
+export default function init(cb) {
   // check for jwt
   const token = localStorage.token
   const decoded = token
@@ -20,7 +21,7 @@ export default function initSocket(cb) {
   } else {
     return false
   }
-
+ 
   window.Data = {
     user: {
       user: decoded.user,
@@ -29,11 +30,22 @@ export default function initSocket(cb) {
         ? `${decoded.partner}_${decoded.user}`
         : `${decoded.user}_${decoded.partner}`
     },
-    names: {},
+    firstnames: {},
     lastnames: {},
     pools: [],
     bracket: []
   }
+
+   // get all names from DB
+  ;['first', 'last'].forEach(whichName => {
+    names.read(whichName, data => {
+      Data[`${whichName}names`] = data
+      if (whichName === 'last' && cb) {
+        cb()
+      }
+    })
+  })
+
 // TODO: remove socket.io
   window.socket = io()
 
@@ -43,7 +55,4 @@ export default function initSocket(cb) {
     console.log('socket disconnected.')
   })
   
-  if (cb) {
-    return cb()
-  }
 }
