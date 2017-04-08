@@ -84,10 +84,11 @@ module.exports = function routes(dir, app) {
         res.writeHead(404, {'Content-type': 'text/html'})
         res.write('<h1>404: This File does not exist.</h1>')
         res.end()
+      } else {
+        res.writeHead(200, {'Content-Type': mime.lookup(req.url)})
+        res.write(data)
+        res.end()
       }
-      res.writeHead(200, {'Content-Type': mime.lookup(req.url)})
-      res.write(data)
-      res.end()
     })
   })
 }
