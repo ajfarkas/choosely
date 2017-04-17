@@ -77,7 +77,7 @@ module.exports = function routes(dir, app) {
   // GET
   app.get('/names/:op/:kind/', authController.jwtAuth, names)
   app.get('/pools/:op/', authController.jwtAuth, pools)
-  app.get('/brackets/:op/', authController.jwtAuth, brackets)
+  app.get('/bracket/:op/', authController.jwtAuth, brackets)
   // POST
   app.post('/names/:op/:kind/', authController.jwtAuth, names)
   app.post('/pools/:op/', authController.jwtAuth, pools)

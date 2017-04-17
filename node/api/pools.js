@@ -26,7 +26,7 @@ Op.read = (req, res) => {
         db.createValueStream({gte: `${team}_firstname_`, lte: `${team}_firstname_\xff`, valueEncoding: 'json'})
           .on('error', readErr => {
             console.error(`readPool/create/readNames: ${readErr}`)
-            res.status(500).json(readErr)
+            res.status(500).json({ error: readErr })
           })
           .on('data', name => {
             names[name.id] = name
@@ -68,7 +68,7 @@ Op.read = (req, res) => {
             db.put(`${team}_pools`, pools, { valueEncoding: 'json'}, (putErr) => {
               if (putErr) {
                 console.error(`poolRead/put: ${putErr}`)
-                res.status(500).json(putErr)
+                res.status(500).json({ error: putErr })
               } else {
                 res.status(201).json(pools)
               }
@@ -76,8 +76,30 @@ Op.read = (req, res) => {
           })
       } else {
         console.error(`readPool read Error: ${err}`)
-        res.status(500).json(err)
+        res.status(500).json({ error: err })
       }
+    } else {
+      res.status(200).json(pools)
+    }
+  })
+}
+/* Update Pools
+ * update user-partner pools.
+ * method: 'post'
+ * req.headers:
+ *   - Authorization: JSON web token
+ * req.body: (`arr`) pools data
+ * response:   
+ *   - `Arr` of arrays or uuid pairs
+*/
+Op.update = (req, res) => {
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+        team = Help.getTeamID(jwt),
+        pools = req.body
+
+  db.put(`${team}_pools`, pools, { valueEncoding: 'json' }, err => {
+    if (err) {
+      res.status(500).json({ error: err })
     } else {
       res.status(200).json(pools)
     }

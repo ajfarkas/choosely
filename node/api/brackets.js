@@ -12,13 +12,14 @@ const Op = {},
  *  - `Arr` containing pool IDs
 */      
 Op.read = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
-  const team = Help.getTeamID(jwt)
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+        team = Help.getTeamID(jwt)
 
   db.get(`${team}_bracket`, { valueEncoding: 'json' }, (err, bracket) => {
     if (err) {
       if (err.notFound) {
-        let names = {}
+        const names = {}
+        bracket = []
         // create bracket
         db.createValueStream({gte: `${team}_firstname_`, lte: `${team}_firstname_\xff`, valueEncoding: 'json'})
           .on('error', readErr => {
@@ -74,6 +75,28 @@ Op.read = (req, res) => {
         console.error(`readBracket read Error: ${err}`)
         res.status(500).json(putErr)
       }
+    } else {
+      res.status(200).json(bracket)
+    }
+  })
+}
+/* Update Bracket
+ * update user-partner bracket.
+ * method: 'post'
+ * req.headers:
+ *   - Authorization: JSON web token
+ * req.body: (`arr`) bracket data
+ * response:   
+ *   - `Arr` of arrays or uuid pairs
+*/
+Op.update = (req, res) => {
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+        team = Help.getTeamID(jwt),
+        bracket = req.body
+
+  db.put(`${team}_bracket`, bracket, { valueEncoding: 'json' }, err => {
+    if (err) {
+      res.status(500).json({ error: err })
     } else {
       res.status(200).json(bracket)
     }

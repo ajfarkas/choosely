@@ -3,7 +3,7 @@ const Choose = {}
 /* Read/Create Choose Pool/Bracket
  * Read match kind from DB or create if none exists
  * Arg:
- *   - kind (`enum`): 'pool' | 'bracket'
+ *   - kind (`enum`): 'pools' | 'bracket'
  * Res: JSON obj containing match data
 */
 Choose.read = (kind, cb) => {
@@ -30,7 +30,7 @@ Choose.read = (kind, cb) => {
  * Update match kind in DB
  * Arg:
  *   - matchData (`obj`): pool or bracket data
- *   - kind (`enum`): 'pool' | 'bracket'
+ *   - kind (`enum`): 'pools' | 'bracket'
  * Res: JSON obj containing match data
 */
 Choose.update = (matchData, kind, cb) => {

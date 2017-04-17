@@ -55,12 +55,12 @@ F.keyChoose = e => {
     return false
   }
   if (e.keyCode === 37) {
-    choose(Help.$('.name-a'))
+    F.choose(Help.$('.name-a'))
   } else if (e.keyCode === 39) {
-    choose(Help.$('.name-b'))
-  } else if (e.keyCode === 38 && Object.keys(lastnames).length > 1) {
+    F.choose(Help.$('.name-b'))
+  } else if (e.keyCode === 38 && Object.keys(Data.lastnames).length > 1) {
     F.cycleLastname(Help.$('.name-a h3'))
-  } else if (e.keyCode === 40 && Object.keys(lastnames).length > 1) {
+  } else if (e.keyCode === 40 && Object.keys(Data.lastnames).length > 1) {
     F.cycleLastname(Help.$('.name-b h3'))
   }
 }
@@ -68,7 +68,7 @@ F.keyChoose = e => {
 F.cycleLastname = choice => {
   if (choice.isTrusted) {
     choice.stopPropagation()
-    choice = this
+    choice = choice.currentTarget
   }
   const lname = choice.dataset.value,
         lastnames = Object.keys(Data.lastnames),
@@ -186,22 +186,10 @@ F.resolvePoolMatch = (id, lastnameID) => {
     }
     // save data to server
     Names.update(Data.firstnames[contestant], 'first')
-    // socket.emit('put', {
-    //   verb: 'update',
-    //   subject: 'name',
-    //   team: Data.user.dbID,
-    //   nameObj: Data.firstnames[contestant]
-    // })
-
   })
   Data.pools.splice(Data.currentMatch, 1)
-  console.log(Data.pools)
-  socket.emit('put', {
-    verb: 'update',
-    subject: 'pool',
-    team: Data.user.dbID,
-    pool: Data.pools
-  })
+  
+  Choose.update(Data.pools, 'pools')
 }
 
 F.newBracketMatch = () => {
@@ -234,20 +222,16 @@ F.resolveBracketMatch = (id, lastnameID) => {
     }
     // save data to server
     Names.update(Data.firstnames[contestant], 'first')
-    // socket.emit('put', {
-    //   verb: 'update',
-    //   subject: 'name',
-    //   team: Data.user.dbID,
-    //   nameObj: Data.firstnames[contestant]
-    // })
   })
   Data.bracket.splice(Data.currentMatch, 1)
-  socket.emit('put', {
-    verb: 'update',
-    subject: 'bracket',
-    team: Data.user.dbID,
-    bracket: Data.bracket
-  })
+
+  Choose.update(Data.bracket, 'bracket')
+
+  const remaining = Object.keys(Data.firstnames).filter(name => 
+      !Data.firstnames[name][Data.user.user].eliminated)
+  if (remaining.length === 1) {
+    alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining][0].name}!`)
+  }
 }
 
 export default F

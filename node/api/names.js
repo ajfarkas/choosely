@@ -21,7 +21,10 @@ Op.read = (req, res) => {
   const team = Help.getTeamID(jwt)
 
   db.createValueStream({gte: `${team}_${kind}name_`, lte: `${team}_${kind}name_\xff`, valueEncoding: 'json'})
-    .on('error', err => console.error(`readNames: ${err}`))
+    .on('error', err => {
+      console.error(`readNames: ${err}`)
+      res.status(500).json({ error: err })
+    })
     .on('data', d => {
       if (Object.keys(names).indexOf(d.id) === -1) {
         names[d.id] = d
@@ -45,14 +48,14 @@ Op.read = (req, res) => {
  *   - `Obj` containing name data
 */
 Op.create = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
-  const kind = req.params.kind
-  const info = {
-    id: uuid.v4(),
-    name: req.body.name,
-    createDate: Date.now()
-  }
-  const team = Help.getTeamID(jwt)
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+        kind = req.params.kind,
+        info = {
+          id: uuid.v4(),
+          name: req.body.name,
+          createDate: Date.now()
+        },
+        team = Help.getTeamID(jwt)
 
   team.split('_').forEach(id => {
     info[id] = {
@@ -63,10 +66,10 @@ Op.create = (req, res) => {
     }
   })
 
-  const lookup = `${team}_${kind}name_${info.id}`
-  db.put(lookup, info, { valueEncoding: 'json' }, err => {
+  db.put(`${team}_${kind}name_${info.id}`, info, { valueEncoding: 'json' }, err => {
     if (err) {
-      return console.error(err)
+      console.error(err)
+      return res.status(500).json({ error: err })
     }
     console.log(`${info.name} saved to DB.`)
     res.status(201).json(info)
@@ -87,10 +90,10 @@ Op.create = (req, res) => {
  *   - `Obj` containing name data
 */
 Op.update = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
-  const team = Help.getTeamID(jwt)
-  const kind = req.params.kind
-  const info = req.body
+  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+        team = Help.getTeamID(jwt),
+        kind = req.params.kind,
+        info = req.body
 
   if (!info || !info.id) {
     return res.status(422).json({ error: 'request is missing body or name ID' })
@@ -99,7 +102,8 @@ Op.update = (req, res) => {
   const lookup = `${team}_${kind}name_${info.id}`
   db.get(lookup, { valueEncoding: 'json' }, (err, entry) => {
     if (err) {
-      return console.error('update getErr:', err)
+      console.error('update getErr:', err)
+      return res.status(500).json({ error: err })
     }
 
     for (key in info) {
