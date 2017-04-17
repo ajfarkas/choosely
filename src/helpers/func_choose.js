@@ -1,25 +1,94 @@
 import Help from './helpers'
+import Names from './fetch_names'
+import Choose from './fetch_choose'
 
 const F = {}
 const choices = ['a', 'b']
 const curtain = Help.$('.curtain')
 const colorNum = 5
 
-F.readPools = () => {
-  socket.emit('get', {
-    verb: 'read',
-    subject: 'pool',
-    team: Data.user.dbID
+F.readPools = (cb) => {
+  Choose.read('pools', data => {
+    Data.pools = data
+    if (typeof cb === 'function') {
+      cb(data)
+    }
+    F.newPoolMatch()
   })
 }
 
-F.readBracket = () => {
-  socket.emit('get', {
-    verb: 'read',
-    subject: 'bracket',
-    team: Data.user.dbID,
-    user: Data.user.user
+F.readBracket = (cb) => {
+  Choose.read('bracket', data => {
+    Data.bracket = data
+    if (typeof cb === 'function') {
+      cb(data)
+    }
+    F.newBracketMatch()
   })
+}
+
+F.choose = choice => {
+  // stop multiple choices before new names are shown
+  F.listen(false)
+  // allow for event Listeners or manual choice
+  if (choice.isTrusted) {
+    choice = choice.currentTarget
+  }
+  const choiceID = Help.$('h2', choice).dataset.value
+  const lastnameID = Help.$('h3', choice).dataset.value
+
+  choice.className += ' chosen'
+  // allow for .chosen animation (see _choose.scss)
+  setTimeout(F.hideChoices, 1650)
+  if (Data.pools.length) {
+    F.resolvePoolMatch(choiceID, lastnameID)
+  } else if (Data.bracket.length) {
+    F.resolveBracketMatch(choiceID, lastnameID)
+  } else {
+    return console.error('Choose: both brackets and pools are unavailable')
+  }
+  return true
+}
+
+F.keyChoose = e => {
+  if (Help.$('.chosen')) {
+    return false
+  }
+  if (e.keyCode === 37) {
+    choose(Help.$('.name-a'))
+  } else if (e.keyCode === 39) {
+    choose(Help.$('.name-b'))
+  } else if (e.keyCode === 38 && Object.keys(lastnames).length > 1) {
+    F.cycleLastname(Help.$('.name-a h3'))
+  } else if (e.keyCode === 40 && Object.keys(lastnames).length > 1) {
+    F.cycleLastname(Help.$('.name-b h3'))
+  }
+}
+
+F.cycleLastname = choice => {
+  if (choice.isTrusted) {
+    choice.stopPropagation()
+    choice = this
+  }
+  const lname = choice.dataset.value,
+        lastnames = Object.keys(Data.lastnames),
+        i = lastnames.indexOf(lname),
+        newName = lastnames[(i + 1) % lastnames.length]
+
+  choice.innerText = Data.lastnames[newName].name
+  choice.dataset.value = newName
+}
+
+// add listeners
+F.listen = add => {
+  const op = add ? 'add' : 'remove'
+  choices.forEach(choice => {
+    Help.$(`.name-${choice}`)[`${op}EventListener`]('click', F.choose)
+    Help.$(`.name-${choice} h3`)[`${op}EventListener`]('click', F.cycleLastname)
+  })
+
+  document[`${op}EventListener`]('keydown', F.keyChoose)
+  console.log(`${op}EventListener`)
 }
 
 F.showChoices = () => {
@@ -31,6 +100,34 @@ F.showChoices = () => {
       Help.$(`.name-${choice}`).setAttribute('style', '')
     })
   }, 20)
+}
+
+F.hideChoices = () => {
+  // set bg to selected choice bg
+  const chosen = Help.$('.chosen')
+  curtain.setAttribute('style',
+    `background-image: ${getComputedStyle(chosen).backgroundImage}; display: block;`
+  )
+  // fade out names
+  choices.forEach(choice => {
+    Help.$(`.name-${choice}`).setAttribute('style', 'transition: none; opacity: 0;')
+  })
+  chosen.className = chosen.className.replace(' chosen', '')
+  // replace names with new set
+  if (Data.pools.length) {
+    F.newPoolMatch()
+  } else if (Data.bracket.length) {
+    F.newBracketMatch()
+  } else {
+    const remaining = Object.keys(Data.firstnames).filter(name => 
+      !Data.firstnames[name][Data.user.user].eliminated)
+    if (remaining.length > 1) {
+      F.readBracket()
+    } else {
+      alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining].name}!`)
+    }
+  }
+  F.listen(true)
 }
 
 F.refreshChoices = (index, kind) => {
@@ -49,8 +146,12 @@ F.refreshChoices = (index, kind) => {
     Help.$(`.name-${choice} h2`).innerText = Data.firstnames[names[i]].name
     Help.$(`.name-${choice} h2`).dataset.value = names[i]
     // set lastnames
-    Help.$(`.name-${choice} h3`).innerText = Data.lastnames[lastnames[lastIndex]].name
-    Help.$(`.name-${choice} h3`).dataset.value = lastnames[lastIndex]
+    Help.$(`.name-${choice} h3`).innerText = lnLen 
+      ? Data.lastnames[lastnames[lastIndex]].name
+      : ''
+    Help.$(`.name-${choice} h3`).dataset.value = lnLen
+      ? lastnames[lastIndex]
+      : null
   })
   F.showChoices()
 }
@@ -84,12 +185,13 @@ F.resolvePoolMatch = (id, lastnameID) => {
       nameData.matches[competitor] = wins
     }
     // save data to server
-    socket.emit('put', {
-      verb: 'update',
-      subject: 'name',
-      team: Data.user.dbID,
-      nameObj: Data.firstnames[contestant]
-    })
+    Names.update(Data.firstnames[contestant], 'first')
+    // socket.emit('put', {
+    //   verb: 'update',
+    //   subject: 'name',
+    //   team: Data.user.dbID,
+    //   nameObj: Data.firstnames[contestant]
+    // })
 
   })
   Data.pools.splice(Data.currentMatch, 1)
@@ -131,12 +233,13 @@ F.resolveBracketMatch = (id, lastnameID) => {
       nameData.eliminated = true
     }
     // save data to server
-    socket.emit('put', {
-      verb: 'update',
-      subject: 'name',
-      team: Data.user.dbID,
-      nameObj: Data.firstnames[contestant]
-    })
+    Names.update(Data.firstnames[contestant], 'first')
+    // socket.emit('put', {
+    //   verb: 'update',
+    //   subject: 'name',
+    //   team: Data.user.dbID,
+    //   nameObj: Data.firstnames[contestant]
+    // })
   })
   Data.bracket.splice(Data.currentMatch, 1)
   socket.emit('put', {

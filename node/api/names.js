@@ -9,6 +9,8 @@ const Op = {},
  * method: 'get'
  * req.headers: 
  *   - Authorization: JSON Web Token
+ * req.params:
+ *   - kind (`enum`): 'first' || 'last'
  * response:
  *   - `Obj` containing nameID:nameData
 */
@@ -35,9 +37,10 @@ Op.read = (req, res) => {
  * method: 'post'
  * req.headers: 
  *   - Authorization: JSON Web Token
+ * req.params:
+ *   - kind (`enum`): 'first' || 'last'
  * req.body:
  *   - name (`str`): name to create
- *   - kind (`str`): 'first' || 'last'
  * response:
  *   - `Obj` containing name data
 */
@@ -75,6 +78,8 @@ Op.create = (req, res) => {
  * method: 'post'
  * req.headers: 
  *   - Authorization: JSON Web Token
+ * req.params:
+ *   - kind (`enum`): 'first' || 'last'
  * req.body: (`obj`) nameData
  *   - id (`uuid`): required. ID of name to update
  *   - all other nameData fields are optional.

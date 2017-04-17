@@ -1,5 +1,5 @@
 import Help from './helpers'
-import names from './fetch_names'
+import Names from './fetch_names'
 
 const F = {}
 
@@ -7,7 +7,7 @@ F.deleteName = e => {
   const parent = e.target.parentNode,
         id = parent.dataset.value
         
-  names.delete(
+  Names.delete(
     id,
     location.pathname.match(/create\/(\w*)\/?/)[1]
   )
@@ -53,7 +53,7 @@ F.updateName = e => {
   // update local Data Object
   Data.firstnames[id].name = name
 
-  names.update(
+  Names.update(
     Data.firstnames[id],
     location.pathname.match(/create\/(\w*)\/?/)[1]
   )
@@ -141,7 +141,7 @@ F.createName = e => {
     return false
   }
   e.preventDefault()
-  names.create(
+  Names.create(
     Help.$('#names input').value,
     location.pathname.match(/create\/(\w*)\/?/)[1],
     F.addNameToDOM

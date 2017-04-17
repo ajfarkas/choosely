@@ -1,7 +1,7 @@
 import getFetch from 'whatwg-fetch'
 import es6Promise from 'es6-promise'
 import jwtDecode from 'jwt-decode'
-import names from './fetch_names'
+import Names from './fetch_names'
 
 // init Promise for IE and maybe FF
 es6Promise.polyfill()
@@ -38,7 +38,7 @@ export default function init(cb) {
 
    // get all names from DB
   ;['first', 'last'].forEach(whichName => {
-    names.read(whichName, data => {
+    Names.read(whichName, data => {
       Data[`${whichName}names`] = data
       if (whichName === 'last' && cb) {
         cb()

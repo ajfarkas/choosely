@@ -3,7 +3,9 @@ const fs = require('fs'),
       passportService = require('../config/passport'),
       authController = require('../controllers/auth'),
       passport = require('passport'),
-      names = require('../api/names')
+      names = require('../api/names'),
+      pools = require('../api/pools'),
+      brackets = require('../api/brackets')
 
 const localLogin = (req, res, cb) => {
   console.log('localLogin!')
@@ -72,8 +74,14 @@ module.exports = function routes(dir, app) {
   app.post('/resetreq/:token', authController.verifyResetToken, localLogin)
   
   // API requests
+  // GET
   app.get('/names/:op/:kind/', authController.jwtAuth, names)
+  app.get('/pools/:op/', authController.jwtAuth, pools)
+  app.get('/brackets/:op/', authController.jwtAuth, brackets)
+  // POST
   app.post('/names/:op/:kind/', authController.jwtAuth, names)
+  app.post('/pools/:op/', authController.jwtAuth, pools)
+  app.post('/bracket/:op/', authController.jwtAuth, brackets)
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {

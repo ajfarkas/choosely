@@ -11,7 +11,7 @@ A simple web application to help groups identify preferences through round-robin
   - [Run Locally](#run-locally)
 
 ## Tech Stack
-Choosely requires Node.js ≥ v4.2.6
+Choosely requires Node.js ≥ v6.10.2
 
 NPM v3.7.3
 
