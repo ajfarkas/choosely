@@ -18,6 +18,26 @@ export default function init(cb) {
       localStorage.clear()
       return location.pathname = '/login'
     }
+  } else if (localStorage && localStorage.token) {
+    const req = new Request(`${location.origin}/jwtloginreq`, {
+      method: 'get',
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: localStorage.token
+      })
+    })
+
+    fetch(req)
+      .then(res => res.json())
+      .then(d => {
+        if (!d.error) {
+          localStorage.token = d.token
+
+          window.location.pathname = '/create/first'
+        }
+      })
+      .catch( e => console.error(e) )
   } else {
     return false
   }
@@ -36,17 +56,18 @@ export default function init(cb) {
     bracket: []
   }
 
-   // get all names from DB
-  ;['first', 'last'].forEach(whichName => {
-    Names.read(whichName, data => {
-      Data[`${whichName}names`] = data
-      if (whichName === 'last' && cb) {
+  // get all names from DB
+  ; Names.read('first', firsts => {
+    Data.firstnames = firsts
+    Names.read('last', lasts => {
+      Data.lastnames = lasts
+      if (typeof cb === 'function') {
         cb()
       }
     })
   })
 
-// TODO: remove socket.io
+  // TODO: remove socket.io
   window.socket = io()
 
   socket.on('connect', () => {

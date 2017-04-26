@@ -7,5 +7,6 @@ node/config/main.js
 
 .sass-cache/
 node_modules/
+temp/
 choicesdb/
 public/dist/

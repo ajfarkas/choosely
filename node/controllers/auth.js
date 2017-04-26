@@ -68,15 +68,15 @@ Auth.login =(req, res, cb) => {
       console.log(`Auth.login Err: ${JSON.stringify(err)}`)
       if (err.status) {
         return res.status(err.status).json(err)
-      } else {
+      } else if (typeof cb === 'function') {
         return cb(err)
       }
+    } else {
+      res.status(200).json({
+        token: 'JWT '+generateToken(ids),
+        user: ids
+      })
     }
-
-    res.status(200).json({
-      token: 'JWT '+generateToken(ids),
-      user: ids
-    })
   })
 },
 /* signup

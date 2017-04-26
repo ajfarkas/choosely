@@ -7,8 +7,26 @@ const choices = ['a', 'b']
 const curtain = Help.$('.curtain')
 const colorNum = 5
 
+const logPools = (contests) => {
+  const pools = [],
+        contestLen = contests.length,
+        poolNum = contestLen / 6
+
+  for (let i = 0; i < poolNum; i++) {
+    pools[i] = [
+      contests[6 * i][0],
+      contests[6 * i][1],
+      contests[6 * i + 1][1],
+      contests[6 * i + 2][1]
+    ]
+  }
+
+  console.log(pools)
+}
+
 F.readPools = (cb) => {
   Choose.read('pools', data => {
+    logPools(data)
     Data.pools = data
     if (typeof cb === 'function') {
       cb(data)
@@ -20,10 +38,21 @@ F.readPools = (cb) => {
 F.readBracket = (cb) => {
   Choose.read('bracket', data => {
     Data.bracket = data
+    console.log('bracket: ', data)
     if (typeof cb === 'function') {
       cb(data)
     }
-    F.newBracketMatch()
+    if (typeof data === 'string') {
+      const remaining = Object.keys(Data.firstnames).filter(name => 
+        !Data.firstnames[name][Data.user.user].eliminated)
+      if (remaining.length === 1) {
+        alert(`We have a winner!\nCongrats to ${Data.firstnames[data].name}!`)
+      } else {
+        console.error('bunch of names left: ', remaining)
+      }
+    } else if (data.length) {
+      F.newBracketMatch()
+    }
   })
 }
 
@@ -199,7 +228,7 @@ F.newBracketMatch = () => {
     const index = Math.floor(Math.random() * bracketLen)
     F.refreshChoices(index, 'bracket')
   } else {
-    console.log('bracket play is done!')
+    F.readBracket()
   }
 }
 
@@ -226,12 +255,6 @@ F.resolveBracketMatch = (id, lastnameID) => {
   Data.bracket.splice(Data.currentMatch, 1)
 
   Choose.update(Data.bracket, 'bracket')
-
-  const remaining = Object.keys(Data.firstnames).filter(name => 
-      !Data.firstnames[name][Data.user.user].eliminated)
-  if (remaining.length === 1) {
-    alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining][0].name}!`)
-  }
 }
 
 export default F

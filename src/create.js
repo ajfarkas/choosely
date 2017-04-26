@@ -26,4 +26,6 @@ init( () => {
   Help.$('#names .input-btn').addEventListener('click', F.createName)
   Help.$('[name=\"name\"]').addEventListener('keypress', F.createName)
   Help.$('#finish-list').addEventListener('click', () => location.pathname = '/choose')
+
+  Help.$('[name=\"name\"]').focus()
 })
