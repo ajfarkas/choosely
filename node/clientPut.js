@@ -1,7 +1,7 @@
 // All DB WRITE functions
 
-const db = require('./data')
-const uuid = require('node-uuid')
+const db = require('./data'),
+      uuid = require('uuid/v4')
 
 const put = {
   /* Create Name
@@ -15,7 +15,7 @@ const put = {
   createName: (client, data) => {
     console.log(`createname: ${data.name}`)
     const info = {
-      id: uuid.v4(),
+      id: uuid(),
       name: data.name,
       createDate: Date.now()
     }
@@ -94,7 +94,7 @@ const put = {
   createLastname: (client, data) => {
     console.log(`updateLastname: ${data.name}`)
     const info = {
-      id: uuid.v4(),
+      id: uuid(),
       name: data.name,
       createDate: Date.now()
     }

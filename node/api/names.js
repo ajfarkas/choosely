@@ -2,7 +2,7 @@ const Op = {},
       db = require('../data'),
       Help = require('./helpers'),
       jwtDecode = require('jwt-decode'),
-      uuid = require('node-uuid')
+      uuid = require('uuid/v4')
 
 /* Read Names
  * Return all names associated with user account.
@@ -51,7 +51,7 @@ Op.create = (req, res) => {
   const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
         kind = req.params.kind,
         info = {
-          id: uuid.v4(),
+          id: uuid(),
           name: req.body.name,
           createDate: Date.now()
         },

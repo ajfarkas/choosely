@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken'),
       user = require('../models/user'),
       config = require('../config/main'),
       db = require('../data'),
-      uuid = require('node-uuid'),
+      uuid = require('uuid/v4'),
       crypto = require('crypto'),
       mail = require('./mail'),
       loginErr = 'Your login details could not be verified.'
@@ -107,12 +107,12 @@ Auth.signup = (req, res, cb) => {
       }
       const notFound = pErr && pErr.notFound
       const partner = {},
-            partnerID = notFound ? uuid.v4() : partnerData._id
+            partnerID = notFound ? uuid() : partnerData._id
       partner[data.partnername] = partnerID
       
       const id = !notFound && partnerData.partners && partnerData.partners[data.username]
         ? partnerData.partners[data.username]
-        : uuid.v4()
+        : uuid()
 
       const nameData = {
         _id: id,
@@ -266,7 +266,7 @@ Auth.verifyResetToken = (req, res, cb) => {
         mail.send(msg)
 
         if (typeof cb === 'function') {
-          return cb(true)
+          return cb()
         } else {
           res.status(200).json({
             message: 'Password reset successful. Go forth and choose.'

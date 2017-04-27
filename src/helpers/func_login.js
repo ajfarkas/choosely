@@ -1,4 +1,5 @@
 import getFetch from 'whatwg-fetch'
+import Cookies from 'js-cookie'
 import es6Promise from 'es6-promise'
 
 // init Promise for IE and maybe FF
@@ -32,6 +33,7 @@ F.login = (username, password, partnername, signup) => {
       }
       // store JWT and redirect
       localStorage.token = d.token
+      Cookies.set('cjwt', d.token.replace('JWT ', ''), { expires: 7 })
 
       window.location.pathname = '/create/first'
     })
@@ -86,6 +88,8 @@ F.resetPassword = (email, password) => {
         e.message = d.message || d.error
         return document.dispatchEvent(e)
       } else {
+        console.log(d)
+        debugger;
         F.login(email, password)
       }
     })

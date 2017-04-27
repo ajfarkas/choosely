@@ -1,4 +1,5 @@
 import getFetch from 'whatwg-fetch'
+import Cookies from 'js-cookie'
 import es6Promise from 'es6-promise'
 import jwtDecode from 'jwt-decode'
 import Names from './fetch_names'
@@ -19,25 +20,25 @@ export default function init(cb) {
       return location.pathname = '/login'
     }
   } else if (localStorage && localStorage.token) {
-    const req = new Request(`${location.origin}/jwtloginreq`, {
-      method: 'get',
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
-      })
-    })
+    // const req = new Request(`${location.origin}/jwtloginreq`, {
+    //   method: 'get',
+    //   headers: new Headers({
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //     Authorization: localStorage.token
+    //   })
+    // })
 
-    fetch(req)
-      .then(res => res.json())
-      .then(d => {
-        if (!d.error) {
-          localStorage.token = d.token
+    // fetch(req)
+    //   .then(res => res.json())
+    //   .then(d => {
+    //     if (!d.error) {
+    //       localStorage.token = d.token
 
-          window.location.pathname = '/create/first'
-        }
-      })
-      .catch( e => console.error(e) )
+    //       window.location.pathname = '/create/first'
+    //     }
+    //   })
+    //   .catch( e => console.error(e) )
   } else {
     return false
   }
