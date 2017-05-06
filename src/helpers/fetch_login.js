@@ -16,6 +16,7 @@ F.login = (username, password, partnername, signup) => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     }),
+    credentials: 'same-origin',
     body: JSON.stringify({
       username: username,
       password: password,
@@ -32,7 +33,6 @@ F.login = (username, password, partnername, signup) => {
         return document.dispatchEvent(e)
       }
       // store JWT and redirect
-      localStorage.token = d.token
       Cookies.set('cjwt', d.token.replace('JWT ', ''), { expires: 7 })
 
       window.location.pathname = '/create/first'
@@ -48,6 +48,7 @@ F.forgotPassword = email => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     }),
+    credentials: 'same-origin',
     body: JSON.stringify({
       username: email
     })
@@ -74,6 +75,7 @@ F.resetPassword = (email, password) => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     }),
+    credentials: 'same-origin',
     body: JSON.stringify({
       username: email,
       password: password
@@ -88,8 +90,6 @@ F.resetPassword = (email, password) => {
         e.message = d.message || d.error
         return document.dispatchEvent(e)
       } else {
-        console.log(d)
-        debugger;
         F.login(email, password)
       }
     })

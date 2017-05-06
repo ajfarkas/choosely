@@ -13,7 +13,7 @@ const Op = {},
  *  - `Arr` containing pool `Objects`
 */      
 Op.read = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
+  const jwt = jwtDecode( Help.getCookies(req).cjwt )
   const team = Help.getTeamID(jwt)
 
   db.get(`${team}_pools`, { valueEncoding: 'json' }, (err, pools) => {
@@ -93,7 +93,7 @@ Op.read = (req, res) => {
  *   - `Arr` of arrays or uuid pairs
 */
 Op.update = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt),
         pools = req.body
 

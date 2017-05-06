@@ -1,6 +1,7 @@
 // Auth functions for /loginreq route
 
 const jwt = require('jsonwebtoken'),
+      Help = require('../api/helpers'),
       user = require('../models/user'),
       config = require('../config/main'),
       db = require('../data'),
@@ -150,7 +151,7 @@ Auth.signup = (req, res, cb) => {
 /*
 */
 Auth.jwtAuth = (req, res, cb) => {
-  const token = req.headers.authorization.replace(/^JWT\s/, '')
+  const token = Help.getCookies(req).cjwt
 
   jwt.verify(token, config.secret, (err, data) => {
     if (err) {

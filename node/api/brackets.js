@@ -12,7 +12,7 @@ const Op = {},
  *  - `Arr` containing pool IDs for one bracket
 */
 Op.create = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
   const names = {},
@@ -83,7 +83,7 @@ Op.create = (req, res) => {
  *  - `Arr` containing pool IDs for one bracket
 */      
 Op.read = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
   db.get(`${team}_bracket`, { valueEncoding: 'json' }, (err, bracket) => {
@@ -111,7 +111,7 @@ Op.read = (req, res) => {
  *   - `Arr` of arrays or uuid pairs
 */
 Op.update = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt),
         bracket = req.body
 

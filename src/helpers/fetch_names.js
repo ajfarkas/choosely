@@ -13,9 +13,9 @@ Names.read = (kind, cb) => {
       method: 'get',
       headers: new Headers({
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
-      }) 
+        'Content-Type': 'application/json'
+      }),
+      credentials: 'same-origin'
     }
   )
 
@@ -41,9 +41,9 @@ Names.create = (name, kind, cb) => {
       method: 'post',
       headers: new Headers({
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
+        'Content-Type': 'application/json'
       }),
+      credentials: 'same-origin',
       body: JSON.stringify({
         name: name
       })
@@ -74,9 +74,9 @@ Names.update = (nameData, kind, cb) => {
       method: 'post',
       headers: new Headers({
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
+        'Content-Type': 'application/json'
       }),
+      credentials: 'same-origin',
       body: JSON.stringify(nameData)
     }
   )
@@ -104,9 +104,9 @@ Names.delete = (nameID, kind, cb) => {
       method: 'post',
       headers: new Headers({
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
+        'Content-Type': 'application/json'
       }),
+      credentials: 'same-origin',
       body: JSON.stringify({
         id: nameID
       })

@@ -13,9 +13,9 @@ Choose.read = (kind, cb) => {
       method: 'get',
       headers: new Headers({
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
-      })
+        'Content-Type': 'application/json'
+      }),
+      credentials: 'same-origin'
     }
   )
 
@@ -40,9 +40,9 @@ Choose.update = (matchData, kind, cb) => {
       method: 'post',
       headers: new Headers({
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: localStorage.token
+        'Content-Type': 'application/json'
       }),
+      credentials: 'same-origin',
       body: JSON.stringify(matchData)
     }
   )

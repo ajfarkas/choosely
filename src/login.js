@@ -1,6 +1,6 @@
 import init from './helpers/init'
 import Help from './helpers/helpers'
-import F from './helpers/func_login'
+import F from './helpers/fetch_login'
 // init socket.io
 init()
 

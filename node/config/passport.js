@@ -4,7 +4,6 @@ const passport = require('passport'),
       config = require('./main'),
       LocalStrategy = require('passport-local'),
       JwtStrategy = passportJWT.Strategy,
-      extractJWT = passportJWT.ExtractJwt,
       db = require('../data')
 
 const localOpts = { },
@@ -37,30 +36,21 @@ const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
 })
 
 const jwtOpts = {
-  // check auth headers
-  jwtFromRequest: extractJWT.fromAuthHeader(),
-  secretOrKey: config.secret
+  secretOrKey: config.secret,
+  jwtFromRequest: req => {
+    const token = req.headers.cookie
+      ? req.headers.cookie.match(/cjwt\=((\w\.?)+)\;?\b/)
+      : null
+    return token && token[1] ? token[1] : null
+  }
 }
 
-const jwtLogin = new JwtStrategy(jwtOpts, (info, cb) => {
-  console.log('JWT login ', info)
-  // check for user in db
-  //TODO: update info.user to info.email
-  db.get(`username-${info.user}`, { valueEncoding: 'json' }, (err, data) => {
-    console.log('data: ', err, data)
-    if (err) {
-      if (err.notFound) {
-        return cb({ status: 401, error: loginErr })
-      } else {
-        return console.error(`jwtLogin get ERR: ${JSON.stringify(err)}`)
-      }
-    }
-    if (data.partners.indexOf(info.partner) < 0) {
-      return cb({ status: 401, error: loginErr })
-    } else {
-      return cb(null, data)
-    }
-  })
+const jwtLogin = new JwtStrategy(jwtOpts, (token, cb) => {
+  if (token) {
+    return cb(token)
+  } else {
+    return cb(null, { status: 401, error: loginErr })
+  }
 })
 
 passport.use(localLogin)

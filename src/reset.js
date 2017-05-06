@@ -1,5 +1,5 @@
 import Help from './helpers/helpers'
-import F from './helpers/func_login'
+import F from './helpers/fetch_login'
 
 function resetPassword() {
   const username = Help.$('#username').value,

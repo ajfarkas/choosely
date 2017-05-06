@@ -9,38 +9,21 @@ es6Promise.polyfill()
 
 export default function init(cb) {
   // check for jwt
-  const token = localStorage.token
-  const decoded = token
-    ? jwtDecode( token.replace('JWT ', '') )
-    : null
-
-  if (!location.pathname.match(/^\/$|^\/login$|^\/logout$/)) {
-    if (!decoded || decoded.exp <= Date.now()/1000) {
-      localStorage.clear()
-      return location.pathname = '/login'
+  const token = Cookies.get('cjwt')
+  let decoded = null
+  if (token) {
+    try {
+      decoded = jwtDecode(token)
+    } catch(e) {
+      console.warn(e)
     }
-  } else if (localStorage && localStorage.token) {
-    // const req = new Request(`${location.origin}/jwtloginreq`, {
-    //   method: 'get',
-    //   headers: new Headers({
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //     Authorization: localStorage.token
-    //   })
-    // })
+  }
 
-    // fetch(req)
-    //   .then(res => res.json())
-    //   .then(d => {
-    //     if (!d.error) {
-    //       localStorage.token = d.token
-
-    //       window.location.pathname = '/create/first'
-    //     }
-    //   })
-    //   .catch( e => console.error(e) )
-  } else {
+  if (location.pathname.match(/^$|^\/$|^\/login$|^\/logout$/)) {
     return false
+  } else if (!decoded || decoded.exp <= Date.now()/1000) {
+    Cookies.remove('cjwt')
+    return location.pathname = '/login'
   }
  
   window.Data = {

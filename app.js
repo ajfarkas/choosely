@@ -10,7 +10,7 @@ const express = require('express'),
       socket = require('./node/socket')
 
 // configure express app
-app.use(express.static('public'))
+app.use(express.static('public', {index: null}) )
 // app.use(cookieParser(config.secret))
 // app.use(flash())
 app.use(bodyParser.urlencoded({ extended: false }))

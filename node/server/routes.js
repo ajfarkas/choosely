@@ -3,55 +3,9 @@ const fs = require('fs'),
       passportService = require('../config/passport'),
       authController = require('../controllers/auth'),
       passport = require('passport'),
-      jwtDecode = require('jwt-decode'),
       names = require('../api/names'),
       pools = require('../api/pools'),
       brackets = require('../api/brackets')
-
-const localLogin = (req, res, cb) => {
-  console.log('localLogin!')
-  return passport.authenticate(
-    'local',
-    {
-      session: false,
-      failureFlash: false
-    },
-    (err) => { // params also: user, info
-      if (err) {
-        if (err.status) {
-          res.status(err.status).json(err)
-        } else {
-          res.status(500).json(err)
-        }
-      } else {
-        authController.login(req, res, cb)
-      }
-    }
-  )(req, res, cb)
-}
-
-const jwtLogin = (req, res, cb) => {
-  console.log('jwtLogin!')
-  return passport.authenticate(
-    'jwt',
-    {
-      session: false,
-      failureFlash: false
-    },
-    (err) => {
-      if (err) {
-        // whatevs, this is an automated request
-      } else {
-        const jwt = jwtDecode(req.headers.authorization.replace(/^JWT\s/, ''))
-        req.body = {
-          username: jwt.username,
-          partnername: jwt.partnername
-        }
-        authController.login(req, res, cb)
-      }
-    }
-  )(req, res, cb)
-}
 
 module.exports = function routes(dir, app) {
   // serve application files
@@ -65,6 +19,47 @@ module.exports = function routes(dir, app) {
       res.write(data)
       res.end()
     })
+  }
+  // email login auth
+  const localLogin = (req, res, cb) => {
+    console.log('localLogin!')
+    return passport.authenticate(
+      'local',
+      {
+        session: false,
+        failureFlash: false
+      },
+      (err) => { // params also: user, info
+        if (err) {
+          if (err.status) {
+            res.status(err.status).json(err)
+          } else {
+            res.status(500).json(err)
+          }
+        } else {
+          authController.login(req, res, cb)
+        }
+      }
+    )(req, res, cb)
+  }
+  // jwt login auth
+  const jwtLogin = (req, res, file) => {
+    console.log('jwtLogin!')
+    return passport.authenticate(
+      'jwt',
+      {
+        session: false,
+        failureFlash: false
+      },
+      (data, err) => {
+        console.log('jwtlogin Auth response: ', data, err)
+        if (data && err === undefined) {
+          res.redirect('/create/first')
+        } else {
+          return serveFile(res, file)
+        }
+      }
+    )(req, res, file)
   }
   // logged in html files
   const insidePages = [
@@ -86,9 +81,10 @@ module.exports = function routes(dir, app) {
     ['/reset/:token', 'reset.html']
   ]
   outsidePages.forEach(page => 
-    app.get(page[0], (req, res) =>
-      serveFile(res, page[1])
-    )
+    app.get(page[0], (req, res) => {
+      console.log('req at ', page[0])
+      return jwtLogin(req, res, page[1]) 
+    })
   )
 
   // login/signup requests
@@ -99,7 +95,6 @@ module.exports = function routes(dir, app) {
   
   // API requests
   // GET
-  app.get('/jwtloginreq', jwtLogin)
   app.get('/names/:op/:kind/', authController.jwtAuth, names)
   app.get('/pools/:op/', authController.jwtAuth, pools)
   app.get('/bracket/:op/', authController.jwtAuth, brackets)

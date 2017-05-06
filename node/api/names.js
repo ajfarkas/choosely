@@ -17,7 +17,7 @@ const Op = {},
 Op.read = (req, res) => {
   const names = {},
         kind = req.params.kind,
-        jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
+        jwt = jwtDecode( Help.getCookies(req).cjwt )
   const team = Help.getTeamID(jwt)
 
   db.createValueStream({gte: `${team}_${kind}name_`, lte: `${team}_${kind}name_\xff`, valueEncoding: 'json'})
@@ -48,7 +48,7 @@ Op.read = (req, res) => {
  *   - `Obj` containing name data
 */
 Op.create = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         kind = req.params.kind,
         info = {
           id: uuid(),
@@ -90,7 +90,7 @@ Op.create = (req, res) => {
  *   - `Obj` containing name data
 */
 Op.update = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') ),
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt),
         kind = req.params.kind,
         info = req.body
@@ -131,7 +131,7 @@ Op.update = (req, res) => {
  *   - `Obj` { id: 'id of deleted name' }
 */
 Op.delete = (req, res) => {
-  const jwt = jwtDecode( req.headers.authorization.replace(/^JWT\s/, '') )
+  const jwt = jwtDecode( Help.getCookies(req).cjwt )
   const team = Help.getTeamID(jwt)
   const kind = req.params.kind
   const id = req.body.id
