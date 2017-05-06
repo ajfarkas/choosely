@@ -18,17 +18,17 @@ NPM v3.7.3
 SASS v3.4.15
 
 ## Installation
-
   - Clone this repo: `$ git clone git@github.com:ajfarkas/choosely.git`
   - Make sure SASS is installed: `$ sass -v`
     - installation: `$ sudo gem install sass`
   - Make sure Node is up-to-date: `$ node -v`
     - installation: use [NVM](https://github.com/creationix/nvm) or download [latest stable version](https://nodejs.org/en/)
   - Make sure NPM is up to date
-    - installation: (`$ sudo npm install  -g npm`)
+    - installation: (`$ sudo npm install -g npm`)
   - * If you don't have XCode installed on your machine, you can download the command line tools:
     - installation: `$ xcode-select --install`
   - Install dependencies: `$ npm install`
+  - Build the application: `$ npm build`
 
 ## Dev Watch
 Client-side Javascript is written in es2016, and compiled using Webpack: 
