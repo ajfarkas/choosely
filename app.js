@@ -2,17 +2,12 @@
 
 const express = require('express'),
       app = express(),
-      // cookieParser = require('cookie-parser'),
       bodyParser = require('body-parser'),
-      // flash = require('connect-flash'),
       session = require('express-session'),
-      config = require('./node/config/main'),
-      socket = require('./node/socket')
+      config = require('./node/config/main')
 
 // configure express app
 app.use(express.static('public', {index: null}) )
-// app.use(cookieParser(config.secret))
-// app.use(flash())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(session({
@@ -30,8 +25,5 @@ const router = require('./node/server/routes.js')
 router(__dirname, app)
 
 // set up server
-const server = app.listen(config.port, config.ip)
+app.listen(config.port, config.ip)
 console.log(`attempting to run server on port ${config.port}.`)
-socket.createNew(server)
-
-

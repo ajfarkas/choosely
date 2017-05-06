@@ -2,7 +2,7 @@
     "env": {
         "browser": true,
         "es6": true,
-        "jquery": true,
+        "jquery": false,
         "node": true
     },
     "parser": "babel-eslint",
@@ -48,7 +48,7 @@
         "init-declarations": 2,
         "no-shadow": 2,
         "no-shadow-restricted-names": 2,
-        "no-unused-vars": 2,
+        "no-unused-vars": 1,
         "no-use-before-define": 2,
 
         "block-spacing": 2,

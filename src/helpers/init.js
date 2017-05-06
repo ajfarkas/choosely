@@ -50,14 +50,4 @@ export default function init(cb) {
       }
     })
   })
-
-  // TODO: remove socket.io
-  window.socket = io()
-
-  socket.on('connect', () => {
-    console.log('socket connected.')
-  }).on('disconnect', () => {
-    console.log('socket disconnected.')
-  })
-  
 }
