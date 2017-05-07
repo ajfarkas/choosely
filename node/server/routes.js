@@ -1,6 +1,6 @@
 const fs = require('fs'),
       mime = require('mime'),
-      passportService = require('../config/passport'),
+      passportService = require('../controllers/passport'),
       authController = require('../controllers/auth'),
       passport = require('passport'),
       names = require('../api/names'),

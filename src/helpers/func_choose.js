@@ -67,8 +67,9 @@ F.choose = choice => {
   const lastnameID = Help.$('h3', choice).dataset.value
 
   choice.className += ' chosen'
-  // allow for .chosen animation (see _choose.scss)
-  setTimeout(F.hideChoices, 1650)
+
+  $('.chosen .name').on('animationend', F.hideChoices)
+
   if (Data.pools.length) {
     F.resolvePoolMatch(choiceID, lastnameID)
   } else if (Data.bracket.length) {
