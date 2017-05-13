@@ -1,0 +1,13 @@
+{
+  "glob": [
+    "app.js",
+    "node/**/*.js",
+    "src/**/*.js",
+    "README.md"
+  ],
+  "except": [
+    "node/config"
+  ],
+  "out": "doc",
+  "github": false
+}
