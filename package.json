@@ -8,9 +8,8 @@
   },
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "sass --update ./sass:./public && webpack",
-    "doc": "groc"
+    "test": "mocha ./**/*.test.js",
+    "build": "sass --update ./sass:./public && webpack"
   },
   "author": {
     "name": "AJ Farkas"
@@ -53,8 +52,7 @@
     "eslint-config-airbnb": "^6.1.0",
     "eslint-loader": "^1.3.x",
     "eslint-plugin-react": "^4.2.3",
-    "groc": "^0.8.0",
-    "qunitjs": "^1.23.1",
+    "mocha": "^3.3.0",
     "webpack": "^1.12.14"
   },
   "readme": "README.md"

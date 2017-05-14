@@ -136,4 +136,9 @@ input {
   }
   line-height: 1;
   color: $invert;
+
+  &:focus {
+    outline: none;
+    border: 3px solid rgba(63,100,205,0.4);
+  }
 }

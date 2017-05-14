@@ -5,23 +5,23 @@ import F from './helpers/fetch_login'
 init()
 
 function login(signup) {  
-  const username = Help.$('#username').value
-  const password = Help.$('#password').value
-  const partnername = Help.$('#partnername').value
+  const username = Help.$('#username')
+  const password = Help.$('#password')
+  const partnername = Help.$('#partnername')
   
   const e = new CustomEvent('message')
-  if (!username) {
-    e.message = 'Your email address is required.'
-  } else if (!password) {
-    e.message = 'Your password is required.'
-  } else if (signup === true && !partnername) {
-    e.message = 'Your partner\'s email address is required.'
+  if (!username.value || !username.checkValidity()) {
+    e.message = 'A valid email address is required.'
+  } else if (!password.value || !password.checkValidity()) {
+    e.message = 'A valid password is required.'
+  } else if (signup === true && (!partnername.value || !partnername.checkValidity())) {
+    e.message = 'Your partner\'s valid email address is required.'
   }
   if (e.message) {
     return document.dispatchEvent(e)
   }
 
-  F.login(username, password, partnername, signup)
+  F.login(username.value, password.value, partnername.value, signup)
 }
 
 function forgotPassword() {

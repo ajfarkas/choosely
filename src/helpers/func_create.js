@@ -141,11 +141,16 @@ F.createName = e => {
     return false
   }
   e.preventDefault()
-  Names.create(
-    Help.$('#names input').value,
-    location.pathname.match(/create\/(\w*)\/?/)[1],
-    F.addNameToDOM
-  )
+
+  const value = Help.$('#names input').value
+
+  if (value) {
+    Names.create(
+      value,
+      location.pathname.match(/create\/(\w*)\/?/)[1],
+      F.addNameToDOM
+    )
+  }
 }
 
 F.toggleFirstLast = e => {

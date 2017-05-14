@@ -8,8 +8,8 @@ module.exports = {
     login: './src/login.js',
     reset: './src/reset.js',
     create: './src/create.js',
-    choose: './src/choose.js',
-    test: './tests/testAll.js'},
+    choose: './src/choose.js'},
+    // test: './tests/testAll.js'},
   output: {
     path: path.join(__dirname, './public/dist'),
     filename: '[name].js',

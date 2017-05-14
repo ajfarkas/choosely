@@ -321,5 +321,8 @@ input {
   font-weight: 400;
   line-height: 1;
   color: white; }
+  .input-btn:focus {
+    outline: none;
+    border: 3px solid rgba(63, 100, 205, 0.4); }
 
 /*# sourceMappingURL=create-list.css.map */
