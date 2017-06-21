@@ -26,4 +26,4 @@ router(__dirname, app)
 
 // set up server
 app.listen(config.port, config.ip)
-console.log(`attempting to run server on port ${config.port}.`)
+console.log(`***Running server on port ${config.port}.***`)

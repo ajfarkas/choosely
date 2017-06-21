@@ -1,4 +1,5 @@
 // Backend API Helper Functions
+const emailCheck = require('email-check')
 
 module.exports = {
   // get ID used to store couple data in DB
@@ -17,5 +18,31 @@ module.exports = {
     })
 
     return cookies
+  },
+  /* Validate.email
+   *
+   * @params:
+   *  email {String}: string to test as valid email
+   *  cb {Function}: optional callback function
+   *
+   * @returns:
+   *  Boolean or callback with (error, Boolean)
+  */
+  validateEmail: (email, cb) => {
+    emailCheck(email, { timeout: 2000 })
+      .then(res => {
+        if (typeof cb === 'function') {
+          cb(null, res)
+        } else {
+          return res
+        }
+      })
+      .catch(err => {
+        if (typeof cb === 'function') {
+          cb(err, false)
+        } else {
+          return false
+        }
+      })
   }
 }

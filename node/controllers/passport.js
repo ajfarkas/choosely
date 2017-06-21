@@ -1,7 +1,7 @@
 const passport = require('passport'),
       passportJWT = require('passport-jwt'),
       user = require('../models/user'),
-      config = require('./main'),
+      config = require('../config/main'),
       LocalStrategy = require('passport-local'),
       JwtStrategy = passportJWT.Strategy,
       db = require('../data')

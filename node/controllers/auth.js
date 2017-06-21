@@ -92,60 +92,79 @@ Auth.login =(req, res, cb) => {
 Auth.signup = (req, res, cb) => {
   const data = req.body
   console.log('signup', `username-${data.username}`)
+  
   db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err, existing) => {
     if (err && !err.notFound) {
       return console.error(err)
     } else if (existing) {
       console.log('user already exists')
-      existentialErr = {error: 'That email address is already in use.'}
-      return res.status(409).json(existentialErr)
+      return res.status(422).json({error: 'That email address is already in use.'})
     }
-
-    // check if partner has already signed up
-    db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (pErr, partnerData) => {
-      if (pErr && !pErr.notFound) {
-        return cb(pErr)
+    // validate user email
+    Help.validateEmail(data.username, (uvErr, uValid) => {
+      console.log(uvErr, uValid)
+      if (uvErr) {
+        console.error('user signup validation error:', JSON.stringify(uvErr))
+        return res.status(500).json({error: JSON.stringify(uvErr)})
+      } else if (!uValid && !req.headers.host.match('localhost')) {
+        return res.status(422).json({error: 'A valid email address is required.'})
       }
-      const notFound = pErr && pErr.notFound
-      const partner = {},
-            partnerID = notFound ? uuid() : partnerData._id
-      partner[data.partnername] = partnerID
-      
-      const id = !notFound && partnerData.partners && partnerData.partners[data.username]
-        ? partnerData.partners[data.username]
-        : uuid()
+      // check if partner has already signed up
+      db.get(`username-${data.partnername}`, {valueEncoding: 'json'}, (pErr, partnerData) => {
+        if (pErr && !pErr.notFound) {
+          return cb(pErr)
+        }
 
-      const nameData = {
-        _id: id,
-        email: data.username,
-        partners: partner,
-        resetPasswordToken: null,
-        resetPasswordExpires: null
-      }
-      user.hashPass(data.password, hash => {
-        nameData.hash = hash
-
-        db.put(`username-${data.username}`, nameData, { valueEncoding: 'json' }, e => {
-          if (e) {
-            return cb(e)
+        Help.validateEmail(data.partnername, (pvErr, pValid) => {
+          if (pvErr) {
+            console.error('partner signup validation error:', JSON.stringify(pvErr))
+            return res.status(500).json({error: JSON.stringify(pvErr)})
+          } else if (!pValid && !req.headers.host.match('localhost')) {
+            return res.status(422).json({error: 'Your partner\'s valid email address is required.'})
           }
-          console.log(`put successful: username-${data.username}`)
 
-          const userData = {
-            user: id,
-            partner: partnerID
-          }
+          const notFound = pErr && pErr.notFound
+          const partner = {},
+                partnerID = notFound ? uuid() : partnerData._id
+          partner[data.partnername] = partnerID
           
-          res.status(201).json({
-            token: 'JWT '+generateToken(userData),
-            user: userData
-          })
-        }) // end db.put
+          const id = !notFound && partnerData.partners && partnerData.partners[data.username]
+            ? partnerData.partners[data.username]
+            : uuid()
 
-      }) // end user.hashpass
-      
-    }) // end db.get partner
+          const nameData = {
+            _id: id,
+            email: data.username,
+            partners: partner,
+            resetPasswordToken: null,
+            resetPasswordExpires: null
+          }
+          user.hashPass(data.password, hash => {
+            nameData.hash = hash
 
+            db.put(`username-${data.username}`, nameData, { valueEncoding: 'json' }, e => {
+              if (e) {
+                return cb(e)
+              }
+              console.log(`put successful: username-${data.username}`)
+
+              const userData = {
+                user: id,
+                partner: partnerID
+              }
+              
+              res.status(201).json({
+                token: 'JWT '+generateToken(userData),
+                user: userData
+              })
+            }) // end db.put
+
+          }) // end user.hashpass
+
+        }) // end partner email validation
+      }) // end db.get partner
+
+    }) // end user email validation
   }) // end db.get user
 }
 /*
