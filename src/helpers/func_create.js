@@ -1,7 +1,14 @@
 import Help from './helpers'
 import Names from './fetch_names'
 
-const F = {}
+const F = {},
+      nameType = location.pathname.match(/create\/(\w*)\/?/)[1]
+
+function nameIsUnique(name) {
+  return Object.keys(Data[`${nameType}names`])
+               .map(id => Data[`${nameType}names`][id].name)
+               .indexOf(name) === -1
+}
 
 F.deleteName = e => {
   const parent = e.target.parentNode,
@@ -9,7 +16,7 @@ F.deleteName = e => {
         
   Names.delete(
     id,
-    location.pathname.match(/create\/(\w*)\/?/)[1]
+    nameType
   )
 
   parent.remove()
@@ -48,19 +55,18 @@ F.updateName = e => {
   if (!name.length) {
     F.cancelUpdateNameMode()
     return F.deleteName({ target: { parentNode: target } })
+  } else if (nameIsUnique(name)) {
+    // update local Data Object
+    Data.firstnames[id].name = name
+
+    Names.update(Data.firstnames[id], nameType)
+    
+    // reset selected name
+    target.dataset.name = name
+    Help.$('.name-label', target).innerText = name
+  } else {
+    alert(`The name ${name} is already on the list.`)
   }
-
-  // update local Data Object
-  Data.firstnames[id].name = name
-
-  Names.update(
-    Data.firstnames[id],
-    location.pathname.match(/create\/(\w*)\/?/)[1]
-  )
-  
-  // reset selected name
-  target.dataset.name = name
-  Help.$('.name-label', target).innerText = name
   
   F.cancelUpdateNameMode()
 }
@@ -145,18 +151,18 @@ F.createName = e => {
   const value = Help.$('#names input').value
 
   if (value) {
-    Names.create(
-      value,
-      location.pathname.match(/create\/(\w*)\/?/)[1],
-      F.addNameToDOM
-    )
+    if (nameIsUnique(value)) {
+      Names.create(value, nameType, F.addNameToDOM)
+    } else {
+      alert(`The name ${value} is already on the list.`)
+    }
   }
 }
 
 F.toggleFirstLast = e => {
   e.preventDefault()
 
-  if (location.pathname.match(/\blast\b/)) {
+  if (nameType === 'last') {
     location.pathname = 'create/first'
   } else {
     location.pathname = 'create/last'
