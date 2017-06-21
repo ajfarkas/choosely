@@ -109,9 +109,7 @@ module.exports = function routes(dir, app) {
     fs.readFile(dir+req.url, (err, data) => {
       if (err) {
         console.error(`Routes readFile Err: ${JSON.stringify(err)}`)
-        res.writeHead(404, {'Content-type': 'text/html'})
-        res.write('<h1>404: This File does not exist.</h1>')
-        res.end()
+        serveFile(res, '404.html')
       } else {
         res.writeHead(200, {'Content-Type': mime.lookup(req.url)})
         res.write(data)
