@@ -66,9 +66,9 @@ F.choose = choice => {
   const choiceID = Help.$('h2', choice).dataset.value
   const lastnameID = Help.$('h3', choice).dataset.value
 
-  choice.className += ' chosen'
+  Help.$('.name', choice).addEventListener('animationend', F.hideChoices)
 
-  $('.chosen .name').on('animationend', F.hideChoices)
+  choice.className += ' chosen'
 
   if (Data.pools.length) {
     F.resolvePoolMatch(choiceID, lastnameID)
@@ -135,6 +135,8 @@ F.showChoices = () => {
 F.hideChoices = () => {
   // set bg to selected choice bg
   const chosen = Help.$('.chosen')
+  Help.$('.name', chosen).removeEventListener('animationend', F.hideChoices)
+
   curtain.setAttribute('style',
     `background-image: ${getComputedStyle(chosen).backgroundImage}; display: block;`
   )
