@@ -16,7 +16,7 @@ Op.read = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt )
   const team = Help.getTeamID(jwt)
 
-  db.get(`${team}_pools`, { valueEncoding: 'json' }, (err, pools) => {
+  db.get(`${team}_pools`, { valueEncoding: 'json' }, (err, poolData) => {
     if (err) {
       if (err.notFound) {
         // create Pool
@@ -35,14 +35,16 @@ Op.read = (req, res) => {
             console.log('pools read firstname', names)
             const idArray = Object.keys(names),
                   namesLen = idArray.length,
-                  namesUsed = {}
+                  namesUsed = {},
+                  matches = [],
+                  pools = []
             let challengeArr = undefined,
                 nameIndex = 0,
                 contestant = undefined,
                 contests = undefined,
                 challenger = undefined,
-                challengeIndex = undefined
-            pools = []
+                challengeIndex = undefined,
+                poolNum = undefined
 
             for (; nameIndex < namesLen; nameIndex++) {
               contestant = idArray.shift()
@@ -55,31 +57,47 @@ Op.read = (req, res) => {
                   ? challengeArr.splice(challengeArr[challengeIndex], 1)[0]
                   : Object.keys(names)[poolSize - contests] 
 
-                pools.push([ contestant, challenger ])
+                matches.push([ contestant, challenger ])
 
                 namesUsed[contestant] = contests++ + 1
                 namesUsed[challenger] = namesUsed[challenger]
                   ? namesUsed[challenger]++ + 1
                   : 1
+
+                if (nameIndex % poolSize === 0) {
+                  poolNum = Math.floor(nameIndex / poolSize)
+                  if (!pools[poolNum]) {
+                    pools[poolNum] = []
+                  }
+                  if (pools[poolNum].indexOf(contestant) === -1) {
+                    pools[poolNum].push(contestant)
+                  }
+                  pools[poolNum].push(challenger)
+                }
               }
             }
 
-            console.log('pool created', pools)
-            db.put(`${team}_pools`, pools, { valueEncoding: 'json'}, (putErr) => {
-              if (putErr) {
-                console.error(`poolRead/put: ${putErr}`)
-                res.status(500).json({ error: putErr })
-              } else {
-                res.status(201).json(pools)
+            console.log('pool created')
+            db.put(
+              `${team}_pools`,
+              { pools: pools, matches: matches},
+              { valueEncoding: 'json'},
+              (putErr) => {
+                if (putErr) {
+                  console.error(`poolRead/put: ${putErr}`)
+                  res.status(500).json({ error: putErr })
+                } else {
+                  res.status(201).json({ pools: pools, matches: matches})
+                }
               }
-            })
+            )
           })
       } else {
         console.error(`readPool read Error: ${err}`)
         res.status(500).json({ error: err })
       }
     } else {
-      res.status(200).json(pools)
+      res.status(200).json(poolData)
     }
   })
 }
@@ -88,20 +106,28 @@ Op.read = (req, res) => {
  * method: 'post'
  * req.headers:
  *   - Authorization: JSON web token
- * req.body: (`arr`) pools data
+ * req.body: (`arr`) pool match data (Data.matches)
  * response:   
  *   - `Arr` of arrays or uuid pairs
 */
 Op.update = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
-        team = Help.getTeamID(jwt),
-        pools = req.body
+        team = Help.getTeamID(jwt)
 
-  db.put(`${team}_pools`, pools, { valueEncoding: 'json' }, err => {
-    if (err) {
-      res.status(500).json({ error: err })
+  db.get(`${team}_pools`, {valueEncoding: 'json'}, (getErr, data) => {
+    if (getErr) {
+      console.error('read DB error on update pools', getErr)
+      res.status(500).json({ error: getErr })
     } else {
-      res.status(200).json(pools)
+      const poolData = Object.assign(data, {matches: req.body})
+
+      db.put(`${team}_pools`, poolData, { valueEncoding: 'json' }, putErr => {
+        if (putErr) {
+          res.status(500).json({ error: putErr })
+        } else {
+          res.status(200).json(poolData)
+        }
+      })
     }
   })
 }

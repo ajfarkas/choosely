@@ -14,10 +14,7 @@ F.deleteName = e => {
   const parent = e.target.parentNode,
         id = parent.dataset.value
         
-  Names.delete(
-    id,
-    nameType
-  )
+  Names.delete(id, nameType)
 
   parent.remove()
   delete Data.firstnames[id]

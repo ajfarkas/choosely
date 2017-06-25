@@ -5,29 +5,14 @@ import Choose from './fetch_choose'
 const F = {}
 const choices = ['a', 'b']
 const curtain = Help.$('.curtain')
+// number of color pairs in CSS file
 const colorNum = 5
 
-const logPools = (contests) => {
-  const pools = [],
-        contestLen = contests.length,
-        poolNum = contestLen / 6
-
-  for (let i = 0; i < poolNum; i++) {
-    pools[i] = [
-      contests[6 * i][0],
-      contests[6 * i][1],
-      contests[6 * i + 1][1],
-      contests[6 * i + 2][1]
-    ]
-  }
-
-  console.log(pools)
-}
+let matchType = 'pools'
 
 F.readPools = (cb) => {
   Choose.read('pools', data => {
-    logPools(data)
-    Data.pools = data
+    Object.assign(Data, data)
     if (typeof cb === 'function') {
       cb(data)
     }
@@ -70,9 +55,9 @@ F.choose = choice => {
 
   choice.className += ' chosen'
 
-  if (Data.pools.length) {
+  if (matchType === 'pools') {
     F.resolvePoolMatch(choiceID, lastnameID)
-  } else if (Data.bracket.length) {
+  } else if (matchType === 'bracket') {
     F.resolveBracketMatch(choiceID, lastnameID)
   } else {
     return console.error('Choose: both brackets and pools are unavailable')
@@ -146,9 +131,9 @@ F.hideChoices = () => {
   })
   chosen.className = chosen.className.replace(' chosen', '')
   // replace names with new set
-  if (Data.pools.length) {
+  if (matchType === 'pools') {
     F.newPoolMatch()
-  } else if (Data.bracket.length) {
+  } else if (matchType === 'bracket') {
     F.newBracketMatch()
   } else {
     const remaining = Object.keys(Data.firstnames).filter(name => 
@@ -162,9 +147,9 @@ F.hideChoices = () => {
   F.listen(true)
 }
 
-F.refreshChoices = (index, kind) => {
+F.refreshChoices = (index) => {
   Data.currentMatch = index
-  const names = Data[kind][index],
+  const names = Data.matches[index],
         lastnames = Object.keys(Data.lastnames),
         lnLen = lastnames.length
 
@@ -190,18 +175,19 @@ F.refreshChoices = (index, kind) => {
 
 F.newPoolMatch = () => {
   console.log('new pool match')
-  const poolLen = Data.pools.length
+  const poolLen = Data.matches.length
   if (poolLen) {
     const index = Math.floor(Math.random() * poolLen)
-    F.refreshChoices(index, 'pools')
+    F.refreshChoices(index)
   } else {
     console.log('pool play is done!')
+    matchType = 'bracket'
     F.readBracket()
   }
 }
 
 F.resolvePoolMatch = (id, lastnameID) => {
-  const match = Data.pools[Data.currentMatch]
+  const match = Data.matches[Data.currentMatch]
   match.forEach((contestant, i) => {
     const nameData = Data.firstnames[contestant][Data.user.user]
     const competitor = match[-i + 1]
@@ -219,9 +205,9 @@ F.resolvePoolMatch = (id, lastnameID) => {
     // save data to server
     Names.update(Data.firstnames[contestant], 'first')
   })
-  Data.pools.splice(Data.currentMatch, 1)
+  Data.matches.splice(Data.currentMatch, 1)
   
-  Choose.update(Data.pools, 'pools')
+  Choose.update(Data.matches, 'pools')
 }
 
 F.newBracketMatch = () => {
@@ -229,7 +215,7 @@ F.newBracketMatch = () => {
   const bracketLen = Data.bracket.length
   if (bracketLen) {
     const index = Math.floor(Math.random() * bracketLen)
-    F.refreshChoices(index, 'bracket')
+    F.refreshChoices(index)
   } else {
     F.readBracket()
   }
