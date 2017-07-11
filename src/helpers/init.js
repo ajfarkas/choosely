@@ -8,6 +8,9 @@ import Names from './fetch_names'
 es6Promise.polyfill()
 
 export default function init(cb) {
+  if (location.pathname.match(/^\/logout$/)) {
+    Cookies.remove('cjwt')
+  }
   // check for jwt
   const token = Cookies.get('cjwt')
   let decoded = null

@@ -22,20 +22,13 @@ F.readPools = (cb) => {
 
 F.readBracket = (cb) => {
   Choose.read('bracket', data => {
-    Data.bracket = data
-    console.log('bracket: ', data)
+    Object.assign(Data, data)
     if (typeof cb === 'function') {
       cb(data)
     }
-    if (typeof data === 'string') {
-      const remaining = Object.keys(Data.firstnames).filter(name => 
-        !Data.firstnames[name][Data.user.user].eliminated)
-      if (remaining.length === 1) {
-        alert(`We have a winner!\nCongrats to ${Data.firstnames[data].name}!`)
-      } else {
-        console.error('bunch of names left: ', remaining)
-      }
-    } else if (data.length) {
+    if (data.matches[0].length === 1) {
+      alert(`We have a winner!\nCongrats to ${Data.firstnames[data.matches[0]].name}!`)
+    } else {
       F.newBracketMatch()
     }
   })
@@ -212,7 +205,7 @@ F.resolvePoolMatch = (id, lastnameID) => {
 
 F.newBracketMatch = () => {
   console.log('new bracket match')
-  const bracketLen = Data.bracket.length
+  const bracketLen = Data.matches.length
   if (bracketLen) {
     const index = Math.floor(Math.random() * bracketLen)
     F.refreshChoices(index)
@@ -222,7 +215,7 @@ F.newBracketMatch = () => {
 }
 
 F.resolveBracketMatch = (id, lastnameID) => {
-  const match = Data.bracket[Data.currentMatch]
+  const match = Data.matches[Data.currentMatch]
   match.forEach((contestant, i) => {
     const nameData = Data.firstnames[contestant][Data.user.user]
     const competitor = match[-i + 1]
@@ -241,9 +234,9 @@ F.resolveBracketMatch = (id, lastnameID) => {
     // save data to server
     Names.update(Data.firstnames[contestant], 'first')
   })
-  Data.bracket.splice(Data.currentMatch, 1)
+  Data.matches.splice(Data.currentMatch, 1)
 
-  Choose.update(Data.bracket, 'bracket')
+  Choose.update(Data.matches, 'bracket')
 }
 
 export default F

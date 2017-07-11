@@ -43,7 +43,7 @@ module.exports = function routes(dir, app) {
     )(req, res, cb)
   }
   // jwt login auth
-  const jwtLogin = (req, res, file) => {
+  const jwtLogin = (req, res, path, file) => {
     console.log('jwtLogin!')
     return passport.authenticate(
       'jwt',
@@ -53,7 +53,7 @@ module.exports = function routes(dir, app) {
       },
       (data, err) => {
         console.log('jwtlogin Auth response: ', data, err)
-        if (data && err === undefined) {
+        if (data && err === undefined && path !== '/logout') {
           res.redirect('/create/first')
         } else {
           return serveFile(res, file)
@@ -83,7 +83,7 @@ module.exports = function routes(dir, app) {
   outsidePages.forEach(page => 
     app.get(page[0], (req, res) => {
       console.log('req at ', page[0])
-      return jwtLogin(req, res, page[1]) 
+      return jwtLogin(req, res, page[0], page[1]) 
     })
   )
 

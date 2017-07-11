@@ -16,7 +16,7 @@ Op.create = (req, res) => {
         team = Help.getTeamID(jwt)
 
   const names = {},
-        bracket = []
+        matches = []
   // create bracket
   db.createValueStream({gte: `${team}_firstname_`, lte: `${team}_firstname_\xff`, valueEncoding: 'json'})
     .on('error', readErr => {
@@ -32,44 +32,69 @@ Op.create = (req, res) => {
         return !names[name][jwt.user].eliminated
       })
       console.log('readBracket nameArr:',nameArr)
-      // return string if bracket ended
-      if (nameArr.length <= 1) {
-        return res.status(200).json(nameArr[0])
-      }
-      // sort names, alternating best/worst seed
-      nameArr.sort((a, b) => {
-        const users = team.split('_')
-        const matchesA = users.reduce((c, d) => {
-          return (Object.keys(names[a][c].matches).length + Object.keys(names[a][d].matches).length)
-        })
-        const matchesB = users.reduce((c, d) => {
-          return (Object.keys(names[b][c].matches).length + Object.keys(names[b][d].matches).length)
-        })
-        const scoreA = users.reduce((c, d) => {
-          return (names[a][c].score + names[a][d].score)
-        })
-        const scoreB = users.reduce((c, d) => {
-          return (names[b][c].score + names[b][d].score)
-        })
+      // bracket ended
+      if (nameArr.length === 1) {
+        // not a bye, only return one Array item
+        matches.push([nameArr.pop()])
+      } else {
+        // sort names, alternating best/worst seed
+        nameArr.sort((a, b) => {
+          const users = team.split('_')
+          const matchesA = users.reduce((c, d) => {
+            return (Object.keys(names[a][c].matches).length + Object.keys(names[a][d].matches).length)
+          })
+          const matchesB = users.reduce((c, d) => {
+            return (Object.keys(names[b][c].matches).length + Object.keys(names[b][d].matches).length)
+          })
+          const scoreA = users.reduce((c, d) => {
+            return (names[a][c].score + names[a][d].score)
+          })
+          const scoreB = users.reduce((c, d) => {
+            return (names[b][c].score + names[b][d].score)
+          })
 
-        return scoreA/matchesA > scoreB/matchesB
-      })
-      // match hi seed to low seed, rm bye
-      for (; nameArr.length > 1;) {
-        bracket.push([
-          nameArr.shift(),
-          nameArr.pop()
-        ])
-      }
-
-      console.log('bracket created', bracket)
-      db.put(`${team}_bracket`, bracket, { valueEncoding: 'json' }, (putErr) => {
-        if (putErr) {
-          console.error(`bracketRead/put: ${putErr}`)
-          res.status(500).json(puErr)
-        } else {
-          res.status(201).json(bracket)
+          return scoreA/matchesA > scoreB/matchesB
+        })
+        // match hi seed to low seed, rm bye
+        for (; nameArr.length > 1;) {
+          matches.push([
+            nameArr.shift(),
+            nameArr.pop()
+          ])
         }
+      }
+
+      db.get(`${team}_bracket`, { valueEncoding: 'json'}, (getErr, getData) => {
+        if (getErr) {
+          if (getErr.notFound) {
+            getData = { matches: [], bracket: [] }
+          } else {
+            console.error('new bracket create err on get DB', getErr)
+            res.status(500).json({ error: getErr })
+          }
+        }
+        // update matches Array
+        getData.matches = matches
+        // create/update bracket Array
+        getData.bracket.push(matches.slice(0))
+        if (nameArr.length) {
+          getData.bracket[getData.bracket.length - 1].push([nameArr[0], null])
+        }
+
+        console.log('bracket created')
+        db.put(
+          `${team}_bracket`,
+          getData,
+          { valueEncoding: 'json' },
+          (putErr) => {
+            if (putErr) {
+              console.error(`bracketRead/put: ${putErr}`)
+              res.status(500).json(puErr)
+            } else {
+              res.status(201).json(getData)
+            }
+          }
+        )
       })
     })
 }
@@ -86,7 +111,7 @@ Op.read = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
-  db.get(`${team}_bracket`, { valueEncoding: 'json' }, (err, bracket) => {
+  db.get(`${team}_bracket`, { valueEncoding: 'json' }, (err, bracketData) => {
     if (err) {
       if (err.notFound) {
         Op.create(req, res)
@@ -94,10 +119,10 @@ Op.read = (req, res) => {
         console.error(`readBracket read Error: ${err}`)
         res.status(500).json(putErr)
       }
-    } else if (bracket.length === 0) {
+    } else if (bracketData.matches.length === 0) {
       Op.create(req, res)
     } else {
-      res.status(200).json(bracket)
+      res.status(200).json(bracketData)
     }
   })
 }
@@ -112,14 +137,22 @@ Op.read = (req, res) => {
 */
 Op.update = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
-        team = Help.getTeamID(jwt),
-        bracket = req.body
+        team = Help.getTeamID(jwt)
 
-  db.put(`${team}_bracket`, bracket, { valueEncoding: 'json' }, err => {
-    if (err) {
-      res.status(500).json({ error: err })
+  db.get(`${team}_bracket`, { valueEncoding: 'json' }, (getErr, data) => {
+    if (getErr) {
+      console.error('read DB err on update bracket', getErr)
+      res.status(500).json({ error: getErr })
     } else {
-      res.status(200).json(bracket)
+      const bracketData = Object.assign(data, {matches: req.body})
+
+      db.put(`${team}_bracket`, bracketData, { valueEncoding: 'json' }, err => {
+        if (err) {
+          res.status(500).json({ error: err })
+        } else {
+          res.status(200).json(bracketData)
+        }
+      })
     }
   })
 }
