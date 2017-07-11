@@ -1,5 +1,5 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   // fast sourcemap, refs compiled code
@@ -8,7 +8,8 @@ module.exports = {
     login: './src/login.js',
     reset: './src/reset.js',
     create: './src/create.js',
-    choose: './src/choose.js'},
+    choose: './src/choose.js',
+    bracket: './src/bracket.js'},
     // test: './tests/testAll.js'},
   output: {
     path: path.join(__dirname, './public/dist'),

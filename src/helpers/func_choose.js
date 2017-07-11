@@ -26,11 +26,6 @@ F.readBracket = (cb) => {
     if (typeof cb === 'function') {
       cb(data)
     }
-    if (data.matches[0].length === 1) {
-      alert(`We have a winner!\nCongrats to ${Data.firstnames[data.matches[0]].name}!`)
-    } else {
-      F.newBracketMatch()
-    }
   })
 }
 

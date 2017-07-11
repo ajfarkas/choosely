@@ -1,0 +1,58 @@
+@import "mixins";
+@import "vars";
+@import "resets";
+
+#bracket { background-image: $grad5; }
+
+h1 {
+  margin: {
+    top: 20px;
+    bottom: 10px;
+  }
+  padding: 15px 0 31px;
+  text-align: center;
+  font-size: rem(44);
+  background: {
+    image: url('/icons/choosely-logo.svg');
+    repeat: no-repeat;
+    position: center;
+  }
+}
+
+[data-bracket*="bye"] {
+  color: white;
+}
+
+.display {
+  display: flex;
+  flex: {
+    direction: column;
+    wrap: nowrap;
+  }
+  justify-content: space-around;
+}
+
+.bracket-round,
+.bracket-match {
+  flex: 1 1 auto;
+  display: flex;
+  flex: {
+    direction: row;
+    wrap: nowrap;
+  }
+  justify-content: space-around;
+}
+
+.bracket-name {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+[data-bracket*="a"]:after {
+  content: '\\';
+  display: block;
+}
+[data-bracket*="b"]:after {
+  content: '\/';
+  display: block;
+}

@@ -79,8 +79,8 @@ canvas {
 input:invalid {
   outline: 2px solid #ff3663; }
 
-body {
-  background-color: #e7f7f7; }
+#bracket {
+  background-image: linear-gradient(to right, #ff3663, #ff8450); }
 
 h1 {
   margin-top: 20px;
@@ -92,45 +92,33 @@ h1 {
   background-repeat: no-repeat;
   background-position: center; }
 
-fieldset {
+[data-bracket*="bye"] {
+  color: white; }
+
+.display {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around; }
+
+.bracket-round,
+.bracket-match {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around; }
+
+.bracket-name {
+  flex: 1 1 auto;
   text-align: center; }
 
-legend {
-  font-size: 1.8rem; }
+[data-bracket*="a"]:after {
+  content: '\\';
+  display: block; }
 
-#sign-in,
-#oauth,
-#reset {
-  width: 80%;
-  margin-left: 10%; }
-  #sign-in input,
-  #oauth input,
-  #reset input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 100%;
-    font-size: 1.6rem;
-    margin-top: 4px;
-    margin-bottom: 12px;
-    padding: 10px 12px;
-    box-sizing: border-box;
-    border: 2px solid lightgrey; }
-  #sign-in button,
-  #oauth button,
-  #reset button {
-    width: 100%;
-    margin-top: 15px; }
+[data-bracket*="b"]:after {
+  content: '\/';
+  display: block; }
 
-label {
-  display: block;
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: left;
-  text-transform: uppercase; }
-
-.message {
-  margin: 5px 0;
-  color: #ff3663; }
-
-/*# sourceMappingURL=admin.css.map */
+/*# sourceMappingURL=bracket.css.map */

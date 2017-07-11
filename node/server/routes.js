@@ -65,7 +65,8 @@ module.exports = function routes(dir, app) {
   const insidePages = [
     ['/start', 'start.html'],
     ['/create/:name', 'create.html'],
-    ['/choose', 'choose.html']
+    ['/choose', 'choose.html'],
+    ['/bracket', 'bracket.html']
   ]
   insidePages.forEach(page => {
     app.get(page[0], (req, res) =>
