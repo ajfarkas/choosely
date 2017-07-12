@@ -22,7 +22,6 @@ module.exports = function routes(dir, app) {
   }
   // email login auth
   const localLogin = (req, res, cb) => {
-    console.log('localLogin!')
     return passport.authenticate(
       'local',
       {
@@ -44,7 +43,6 @@ module.exports = function routes(dir, app) {
   }
   // jwt login auth
   const jwtLogin = (req, res, path, file) => {
-    console.log('jwtLogin!')
     return passport.authenticate(
       'jwt',
       {
@@ -52,7 +50,6 @@ module.exports = function routes(dir, app) {
         failureFlash: false
       },
       (data, err) => {
-        console.log('jwtlogin Auth response: ', data, err)
         if (data && err === undefined && path !== '/logout') {
           res.redirect('/create/first')
         } else {

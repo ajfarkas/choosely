@@ -1,16 +1,14 @@
 const passport = require('passport'),
-      passportJWT = require('passport-jwt'),
       user = require('../models/user'),
       config = require('../config/main'),
       LocalStrategy = require('passport-local'),
-      JwtStrategy = passportJWT.Strategy,
+      JwtStrategy = require('passport-jwt').Strategy,
       db = require('../data')
 
 const localOpts = { },
       loginErr = 'Your login details could not be verified.'
 
 const localLogin = new LocalStrategy(localOpts, (email, password, cb) => {
-  console.log('local login (pp) ', localOpts)
   // call user info from database and use comparePass from models/user.
   return db.get(`username-${email}`, { valueEncoding: 'json' }, (err, data) => {
     if (err) {
@@ -39,9 +37,10 @@ const jwtOpts = {
   secretOrKey: config.secret,
   jwtFromRequest: req => {
     const token = req.headers.cookie
-      ? req.headers.cookie.match(/cjwt\=((\w\.?)+)\;?\b/)
+      ? req.headers.cookie.match(/cjwt\=((\w\.?|\-.?)+)\;?/)
       : null
-    return token && token[1] ? token[1] : null
+    console.log('from request:', token && token[1] ? token[1] : false)
+    return token && token[1] ? token[1] : false
   }
 }
 

@@ -1,6 +1,7 @@
 import Help from './helpers'
 import Names from './fetch_names'
 import Choose from './fetch_choose'
+import Progress from './func_progress'
 
 const F = {}
 const choices = ['a', 'b']
@@ -16,8 +17,15 @@ F.readPools = (cb) => {
     if (typeof cb === 'function') {
       cb(data)
     }
-    F.newPoolMatch()
   })
+}
+
+function newBracketMatch(data) {
+  if (data.matches[0].length === 1) {
+    alert(`We have a winner!\nCongrats to ${Data.firstnames[data.matches[0]].name}!`)
+  } else {
+    F.newBracketMatch()
+  }
 }
 
 F.readBracket = (cb) => {
@@ -127,7 +135,7 @@ F.hideChoices = () => {
     const remaining = Object.keys(Data.firstnames).filter(name => 
       !Data.firstnames[name][Data.user.user].eliminated)
     if (remaining.length > 1) {
-      F.readBracket()
+      F.readBracket(newBracketMatch)
     } else {
       alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining].name}!`)
     }
@@ -170,7 +178,7 @@ F.newPoolMatch = () => {
   } else {
     console.log('pool play is done!')
     matchType = 'bracket'
-    F.readBracket()
+    F.readBracket(newBracketMatch)
   }
 }
 
@@ -194,6 +202,8 @@ F.resolvePoolMatch = (id, lastnameID) => {
     Names.update(Data.firstnames[contestant], 'first')
   })
   Data.matches.splice(Data.currentMatch, 1)
+
+  console.log(`${Progress.calcMatchesPlayed()}/${Progress.calcTotalMatches()}`)
   
   Choose.update(Data.matches, 'pools')
 }
@@ -205,7 +215,7 @@ F.newBracketMatch = () => {
     const index = Math.floor(Math.random() * bracketLen)
     F.refreshChoices(index)
   } else {
-    F.readBracket()
+    F.readBracket(newBracketMatch)
   }
 }
 
@@ -230,6 +240,8 @@ F.resolveBracketMatch = (id, lastnameID) => {
     Names.update(Data.firstnames[contestant], 'first')
   })
   Data.matches.splice(Data.currentMatch, 1)
+
+  console.log(`${Progress.calcMatchesPlayed()}/${Progress.calcTotalMatches()}`)
 
   Choose.update(Data.matches, 'bracket')
 }
