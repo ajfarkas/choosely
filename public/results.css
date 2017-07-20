@@ -81,11 +81,15 @@ input:invalid {
 
 #results {
   position: relative;
-  background-color: #c5f1d7; }
+  background: linear-gradient(to right, #eDD7c0, #efe82e); }
 
 .results {
   display: inline-block;
   width: 50%;
   margin-right: -0.3em; }
+
+.result {
+  box-sizing: border-box;
+  padding: 4px 6px; }
 
 /*# sourceMappingURL=results.css.map */

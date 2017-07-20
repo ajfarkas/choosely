@@ -4,11 +4,16 @@
 
 #results {
 	position: relative;
-	background-color: $palegreen;
+	background: $grad4;
 }
 
 .results {
 	display: inline-block;
 	width: 50%;
 	margin-right: -0.3em;
+}
+
+.result {
+	box-sizing: border-box;
+	padding: 4px 6px;
 }
