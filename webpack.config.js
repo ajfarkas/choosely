@@ -9,7 +9,8 @@ module.exports = {
     reset: './src/reset.js',
     create: './src/create.js',
     choose: './src/choose.js',
-    bracket: './src/bracket.js'},
+    bracket: './src/bracket.js',
+    results: './src/results.js'},
     // test: './tests/testAll.js'},
   output: {
     path: path.join(__dirname, './public/dist'),

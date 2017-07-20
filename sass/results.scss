@@ -1,0 +1,14 @@
+@import "mixins";
+@import "vars";
+@import "resets";
+
+#results {
+	position: relative;
+	background-color: $palegreen;
+}
+
+.results {
+	display: inline-block;
+	width: 50%;
+	margin-right: -0.3em;
+}

@@ -63,7 +63,8 @@ module.exports = function routes(dir, app) {
     ['/start', 'start.html'],
     ['/create/:name', 'create.html'],
     ['/choose', 'choose.html'],
-    ['/bracket', 'bracket.html']
+    ['/bracket', 'bracket.html'],
+    ['/results', 'results.html']
   ]
   insidePages.forEach(page => {
     app.get(page[0], (req, res) =>
