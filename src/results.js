@@ -1,5 +1,12 @@
 import init from './helpers/init'
 
+function highlightName(e) {
+  console.log('hilite', e.type)
+  document.querySelectorAll(`[data-id="${e.currentTarget.dataset.id}"]`).forEach(nameEl => {
+    nameEl.classList.toggle('is-selected')
+  })
+}
+
 function displayNames() {
   const userList = document.querySelector('.user-results'),
         partnerList = document.querySelector('.partner-results'),
@@ -26,6 +33,8 @@ function displayNames() {
     you.dataset.id = userNames[i]
     you.innerText = `${youName.name}: ${youName[Data.user.user].score}`
     userList.append(you)
+    you.addEventListener('mouseenter', highlightName)
+    you.addEventListener('mouseout', highlightName)
 
     partner = document.createElement('li')
     partnerName = Data.firstnames[partnerNames[i]]
@@ -34,6 +43,8 @@ function displayNames() {
     partner.dataset.id = partnerNames[i]
     partner.innerText = `${partnerName.name}: ${partnerName[Data.user.partner].score}`
     partnerList.append(partner)
+    partner.addEventListener('mouseenter', highlightName)
+    partner.addEventListener('mouseout', highlightName)
   }
 }
 

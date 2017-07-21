@@ -16,4 +16,8 @@
 .result {
 	box-sizing: border-box;
 	padding: 4px 6px;
+
+	&.is-selected {
+		text-shadow: 0px 0px 5px seagreen;
+	}
 }
