@@ -4,7 +4,7 @@ choosely.sublime-workspace
 package-lock.json
 npm-debug.log
 
-node/config
+node/config/smtp.js
 
 .sass-cache/
 node_modules/
