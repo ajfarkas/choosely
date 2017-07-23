@@ -1,0 +1,78 @@
+nav {
+	position: absolute;
+	z-index: 99;
+	right: 0;
+	top: 0;
+	width: 40px;
+	height: 40px;
+	overflow: visible;
+	color: white;
+
+	& > label {
+		display: block;
+		height: 100%;
+	}
+}
+
+.hamburger {
+	position: relative;
+	top: calc(50% - 1px);
+	width: 24px;
+	height: 2px;
+	margin: {
+		left: auto;
+		right: auto;
+	}
+	background-color: white;
+
+	&:before,
+	&:after {
+		content: '';
+		display: block;
+		position: relative;
+		width: 100%;
+		height: 2px;
+		background-color: white;
+		transition: transform 200ms linear;
+	}
+	&:before {
+		top: calc(50% - 9px);
+		transform-origin: top left;
+	}
+	&:after {
+		top: calc(50% + 5px);
+		transform-origin: bottom left;
+	}
+}
+
+#nav-menu { display: none; }
+
+.nav-opts {
+	pointer-events: none;
+	opacity: 0;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	z-index: 9;
+	min-width: 160px;
+	padding: 10px 16px;
+	background-color: white;
+	color: black;
+	text-align: left;
+	transition: opacity 150ms ease;
+}
+
+#nav-menu:checked ~ .nav-opts {
+	pointer-events: auto;
+	opacity: 1;
+}
+#nav-menu:checked + .hamburger {
+	height: 0;
+
+	&:before {
+		transform: translateX(3px) rotate(45deg);
+	}
+	&:after {
+		transform: translateX(3px) rotate(-45deg);
+	}
+}

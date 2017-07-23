@@ -8,6 +8,23 @@
   <link href="/public/choose.css" rel="stylesheet" type="text/css">
 </head>
 <body id="choose">
+  <nav>
+    <label>
+      <input type="checkbox" id="nav-menu"/>
+      <div class="hamburger"></div>
+      <ul class="nav-opts">
+        <li class="nav-opt" id="edit-names">
+          <a href="/create/first" class="menu-link">Edit names</a>
+        </li>
+        <li class="nav-opt" id="view-standings">
+          <a href="/results" class="menu-link">View standings</a>
+        </li>
+        <li class="nav-opt" id="logout">
+          <a href="/logout" class="menu-link">Log out</a>
+        </li>
+      </ul>
+    </label>
+  </nav>
   <div class="choice name-a">
     <svg class="svg-arrow left">
       <use xlink:href="#svg-arrow"/>

@@ -1,7 +1,6 @@
 import init from './helpers/init'
 
 function highlightName(e) {
-  console.log('hilite', e.type)
   document.querySelectorAll(`[data-id="${e.currentTarget.dataset.id}"]`).forEach(nameEl => {
     nameEl.classList.toggle('is-selected')
   })
