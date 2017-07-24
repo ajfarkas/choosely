@@ -1,4 +1,5 @@
 import init from './helpers/init'
+import Nav from './helpers/navigation'
 
 function highlightName(e) {
   document.querySelectorAll(`[data-id="${e.currentTarget.dataset.id}"]`).forEach(nameEl => {
@@ -9,6 +10,8 @@ function highlightName(e) {
 function displayNames() {
   const userList = document.querySelector('.user-results'),
         partnerList = document.querySelector('.partner-results'),
+        youWinner = document.querySelector('.you-winner'),
+        partnerWinner = document.querySelector('.partner-winner'),
         names = Object.keys(Data.firstnames),
         namesLen = names.length,
         userNames = names.sort((a,b) =>
@@ -17,12 +20,29 @@ function displayNames() {
         partnerNames = names.sort((a,b) =>
           Data.firstnames[a][Data.user.partner].score < Data.firstnames[b][Data.user.partner].score
         ),
-        youScoreMax = Math.max(...names.map(name => Data.firstnames[name][Data.user.user].score)),
-        partnerScoreMax = Math.max(...names.map(name => Data.firstnames[name][Data.user.partner].score))
+        youScoreMax = Math.max(...names.map(name =>
+          Data.firstnames[name][Data.user.user].score)
+        ),
+        partnerScoreMax = Math.max(...names.map(name =>
+          Data.firstnames[name][Data.user.partner].score)
+        ),
+        youWinnerId = Object.keys(Data.firstnames).filter(name =>
+          !Data.firstnames[name][Data.user.user].eliminated
+        ),
+        partnerWinnerId = Object.keys(Data.firstnames).filter(name =>
+          !Data.firstnames[name][Data.user.partner].eliminated
+        )
   let you = undefined,
       partner = undefined,
       youName = undefined,
       partnerName = undefined
+
+  if (youWinnerId.length === 1) {
+    youWinner.innerText = Data.firstnames[youWinnerId[0]].name
+  }
+  if (partnerWinnerId.length === 1) {
+    partnerWinner.innerText = Data.firstnames[partnerWinnerId[0]].name
+  }
 
   for(let i = 0; i < namesLen; i++) {
     you = document.createElement('li')
@@ -48,3 +68,4 @@ function displayNames() {
 }
 
 init(displayNames)
+Nav.setupClearData()

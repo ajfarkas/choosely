@@ -156,6 +156,26 @@ Op.update = (req, res) => {
     }
   })
 }
+/* Delete Bracket
+ * clear user-partner brackets.
+ * method: 'delete'
+ * req.headers:
+ *   - Authorization: JSON web token
+ * response:   
+ *   - `Arr` (empty)
+*/
+Op.delete = (req, res) => {
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
+        team = Help.getTeamID(jwt)
+
+  db.del(`${team}_bracket`, { valueEncoding: 'json' }, err => {
+    if (err) {
+      res.status(500).json({ error: err })
+    } else {
+      res.status(200).json([])
+    }
+  })
+}
 
 module.exports = (req, res, cb) => {
   Op[req.params.op](req, res, cb)

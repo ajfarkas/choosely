@@ -76,3 +76,12 @@ nav {
 		transform: translateX(3px) rotate(-45deg);
 	}
 }
+
+.menu-link {
+	padding: 4px 0;
+	background-color: transparent;
+	text-align: inherit;
+	font-size: initial;
+	text-transform: initial;
+}
+#clear-data .menu-link { color: $red; }

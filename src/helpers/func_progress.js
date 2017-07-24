@@ -23,4 +23,4 @@ F.calcMatchesPlayed = () => {
   return matchesPlayed
 }
 
-module.exports = F
+export default F

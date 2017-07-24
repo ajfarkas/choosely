@@ -101,6 +101,9 @@ module.exports = function routes(dir, app) {
   app.post('/names/:op/:kind/', authController.jwtAuth, names)
   app.post('/pools/:op/', authController.jwtAuth, pools)
   app.post('/bracket/:op/', authController.jwtAuth, brackets)
+  // DELETE
+  app.delete('/pools/:op/', authController.jwtAuth, pools)
+  app.delete('/bracket/:op/', authController.jwtAuth, brackets)
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {

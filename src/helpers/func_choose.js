@@ -22,6 +22,7 @@ F.readPools = (cb) => {
 
 function newBracketMatch(data) {
   if (data.matches[0].length === 1) {
+    F.listen(false)
     alert(`We have a winner!\nCongrats to ${Data.firstnames[data.matches[0]].name}!`)
   } else {
     F.newBracketMatch()
@@ -136,8 +137,6 @@ F.hideChoices = () => {
       !Data.firstnames[name][Data.user.user].eliminated)
     if (remaining.length > 1) {
       F.readBracket(newBracketMatch)
-    } else {
-      alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining].name}!`)
     }
   }
   F.listen(true)

@@ -58,5 +58,35 @@ Choose.update = (matchData, kind, cb) => {
       console.error(err)
     })
 }
+/* Delete Choose Pool/Bracket
+ * Update match kind in DB
+ * Arg:
+ *   - kind (`enum`): 'pools' | 'bracket'
+ * Res: empty `Array`
+*/
+Choose.delete = (kind, cb) => {
+  const req = new Request(
+    `${location.origin}/${kind}/delete/`,
+    {
+      method: 'delete',
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }),
+      credentials: 'same-origin'
+    }
+  )
+
+  fetch(req)
+    .then(res => res.json())
+    .then(data => {
+      if (typeof cb === 'function') {
+        cb(data)
+      }
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}
 
 export default Choose
