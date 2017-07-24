@@ -209,7 +209,8 @@ input:invalid {
   to {
     opacity: 0; } }
 #choose {
-  overflow: hidden; }
+  overflow: hidden;
+  background-color: #3b3b3b; }
 
 h2 {
   font-size: 3.6rem; }

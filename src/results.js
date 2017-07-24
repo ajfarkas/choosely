@@ -1,5 +1,6 @@
 import init from './helpers/init'
 import Nav from './helpers/navigation'
+import Help from './helpers/helpers'
 
 function highlightName(e) {
   document.querySelectorAll(`[data-id="${e.currentTarget.dataset.id}"]`).forEach(nameEl => {
@@ -26,12 +27,8 @@ function displayNames() {
         partnerScoreMax = Math.max(...names.map(name =>
           Data.firstnames[name][Data.user.partner].score)
         ),
-        youWinnerId = Object.keys(Data.firstnames).filter(name =>
-          !Data.firstnames[name][Data.user.user].eliminated
-        ),
-        partnerWinnerId = Object.keys(Data.firstnames).filter(name =>
-          !Data.firstnames[name][Data.user.partner].eliminated
-        )
+        youWinnerId = Help.getRemaining('user'),
+        partnerWinnerId = Help.getRemaining('partner')
   let you = undefined,
       partner = undefined,
       youName = undefined,

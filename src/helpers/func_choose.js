@@ -133,8 +133,7 @@ F.hideChoices = () => {
   } else if (matchType === 'bracket') {
     F.newBracketMatch()
   } else {
-    const remaining = Object.keys(Data.firstnames).filter(name => 
-      !Data.firstnames[name][Data.user.user].eliminated)
+    const remaining = Help.getWinner('user')
     if (remaining.length > 1) {
       F.readBracket(newBracketMatch)
     }
