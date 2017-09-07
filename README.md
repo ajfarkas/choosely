@@ -25,10 +25,23 @@ SASS v3.4.15
     - installation: use [NVM](https://github.com/creationix/nvm) or download [latest stable version](https://nodejs.org/en/)
   - Make sure NPM is up to date
     - installation: (`$ sudo npm install -g npm`)
-  - * If you don't have XCode installed on your machine, you can download the command line tools:
+  - If you don't have XCode installed on your machine, you can download the command line tools:
     - installation: `$ xcode-select --install`
   - Install dependencies: `$ npm install`
   - Build the application: `$ npm build`
+  
+There is one file missing, which contains the configuration details for emailing confirmations. This file is necessary to run the application, but must be added manually, with your own email details (you can't have mine):
+
+**`node/config/smtp.js`**
+````
+module.exports = {
+  service: 'gmail',
+  auth: {
+    user: 'youremail@gmail.com',
+    pass: 'nlkaldfpkonlkjbdfnbksjb'
+  }
+}
+````
 
 ## Dev Watch
 Client-side Javascript is written in es2016, and compiled using Webpack: 
