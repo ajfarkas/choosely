@@ -8,7 +8,7 @@ const Choose = {}
 */
 Choose.read = (kind, cb) => {
   const req = new Request(
-    `${location.origin}/${kind}/read/`,
+    `${location.origin}/${kind}`,
     {
       method: 'get',
       headers: new Headers({
@@ -35,9 +35,9 @@ Choose.read = (kind, cb) => {
 */
 Choose.update = (matchData, kind, cb) => {
   const req = new Request(
-    `${location.origin}/${kind}/update/`,
+    `${location.origin}/${kind}`,
     {
-      method: 'post',
+      method: 'put',
       headers: new Headers({
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ Choose.update = (matchData, kind, cb) => {
 */
 Choose.delete = (kind, cb) => {
   const req = new Request(
-    `${location.origin}/${kind}/delete/`,
+    `${location.origin}/${kind}`,
     {
       method: 'delete',
       headers: new Headers({

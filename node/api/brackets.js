@@ -11,7 +11,7 @@ const Op = {},
  * response:
  *  - `Arr` containing pool IDs for one bracket
 */
-Op.create = (req, res) => {
+Op.post = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
@@ -107,20 +107,20 @@ Op.create = (req, res) => {
  * response:
  *  - `Arr` containing pool IDs for one bracket
 */      
-Op.read = (req, res) => {
+Op.get = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
   db.get(`${team}_bracket`, { valueEncoding: 'json' }, (err, bracketData) => {
     if (err) {
       if (err.notFound) {
-        Op.create(req, res)
+        Op.post(req, res)
       } else {
         console.error(`readBracket read Error: ${err}`)
         res.status(500).json(putErr)
       }
     } else if (bracketData.matches.length === 0) {
-      Op.create(req, res)
+      Op.post(req, res)
     } else {
       res.status(200).json(bracketData)
     }
@@ -135,7 +135,7 @@ Op.read = (req, res) => {
  * response:   
  *   - `Arr` of arrays or uuid pairs
 */
-Op.update = (req, res) => {
+Op.put = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
@@ -178,5 +178,5 @@ Op.delete = (req, res) => {
 }
 
 module.exports = (req, res, cb) => {
-  Op[req.params.op](req, res, cb)
+  Op[req.method.toLowerCase()](req, res, cb)
 }

@@ -12,7 +12,7 @@ const Op = {},
  * response:
  *  - `Arr` containing pool `Objects`
 */      
-Op.read = (req, res) => {
+Op.get = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt )
   const team = Help.getTeamID(jwt)
 
@@ -110,7 +110,7 @@ Op.read = (req, res) => {
  * response:   
  *   - `Arr` of arrays or uuid pairs
 */
-Op.update = (req, res) => {
+Op.put = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
@@ -153,5 +153,5 @@ Op.delete = (req, res) => {
 }
 
 module.exports = (req, res, cb) => {
-  Op[req.params.op](req, res, cb)
+  Op[req.method.tolowerCase()](req, res, cb)
 }

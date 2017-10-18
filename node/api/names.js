@@ -14,7 +14,7 @@ const Op = {},
  * response:
  *   - `Obj` containing nameID:nameData
 */
-Op.read = (req, res) => {
+Op.get = (req, res) => {
   const names = {},
         kind = req.params.kind,
         jwt = jwtDecode( Help.getCookies(req).cjwt )
@@ -47,7 +47,7 @@ Op.read = (req, res) => {
  * response:
  *   - `Obj` containing name data
 */
-Op.create = (req, res) => {
+Op.post = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         kind = req.params.kind,
         info = {
@@ -89,7 +89,7 @@ Op.create = (req, res) => {
  * response:
  *   - `Obj` containing name data
 */
-Op.update = (req, res) => {
+Op.put = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt),
         kind = req.params.kind,
@@ -150,5 +150,5 @@ Op.delete = (req, res) => {
 }
 
 module.exports = (req, res, cb) => {
-  Op[req.params.op](req, res, cb)
+  Op[req.method.toLowerCase()](req, res, cb)
 }
