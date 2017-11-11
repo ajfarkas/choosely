@@ -63,7 +63,7 @@ module.exports = function routes(dir, app) {
     ['/start', 'start.html'],
     ['/create/:name', 'create.html'],
     ['/choose', 'choose.html'],
-    ['/bracket', 'bracket.html'],
+    ['/brackets', 'bracket.html'],
     ['/results', 'results.html']
   ]
   insidePages.forEach(page => {
@@ -101,6 +101,10 @@ module.exports = function routes(dir, app) {
   app.post('/names/:kind', authController.jwtAuth, names)
   app.post('/pools', authController.jwtAuth, pools)
   app.post('/bracket', authController.jwtAuth, brackets)
+  // PUT
+  app.put('/names/:kind', authController.jwtAuth, names)
+  app.put('/pools', authController.jwtAuth, pools)
+  app.put('/bracket', authController.jwtAuth, brackets)
   // DELETE
   app.delete('/names/:kind', authController.jwtAuth, names)
   app.delete('/pools', authController.jwtAuth, pools)

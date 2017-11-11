@@ -153,5 +153,5 @@ Op.delete = (req, res) => {
 }
 
 module.exports = (req, res, cb) => {
-  Op[req.method.tolowerCase()](req, res, cb)
+  Op[req.method.toLowerCase()](req, res, cb)
 }
