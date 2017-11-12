@@ -95,7 +95,7 @@ Auth.signup = (req, res, cb) => {
   
   db.get(`username-${data.username}`, {valueEncoding: 'json'}, (err, existing) => {
     if (err && !err.notFound) {
-      return console.error(err)
+      return console.error('signup err: ', err)
     } else if (existing) {
       console.log('user already exists')
       return res.status(422).json({error: 'That email address is already in use.'})
@@ -167,7 +167,7 @@ Auth.signup = (req, res, cb) => {
     }) // end user email validation
   }) // end db.get user
 }
-/*
+/* Check JSON Web Token
 */
 Auth.jwtAuth = (req, res, cb) => {
   const token = Help.getCookies(req).cjwt
@@ -181,7 +181,6 @@ Auth.jwtAuth = (req, res, cb) => {
     return cb(null, data)
   })
 }
-
 /* Forgot Password
 */
 Auth.forgotPassword = (req, res, cb) => {

@@ -42,7 +42,7 @@ module.exports = function routes(dir, app) {
     )(req, res, cb)
   }
   // jwt login auth
-  const jwtLogin = (req, res, path, file) => {
+  const jwtLogin = (req, res) => {
     return passport.authenticate(
       'jwt',
       {
@@ -50,13 +50,12 @@ module.exports = function routes(dir, app) {
         failureFlash: false
       },
       (data, err) => {
-        if (data && err === undefined && path !== '/logout') {
-          res.redirect('/create/first')
-        } else {
-          return serveFile(res, file)
-        }
+        const file = data && err === undefined
+          ? 'home.html'
+          : 'index.html'
+        return serveFile(res, file)
       }
-    )(req, res, file)
+    )(req, res)
   }
   // logged in html files
   const insidePages = [
@@ -66,26 +65,19 @@ module.exports = function routes(dir, app) {
     ['/brackets', 'bracket.html'],
     ['/results', 'results.html']
   ]
-  insidePages.forEach(page => {
-    app.get(page[0], (req, res) =>
-      serveFile(res, page[1])
-    )
-  })
-
   // logged out html files
   const outsidePages = [
-    ['/', 'index.html'],
     ['/login', 'index.html'],
     ['/logout', 'index.html'],
     ['/reset/:token', 'reset.html']
   ]
-  outsidePages.forEach(page => 
-    app.get(page[0], (req, res) => {
-      console.log('req at ', page[0])
-      return jwtLogin(req, res, page[0], page[1]) 
-    })
+  outsidePages.concat(insidePages).forEach(page => 
+    app.get(page[0], (req, res) =>
+      serveFile(res, page[1])
+    )
   )
-
+  // home page
+  app.get('/', jwtLogin)
   // login/signup requests
   app.post('/loginreq', localLogin)
   app.post('/signupreq', authController.signup)

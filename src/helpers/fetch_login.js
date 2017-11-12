@@ -35,7 +35,7 @@ F.login = (username, password, partnername, signup) => {
       // store JWT and redirect
       Cookies.set('cjwt', d.token.replace('JWT ', ''), { expires: 7 })
 
-      window.location.pathname = '/create/first'
+      window.location.pathname = '/'
     })
     .catch( e => console.error(e) )
 }

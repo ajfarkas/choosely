@@ -48,7 +48,7 @@ h1 {
   text-align: center;
 }
 
-[data-bracket*="a"]:after {
+[data-bracket*="a"]:not(:last-of-type):after {
   content: '\\';
   display: block;
 }
