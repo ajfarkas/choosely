@@ -209,6 +209,7 @@ input:invalid {
   to {
     opacity: 0; } }
 #choose {
+  height: 100vh;
   overflow: hidden;
   background-color: #3b3b3b; }
 
@@ -236,7 +237,7 @@ h3 {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 20px);
   text-align: center;
   opacity: 1;
   transition: opacity .75s ease;
@@ -289,7 +290,7 @@ h3 {
   .name-b[data-color="10"] {
     background-image: linear-gradient(to right, #c5f1d7, #dbf3ff); }
   .name-b .name {
-    bottom: 10%; }
+    bottom: calc(10% + 20px); }
   .name-b .svg-heart {
     stroke: #3b3b3b; }
 
@@ -328,6 +329,20 @@ h3 {
   width: 100%;
   height: 100%;
   z-index: 99; }
+
+.progress-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 20px;
+  background-color: darkgrey; }
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background-color: pink;
+  transition: width 500ms ease; }
 
 nav {
   position: absolute;

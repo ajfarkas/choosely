@@ -13,15 +13,16 @@ All names will be saved, but you will have to play all the matches again.`
       }
     }
 
-    Object.keys(Data.firstnames).forEach(name => {
+    const allFirstnames = Object.keys(Data.firstnames).map(name => {
       Data.firstnames[name][Data.user.user] = {
         score: 0,
         matches: {},
         lastnames: {},
         eliminated: false
       }
+      return Data.firstnames[name]
     })
-    Names.update(Data.firstnames, 'first', checkCallsComplete)
+    Names.update(allFirstnames, 'first', checkCallsComplete)
     Choose.delete('pools', checkCallsComplete)
     Choose.delete('bracket', checkCallsComplete)
     return true

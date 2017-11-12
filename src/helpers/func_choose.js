@@ -167,6 +167,17 @@ F.refreshChoices = (index) => {
   F.showChoices()
 }
 
+function showProgress() {
+  const completed = Progress.calcMatchesPlayed(),
+        total = Progress.calcTotalMatches(),
+        progressContainer = Help.$('.progress-container'),
+        progressBar = Help.$('.progress-bar')
+
+  progressBar.style.width = `${100*completed/total}%`
+  progressBar.setAttribute('title', `${completed} rounds down`)
+  progressContainer.setAttribute('title', `${total - completed} rounds to go`)
+}
+
 F.newPoolMatch = () => {
   console.log('new pool match')
   const poolLen = Data.matches.length
@@ -202,7 +213,8 @@ F.resolvePoolMatch = (id, lastnameID) => {
   Data.matches.splice(Data.currentMatch, 1)
 
   console.log(`${Progress.calcMatchesPlayed()}/${Progress.calcTotalMatches()}`)
-  
+  showProgress()
+
   Choose.update(Data.matches, 'pools')
 }
 
@@ -240,6 +252,7 @@ F.resolveBracketMatch = (id, lastnameID) => {
   Data.matches.splice(Data.currentMatch, 1)
 
   console.log(`${Progress.calcMatchesPlayed()}/${Progress.calcTotalMatches()}`)
+  showProgress()
 
   Choose.update(Data.matches, 'bracket')
 }
