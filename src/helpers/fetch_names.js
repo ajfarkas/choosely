@@ -8,7 +8,7 @@ const Names = {}
 */
 Names.read = (kind, cb) => {
   const req = new Request(
-    `${location.origin}/names/read/${kind}/`,
+    `${location.origin}/names/${kind}`,
     { 
       method: 'get',
       headers: new Headers({
@@ -36,7 +36,7 @@ Names.read = (kind, cb) => {
 */
 Names.create = (name, kind, cb) => {
   const req = new Request(
-    `${location.origin}/names/create/${kind}/`,
+    `${location.origin}/names/${kind}`,
     {
       method: 'post',
       headers: new Headers({
@@ -69,9 +69,9 @@ Names.create = (name, kind, cb) => {
 */
 Names.update = (nameData, kind, cb) => {
   const req = new Request(
-    `${location.origin}/names/update/${kind}/`,
+    `${location.origin}/names/${kind}`,
     {
-      method: 'post',
+      method: 'put',
       headers: new Headers({
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -99,9 +99,9 @@ Names.update = (nameData, kind, cb) => {
 */
 Names.delete = (nameID, kind, cb) => {
   const req = new Request(
-    `${location.origin}/names/delete/${kind}/`,
+    `${location.origin}/names/${kind}`,
     {
-      method: 'post',
+      method: 'delete',
       headers: new Headers({
         Accept: 'application/json',
         'Content-Type': 'application/json'

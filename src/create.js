@@ -1,6 +1,7 @@
 import init from './helpers/init'
 import F from './helpers/func_create'
 import Help from './helpers/helpers'
+import Nav from './helpers/navigation'
 
 init( () => {
   const whichName = location.pathname.match(/create\/(\w*)\/?/)[1]
@@ -29,3 +30,4 @@ init( () => {
 
   Help.$('[name=\"name\"]').focus()
 })
+Nav.setupClearData()

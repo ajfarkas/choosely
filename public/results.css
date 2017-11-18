@@ -143,6 +143,16 @@ nav {
   #nav-menu:checked + .hamburger:after {
     transform: translateX(3px) rotate(-45deg); }
 
+.menu-link {
+  padding: 4px 0;
+  background-color: transparent;
+  text-align: inherit;
+  font-size: initial;
+  text-transform: initial; }
+
+#clear-data .menu-link {
+  color: #ff3663; }
+
 #results {
   position: relative;
   background: linear-gradient(to right, #eDD7c0, #efe82e); }
@@ -151,6 +161,12 @@ nav {
   display: inline-block;
   width: 50%;
   margin-right: -0.3em; }
+
+.winner {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 -1px; }
 
 .result {
   box-sizing: border-box;

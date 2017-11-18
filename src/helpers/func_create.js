@@ -1,5 +1,6 @@
 import Help from './helpers'
 import Names from './fetch_names'
+import Nav from './navigation'
 
 const F = {},
       nameType = location.pathname.match(/create\/(\w*)\/?/)[1]
@@ -144,6 +145,14 @@ F.createName = e => {
     return false
   }
   e.preventDefault()
+
+  if (Help.getRemaining('user').length === 1 &&
+    Object.keys(Data.firstnames).length > 1 &&
+    !window.confirm('Adding names now will mean you have to start all of your matches again.\nAre you sure you want to do this?')) {
+    if (Nav.clearMatchData(true)) {
+      return false
+    }
+  }
 
   const value = Help.$('#names input').value
 

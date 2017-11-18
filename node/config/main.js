@@ -6,7 +6,7 @@ const config = {
     token: null,
     prettyHtml: true,
     secret: 'TOP_SECRET',
-    tokenExpLen: 10080
+    tokenExpLen: 1209600
   }
 }
 

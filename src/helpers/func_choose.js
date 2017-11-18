@@ -22,6 +22,7 @@ F.readPools = (cb) => {
 
 function newBracketMatch(data) {
   if (data.matches[0].length === 1) {
+    F.listen(false)
     alert(`We have a winner!\nCongrats to ${Data.firstnames[data.matches[0]].name}!`)
   } else {
     F.newBracketMatch()
@@ -132,12 +133,9 @@ F.hideChoices = () => {
   } else if (matchType === 'bracket') {
     F.newBracketMatch()
   } else {
-    const remaining = Object.keys(Data.firstnames).filter(name => 
-      !Data.firstnames[name][Data.user.user].eliminated)
+    const remaining = Help.getWinner('user')
     if (remaining.length > 1) {
       F.readBracket(newBracketMatch)
-    } else {
-      alert(`We have a winner!\nCongrats to ${Data.firstnames[remaining].name}!`)
     }
   }
   F.listen(true)
@@ -167,6 +165,17 @@ F.refreshChoices = (index) => {
       : null
   })
   F.showChoices()
+}
+
+function showProgress() {
+  const completed = Progress.calcMatchesPlayed(),
+        total = Progress.calcTotalMatches(),
+        progressContainer = Help.$('.progress-container'),
+        progressBar = Help.$('.progress-bar')
+
+  progressBar.style.width = `${100*completed/total}%`
+  progressBar.setAttribute('title', `${completed} rounds down`)
+  progressContainer.setAttribute('title', `${total - completed} rounds to go`)
 }
 
 F.newPoolMatch = () => {
@@ -204,7 +213,8 @@ F.resolvePoolMatch = (id, lastnameID) => {
   Data.matches.splice(Data.currentMatch, 1)
 
   console.log(`${Progress.calcMatchesPlayed()}/${Progress.calcTotalMatches()}`)
-  
+  showProgress()
+
   Choose.update(Data.matches, 'pools')
 }
 
@@ -242,6 +252,7 @@ F.resolveBracketMatch = (id, lastnameID) => {
   Data.matches.splice(Data.currentMatch, 1)
 
   console.log(`${Progress.calcMatchesPlayed()}/${Progress.calcTotalMatches()}`)
+  showProgress()
 
   Choose.update(Data.matches, 'bracket')
 }

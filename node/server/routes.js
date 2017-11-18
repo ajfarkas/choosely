@@ -42,7 +42,7 @@ module.exports = function routes(dir, app) {
     )(req, res, cb)
   }
   // jwt login auth
-  const jwtLogin = (req, res, path, file) => {
+  const jwtLogin = (req, res) => {
     return passport.authenticate(
       'jwt',
       {
@@ -50,42 +50,34 @@ module.exports = function routes(dir, app) {
         failureFlash: false
       },
       (data, err) => {
-        if (data && err === undefined && path !== '/logout') {
-          res.redirect('/create/first')
-        } else {
-          return serveFile(res, file)
-        }
+        const file = data && err === undefined
+          ? 'home.html'
+          : 'index.html'
+        return serveFile(res, file)
       }
-    )(req, res, file)
+    )(req, res)
   }
   // logged in html files
   const insidePages = [
     ['/start', 'start.html'],
     ['/create/:name', 'create.html'],
     ['/choose', 'choose.html'],
-    ['/bracket', 'bracket.html'],
+    ['/brackets', 'bracket.html'],
     ['/results', 'results.html']
   ]
-  insidePages.forEach(page => {
-    app.get(page[0], (req, res) =>
-      serveFile(res, page[1])
-    )
-  })
-
   // logged out html files
   const outsidePages = [
-    ['/', 'index.html'],
     ['/login', 'index.html'],
     ['/logout', 'index.html'],
     ['/reset/:token', 'reset.html']
   ]
-  outsidePages.forEach(page => 
-    app.get(page[0], (req, res) => {
-      console.log('req at ', page[0])
-      return jwtLogin(req, res, page[0], page[1]) 
-    })
+  outsidePages.concat(insidePages).forEach(page => 
+    app.get(page[0], (req, res) =>
+      serveFile(res, page[1])
+    )
   )
-
+  // home page
+  app.get('/', jwtLogin)
   // login/signup requests
   app.post('/loginreq', localLogin)
   app.post('/signupreq', authController.signup)
@@ -94,13 +86,21 @@ module.exports = function routes(dir, app) {
   
   // API requests
   // GET
-  app.get('/names/:op/:kind/', authController.jwtAuth, names)
-  app.get('/pools/:op/', authController.jwtAuth, pools)
-  app.get('/bracket/:op/', authController.jwtAuth, brackets)
+  app.get('/names/:kind', authController.jwtAuth, names)
+  app.get('/pools', authController.jwtAuth, pools)
+  app.get('/bracket', authController.jwtAuth, brackets)
   // POST
-  app.post('/names/:op/:kind/', authController.jwtAuth, names)
-  app.post('/pools/:op/', authController.jwtAuth, pools)
-  app.post('/bracket/:op/', authController.jwtAuth, brackets)
+  app.post('/names/:kind', authController.jwtAuth, names)
+  app.post('/pools', authController.jwtAuth, pools)
+  app.post('/bracket', authController.jwtAuth, brackets)
+  // PUT
+  app.put('/names/:kind', authController.jwtAuth, names)
+  app.put('/pools', authController.jwtAuth, pools)
+  app.put('/bracket', authController.jwtAuth, brackets)
+  // DELETE
+  app.delete('/names/:kind', authController.jwtAuth, names)
+  app.delete('/pools', authController.jwtAuth, pools)
+  app.delete('/bracket', authController.jwtAuth, brackets)
 
   // other files (css, js)
   app.get(/.*/, (req, res) => {

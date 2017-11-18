@@ -14,7 +14,7 @@ const Op = {},
  * response:
  *   - `Obj` containing nameID:nameData
 */
-Op.read = (req, res) => {
+Op.get = (req, res) => {
   const names = {},
         kind = req.params.kind,
         jwt = jwtDecode( Help.getCookies(req).cjwt )
@@ -47,7 +47,7 @@ Op.read = (req, res) => {
  * response:
  *   - `Obj` containing name data
 */
-Op.create = (req, res) => {
+Op.post = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         kind = req.params.kind,
         info = {
@@ -89,33 +89,46 @@ Op.create = (req, res) => {
  * response:
  *   - `Obj` containing name data
 */
-Op.update = (req, res) => {
+Op.put = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt),
         kind = req.params.kind,
-        info = req.body
+        nameData = Array.isArray(req.body) ? req.body : [req.body],
+        nameDataLen = nameData.length,
+        halt = false
+  let dataProcessed = 0
 
-  if (!info || !info.id) {
+  if (!nameData[0] || !nameData[0].id) {
     return res.status(422).json({ error: 'request is missing body or name ID' })
   }
 
-  const lookup = `${team}_${kind}name_${info.id}`
-  db.get(lookup, { valueEncoding: 'json' }, (err, entry) => {
-    if (err) {
-      console.error('update getErr:', err)
-      return res.status(500).json({ error: err })
-    }
-
-    for (key in info) {
-      entry[key] = info[key]
-    }
-
-    db.put(lookup, entry, { valueEncoding: 'json' }, putErr => {
-      if (putErr) {
-        return console.error('update putErr:', putErr)
+  nameData.forEach(info => {
+    const lookup = `${team}_${kind}name_${info.id}`
+    db.get(lookup, { valueEncoding: 'json' }, (err, entry) => {
+      if (err) {
+        halt = true
+        console.error('update getErr:', err)
+        if (!halt) {
+          return res.status(500).json({ error: err })
+        }
       }
-      console.log(`${info.name} updated.`)
-      res.status(200).json(entry)
+
+      for (key in info) {
+        entry[key] = info[key]
+      }
+
+      db.put(lookup, entry, { valueEncoding: 'json' }, putErr => {
+        if (putErr) {
+          return console.error('update putErr:', putErr)
+        }
+        console.log(`${info.name} updated.`)
+        dataProcessed++
+        if (nameDataLen === 1 && !halt) {
+          res.status(200).json(entry)
+        } else if (dataProcessed === nameDataLen) {
+          res.status(204)
+        }
+      })
     })
   })
 }
@@ -150,5 +163,5 @@ Op.delete = (req, res) => {
 }
 
 module.exports = (req, res, cb) => {
-  Op[req.params.op](req, res, cb)
+  Op[req.method.toLowerCase()](req, res, cb)
 }

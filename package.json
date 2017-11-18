@@ -9,6 +9,7 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha ./**/*.test.js",
+    "run": "node app",
     "build": "sass --update ./sass:./public && webpack",
     "sass": "sass --watch ./sass/:./public",
     "webpack": "webpack --watch"

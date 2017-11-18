@@ -12,7 +12,7 @@ const Op = {},
  * response:
  *  - `Arr` containing pool `Objects`
 */      
-Op.read = (req, res) => {
+Op.get = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt )
   const team = Help.getTeamID(jwt)
 
@@ -110,7 +110,7 @@ Op.read = (req, res) => {
  * response:   
  *   - `Arr` of arrays or uuid pairs
 */
-Op.update = (req, res) => {
+Op.put = (req, res) => {
   const jwt = jwtDecode( Help.getCookies(req).cjwt ),
         team = Help.getTeamID(jwt)
 
@@ -131,7 +131,27 @@ Op.update = (req, res) => {
     }
   })
 }
+/* Delete Pools
+ * clear user-partner pools.
+ * method: 'delete'
+ * req.headers:
+ *   - Authorization: JSON web token
+ * response:   
+ *   - `Arr` (empty)
+*/
+Op.delete = (req, res) => {
+  const jwt = jwtDecode( Help.getCookies(req).cjwt ),
+        team = Help.getTeamID(jwt)
+
+  db.del(`${team}_pools`, { valueEncoding: 'json' }, err => {
+    if (err) {
+      res.status(500).json({ error: err })
+    } else {
+      res.status(200).json([])
+    }
+  })
+}
 
 module.exports = (req, res, cb) => {
-  Op[req.params.op](req, res, cb)
+  Op[req.method.toLowerCase()](req, res, cb)
 }

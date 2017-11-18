@@ -8,7 +8,7 @@ const Choose = {}
 */
 Choose.read = (kind, cb) => {
   const req = new Request(
-    `${location.origin}/${kind}/read/`,
+    `${location.origin}/${kind}`,
     {
       method: 'get',
       headers: new Headers({
@@ -35,15 +35,45 @@ Choose.read = (kind, cb) => {
 */
 Choose.update = (matchData, kind, cb) => {
   const req = new Request(
-    `${location.origin}/${kind}/update/`,
+    `${location.origin}/${kind}`,
     {
-      method: 'post',
+      method: 'put',
       headers: new Headers({
         Accept: 'application/json',
         'Content-Type': 'application/json'
       }),
       credentials: 'same-origin',
       body: JSON.stringify(matchData)
+    }
+  )
+
+  fetch(req)
+    .then(res => res.json())
+    .then(data => {
+      if (typeof cb === 'function') {
+        cb(data)
+      }
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}
+/* Delete Choose Pool/Bracket
+ * Update match kind in DB
+ * Arg:
+ *   - kind (`enum`): 'pools' | 'bracket'
+ * Res: empty `Array`
+*/
+Choose.delete = (kind, cb) => {
+  const req = new Request(
+    `${location.origin}/${kind}`,
+    {
+      method: 'delete',
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }),
+      credentials: 'same-origin'
     }
   )
 

@@ -1,7 +1,9 @@
 $timing: .4s;
 
 #choose {
+  height: 100vh;
   overflow: hidden;
+  background-color: $black;
 }
 
 h2 {
@@ -29,7 +31,7 @@ h3 {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 20px);
   text-align: center;
   opacity: 1;
   transition: opacity .75s ease;
@@ -71,7 +73,7 @@ h3 {
   &[data-color="8"] { background-image: $grad8; }
   &[data-color="10"] { background-image: $grad10; }
 
-  & .name { bottom: 10%; }
+  & .name { bottom: calc(10% + 20px); }
   & .svg-heart { stroke: $text-color; }
 }
 
@@ -108,4 +110,19 @@ h3 {
   width: 100%;
   height: 100%;
   z-index: 99;
+}
+
+.progress-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 20px;
+  background-color: darkgrey;
+}
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background-color: pink;
+  transition: width 500ms ease;
 }
